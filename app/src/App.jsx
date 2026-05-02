@@ -1,7 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation, useParams } from 'react-router-dom';
-import propertiesData from './data/properties.json';
-import mainPhoto from './assets/portada_test.png';
+import { createClient } from '@supabase/supabase-js';
+
+// Conexión a Supabase usando variables de entorno
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 function Sidebar() {
   const location = useLocation();
@@ -31,8 +35,8 @@ function Sidebar() {
           <span className="text-xs font-semibold uppercase tracking-wider">Propiedades</span>
         </Link>
         <Link to="#" className="sidebar-link">
-          <span className="material-symbols-outlined !text-[20px]">gavel</span>
-          <span className="text-xs font-semibold uppercase tracking-wider">Legales</span>
+          <span className="material-symbols-outlined !text-[20px]">account_balance</span>
+          <span className="text-xs font-semibold uppercase tracking-wider">Cuenta Corriente</span>
         </Link>
       </nav>
 
@@ -55,34 +59,24 @@ function Topbar() {
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-4 text-slate-400">
           <button className="hover:text-white transition-colors"><span className="material-symbols-outlined !text-[22px]">notifications</span></button>
-          <button className="hover:text-white transition-colors"><span className="material-symbols-outlined !text-[22px]">account_balance</span></button>
-          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-slate-700 to-slate-900 border border-slate-700 shadow-inner" />
+          <button className="hover:text-white transition-colors"><span className="material-symbols-outlined !text-[22px]">database</span></button>
+          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-orange-600 to-orange-900 border border-orange-500 shadow-inner" />
         </div>
       </div>
     </header>
   );
 }
 
-function Dashboard() {
+function Dashboard({ properties }) {
   const navigate = useNavigate();
   
   const stats = useMemo(() => {
-    let totalSurface = 0;
-    propertiesData.forEach(p => {
-      const supStr = p.superficie || "0";
-      // Basic extraction of numbers for "4 Hectáreas" or "622,50 m²"
-      const match = supStr.replace(',', '.').match(/([\d.]+)/);
-      if (match) {
-        let val = parseFloat(match[1]);
-        if (supStr.toLowerCase().includes('hect')) val *= 10000;
-        totalSurface += val;
-      }
-    });
+    const totalSurface = properties.reduce((acc, p) => acc + (p.superficie_m2 || 0), 0);
     return {
-      count: propertiesData.length,
-      surface: (totalSurface / 10000).toFixed(2) // Total in Ha
+      count: properties.length,
+      surface: totalSurface.toLocaleString('es-AR')
     };
-  }, []);
+  }, [properties]);
 
   return (
     <main className="p-8 flex flex-col gap-8">
@@ -92,37 +86,37 @@ function Dashboard() {
           <div className="flex items-baseline justify-end gap-2 mt-1">
             <span className="text-2xl font-black tracking-tight text-white">{stats.count}</span>
           </div>
-          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Sincronizado con Obsidian</span>
+          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Supabase Cloud Active</span>
         </div>
         <div className="kpi-card p-5">
           <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Superficie Total</span>
           <div className="flex items-baseline justify-end gap-2 mt-1">
-            <span className="text-2xl font-black tracking-tight text-white">{Math.round(propertiesData.reduce((acc, p) => acc + parseInt(p.superficie_limpia), 0)).toLocaleString('es-AR')} m²</span>
+            <span className="text-2xl font-black tracking-tight text-white">{stats.surface} m²</span>
           </div>
           <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Suma de activos</span>
         </div>
         <div className="kpi-card p-5">
-          <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Valuación Estimada</span>
+          <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Saldo Deudor Total</span>
           <div className="flex items-baseline justify-end gap-2 mt-1">
-            <span className="text-2xl font-black tracking-tight text-white">USD --</span>
+            <span className="text-2xl font-black tracking-tight text-orange-400">$0</span>
           </div>
-          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Pendiente Supabase</span>
+          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Impuestos + Multas</span>
         </div>
         <div className="kpi-card p-5">
-          <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Deuda / Multas</span>
+          <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Valuación Cartera</span>
           <div className="flex items-baseline justify-end gap-2 mt-1">
-            <span className="text-2xl font-black tracking-tight text-emerald-400">$0.00</span>
+            <span className="text-2xl font-black tracking-tight text-emerald-400">USD --</span>
           </div>
-          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Sin alertas críticas</span>
+          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Métrica en desarrollo</span>
         </div>
       </div>
 
       <div className="kpi-card overflow-hidden border-slate-800/40 bg-slate-950/40 backdrop-blur-md">
         <div className="px-6 py-4 border-b border-slate-800/50 bg-white/[0.02] flex justify-between items-center">
           <span className="text-[9px] font-black text-slate-500 tracking-[0.2em] uppercase">Registro de Activos Dominiales</span>
-          <div className="flex gap-2">
+          <div className="flex gap-2 text-emerald-500">
             <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-            <span className="text-[9px] font-bold text-emerald-500/80 uppercase tracking-widest">Live Sync</span>
+            <span className="text-[9px] font-bold uppercase tracking-widest">Supabase Connected</span>
           </div>
         </div>
         <div className="overflow-x-auto px-2 pb-2">
@@ -134,11 +128,11 @@ function Dashboard() {
                 <th className="px-4 py-3 w-40">Titularidad</th>
                 <th className="px-4 py-3 text-right w-24">Superficie</th>
                 <th className="px-4 py-3 text-center w-28">Estatus Legal</th>
-                <th className="px-4 py-3 text-right w-28">Valuación</th>
+                <th className="px-4 py-3 text-right w-28">Deuda</th>
               </tr>
             </thead>
             <tbody className="text-[11px] text-slate-400">
-              {propertiesData.map((row, i) => (
+              {properties.map((row, i) => (
                 <tr 
                   key={i} 
                   className="bg-white/[0.01] hover:bg-orange-500/[0.06] border border-white/5 transition-all duration-200 cursor-pointer group" 
@@ -151,18 +145,18 @@ function Dashboard() {
                     <div className="truncate opacity-60 group-hover:opacity-100 transition-opacity" title={row.localidad}>{row.localidad || "---"}</div>
                   </td>
                   <td className="px-4 py-2.5 font-medium">
-                    <div className="truncate opacity-60 group-hover:opacity-100" title={row.titulares_limpios.join(', ')}>{row.titulares_limpios[0] || "---"}</div>
+                    <div className="truncate opacity-60 group-hover:opacity-100" title={row.titulares?.join(', ')}>{row.titulares?.[0] || "---"}</div>
                   </td>
                   <td className="px-4 py-2.5 text-right font-mono font-bold text-orange-200/50 group-hover:text-orange-200">
-                    {row.superficie_limpia}
+                    {row.superficie_m2} m²
                   </td>
                   <td className="px-4 py-2.5 text-center">
-                    <span className={`px-2 py-0.5 rounded-md text-[8px] font-black border uppercase tracking-tighter ${row.estado_limpio.includes('Limpio') ? 'bg-emerald-500/5 text-emerald-400/80 border-emerald-500/10' : 'bg-amber-500/5 text-amber-400/80 border-amber-500/10'}`}>
-                      {row.estado_limpio}
+                    <span className={`px-2 py-0.5 rounded-md text-[8px] font-black border uppercase tracking-tighter ${row.estado_legal.includes('Limpio') ? 'bg-emerald-500/5 text-emerald-400/80 border-emerald-500/10' : 'bg-amber-500/5 text-amber-400/80 border-amber-500/10'}`}>
+                      {row.estado_legal}
                     </span>
                   </td>
-                  <td className="px-4 py-2.5 text-right font-mono font-black text-white/40 group-hover:text-white/90 rounded-r-xl border-r border-y border-transparent group-hover:border-orange-500/30">
-                    USD 0
+                  <td className="px-4 py-2.5 text-right font-mono font-black text-emerald-400/40 group-hover:text-emerald-400 rounded-r-xl border-r border-y border-transparent group-hover:border-orange-500/30">
+                    $0
                   </td>
                 </tr>
               ))}
@@ -176,8 +170,6 @@ function Dashboard() {
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-
-// Fix for default marker icon issues in Leaflet + React
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -185,13 +177,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-function PropertyDetail() {
+function PropertyDetail({ properties }) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const property = useMemo(() => propertiesData.find(p => p.id === id), [id]);
+  const property = useMemo(() => properties.find(p => p.id === id), [id, properties]);
 
   const coords = useMemo(() => {
-    if (!property?.coordenadas) return [-27.45, -58.98]; // Default Resistencia
+    if (!property?.coordenadas) return [-27.45, -58.98];
     const parts = property.coordenadas.replace(/"/g, '').split(',');
     return [parseFloat(parts[0]), parseFloat(parts[1])];
   }, [property]);
@@ -200,59 +192,41 @@ function PropertyDetail() {
 
   return (
     <main className="flex flex-col animate-in fade-in duration-700 h-full overflow-y-auto bg-[#020617] z-0 relative">
-      {/* Header con Foto Principal - DINÁMICO */}
-      <div className="w-full bg-slate-900 border-b border-white/10 relative overflow-hidden flex-shrink-0" style={{ height: '450px' }}>
-        {property.foto_portada && (
-          <img 
-            src={property.foto_portada} 
-            className="absolute inset-0 w-full h-full object-cover brightness-75 z-0"
-            alt="Fondo Propiedad"
-          />
+      <div className="w-full bg-slate-900 border-b border-white/10 relative overflow-hidden flex-shrink-0" style={{ height: '400px' }}>
+        {property.foto_url && (
+          <img src={property.foto_url} className="absolute inset-0 w-full h-full object-cover brightness-75 z-0" alt="Portada" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/20 to-transparent z-10" />
-        
-        <div className="absolute bottom-12 left-12 right-12 flex justify-between items-end z-20">
-          <div className="flex flex-col gap-3">
-            <button 
-              onClick={() => navigate('/')}
-              className="w-fit px-6 py-2.5 rounded-full bg-white/10 backdrop-blur-2xl border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/30 transition-all mb-6"
-            >
-              ← Volver al Dashboard
-            </button>
-            <h1 className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">{property.id}</h1>
-            <div className="flex items-center gap-3 text-orange-400">
-              <span className="material-symbols-outlined !text-[20px]">location_on</span>
-              <p className="text-[11px] uppercase tracking-[0.4em] font-black drop-shadow-md">{property.localidad}</p>
-            </div>
+        <div className="absolute bottom-10 left-12 flex flex-col gap-3 z-20">
+          <button onClick={() => navigate('/')} className="w-fit px-6 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/20 transition-all mb-4">← Volver</button>
+          <h1 className="text-5xl font-black text-white tracking-tighter">{property.id}</h1>
+          <div className="flex items-center gap-3 text-orange-400">
+            <span className="material-symbols-outlined !text-[20px]">location_on</span>
+            <p className="text-[10px] uppercase tracking-[0.4em] font-black">{property.localidad}</p>
           </div>
         </div>
       </div>
 
-      {/* Contenido con Padding */}
       <div className="p-12 grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-[1800px] mx-auto w-full relative z-30">
-        {/* Columna Izquierda: Información Principal */}
         <div className="lg:col-span-2 flex flex-col gap-10">
           <div className="kpi-card p-12">
             <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-10">Ficha Técnica Legal</span>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-20">
               <div>
                 <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Nomenclatura Catastral</label>
-                <p className="text-sm text-slate-300 font-medium leading-relaxed">{property.nomenclatura_castastral || "---"}</p>
+                <p className="text-sm text-slate-300 font-medium leading-relaxed">{property.nomenclatura || "---"}</p>
               </div>
               <div>
                 <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Matrícula / Folio Real</label>
-                <p className="text-sm text-slate-300 font-medium">{property.matricula_folio_real || "---"}</p>
+                <p className="text-sm text-slate-300 font-medium">{property.matricula || "---"}</p>
               </div>
               <div>
                 <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Superficie Total</label>
-                <p className="text-sm text-slate-200 font-bold leading-relaxed">{property.superficie_limpia}</p>
-                {property.superficie !== property.superficie_limpia && (
-                  <p className="text-[9px] text-slate-500 mt-1 italic leading-tight">{property.superficie.replace(property.superficie_limpia, '').replace(/^\s*[\(]*/, '').replace(/[\)]*$/, '').trim()}</p>
-                )}
+                <p className="text-sm text-slate-200 font-bold leading-relaxed">{property.superficie_m2} m²</p>
               </div>
               <div>
                 <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Titular Dominial</label>
-                <p className="text-sm text-orange-200/80 font-bold leading-relaxed">{property.titulares_limpios.join(', ')}</p>
+                <p className="text-sm text-orange-200/80 font-bold leading-relaxed">{property.titulares?.join(', ')}</p>
               </div>
               <div className="md:col-span-2 p-8 bg-white/[0.02] border border-white/5 rounded-[32px]">
                 <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Ubicación de Referencia</label>
@@ -264,82 +238,63 @@ function PropertyDetail() {
           <div className="kpi-card p-12">
             <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-10">Historial y Auditoría Legal</span>
             <div className="prose prose-invert prose-sm max-w-none text-slate-400 leading-relaxed space-y-6">
-              {property.resumen ? (
-                <div dangerouslySetInnerHTML={{ __html: property.resumen.replace(/\n/g, '<br/><br/>') }} />
-              ) : (
-                <p className="italic text-slate-600 font-light text-xs">No hay observaciones adicionales registradas en el legajo.</p>
-              )}
+              <div dangerouslySetInnerHTML={{ __html: (property.resumen || "").replace(/\n/g, '<br/>') }} />
+            </div>
+          </div>
+
+          {/* NUEVA SECCIÓN: CUENTA CORRIENTE DETALLADA */}
+          <div className="kpi-card p-10 border-orange-500/10">
+            <div className="flex justify-between items-center mb-10">
+              <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">Cuenta Corriente de Activo</span>
+              <button className="px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-lg text-[9px] font-black text-orange-400 hover:bg-orange-500 hover:text-white transition-all uppercase tracking-widest">
+                + Cargar Comprobante
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="text-[9px] text-slate-600 uppercase font-black tracking-widest border-b border-white/5">
+                    <th className="py-4">Fecha</th>
+                    <th className="py-4">Cuenta</th>
+                    <th className="py-4">Concepto</th>
+                    <th className="py-4 text-right">Monto</th>
+                    <th className="py-4 text-center w-20">Doc</th>
+                  </tr>
+                </thead>
+                <tbody className="text-[11px]">
+                  {/* Aquí mapearemos los movimientos de Supabase más adelante */}
+                  <tr>
+                    <td colSpan="5" className="py-12 text-center text-slate-600 italic">
+                      No se registran movimientos contables para esta propiedad.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        {/* Columna Derecha: Mapa y Documentos */}
         <div className="flex flex-col gap-10">
-          {/* Mapa Interactiva Pequeño */}
-          <div className="kpi-card h-72 overflow-hidden relative z-10">
-            <div className="absolute top-5 left-5 z-[1000] px-4 py-2 bg-slate-950/90 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl">
-              <span className="text-[9px] font-black text-white uppercase tracking-widest">Localización Exacta</span>
-            </div>
-            <MapContainer center={coords} zoom={14} scrollWheelZoom={false} className="h-full w-full">
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={coords}>
-                <Popup><span className="text-[10px] font-bold">{property.id}</span></Popup>
-              </Marker>
+          <div className="kpi-card h-64 overflow-hidden relative z-10">
+            <MapContainer center={coords} zoom={14} className="h-full w-full">
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <Marker position={coords} />
             </MapContainer>
           </div>
 
           <div className="kpi-card p-10">
-            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-8">Métricas y Gestión</span>
+            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-8">Gestión de Cuentas</span>
             <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-3 pb-6 border-b border-white/5">
-                <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Estado Jurídico</span>
-                <div className={`p-4 rounded-2xl border ${property.estado_limpio.includes('Limpio') ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-amber-500/10 border-amber-500/20'}`}>
-                  <span className={`text-[10px] font-bold leading-tight block uppercase ${property.estado_limpio.includes('Limpio') ? 'text-emerald-400' : 'text-amber-400'}`}>{property.estado_limpio}</span>
-                </div>
-              </div>
-              
               <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center group cursor-pointer hover:bg-white/[0.02] p-2 rounded-xl transition-all">
-                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Impuestos (TGI/API)</span>
-                  <span className="text-[10px] font-black px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full uppercase">AL DÍA</span>
+                <div className="flex justify-between items-center p-2 rounded-xl">
+                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Saldo Impuestos</span>
+                  <span className="text-[10px] font-black px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">$0</span>
                 </div>
-                <div className="flex justify-between items-center group cursor-pointer hover:bg-white/[0.02] p-2 rounded-xl transition-all">
-                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Multas / Infracciones</span>
-                  <span className="text-[10px] font-black px-3 py-1 bg-slate-800 text-slate-500 border border-white/5 rounded-full uppercase">SIN REGISTRO</span>
+                <div className="flex justify-between items-center p-2 rounded-xl">
+                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Saldo Multas</span>
+                  <span className="text-[10px] font-black px-3 py-1 bg-slate-800 text-slate-500 border border-white/5 rounded-full">$0</span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div className="kpi-card p-8 bg-gradient-to-br from-orange-500/10 to-transparent">
-            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-8">Documentación Digital</span>
-            <div className="flex flex-col gap-3">
-              {property.adjuntos && property.adjuntos.length > 0 ? (
-                property.adjuntos.map((doc, idx) => (
-                  <a 
-                    key={idx}
-                    href={doc.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="p-4 bg-white/[0.03] border border-white/10 rounded-[20px] flex items-center gap-4 hover:bg-white/[0.08] hover:border-orange-500/30 transition-all group"
-                  >
-                    <div className="h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-all">
-                      <span className="material-symbols-outlined !text-[20px]">
-                        {doc.nombre.toLowerCase().endsWith('.pdf') ? 'picture_as_pdf' : 'image'}
-                      </span>
-                    </div>
-                    <div className="flex flex-col overflow-hidden">
-                      <span className="text-[10px] text-white font-bold uppercase tracking-tight truncate">{doc.nombre}</span>
-                      <span className="text-[9px] text-slate-600 font-mono italic">Documento Verificado</span>
-                    </div>
-                  </a>
-                ))
-              ) : (
-                <p className="text-[10px] text-slate-600 italic px-4">No hay documentos adjuntos cargados.</p>
-              )}
             </div>
           </div>
         </div>
@@ -349,6 +304,26 @@ function PropertyDetail() {
 }
 
 export default function App() {
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      const { data, error } = await supabase
+        .from('propiedades')
+        .select('*')
+        .order('id', { ascending: true });
+      
+      if (error) console.error('Error fetching properties:', error);
+      else setProperties(data);
+      setLoading(false);
+    };
+
+    fetchProperties();
+  }, []);
+
+  if (loading) return <div className="h-screen bg-[#020617] flex items-center justify-center text-white font-black tracking-widest">LOADING DATABASE...</div>;
+
   return (
     <BrowserRouter>
       <div className="h-screen bg-[#020617] flex overflow-hidden">
@@ -356,8 +331,8 @@ export default function App() {
         <div className="flex-1 ml-64 flex flex-col h-full overflow-y-auto scroll-smooth">
           <Topbar />
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/property/:id" element={<PropertyDetail />} />
+            <Route path="/" element={<Dashboard properties={properties} />} />
+            <Route path="/property/:id" element={<PropertyDetail properties={properties} />} />
           </Routes>
         </div>
       </div>
