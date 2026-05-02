@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #bec6e0;
+  --color-secondary: #4edea3;
+  --color-background: #020617;
+  --color-surface: #0f172a;
+  --color-surface-variant: #1e293b;
+  --color-outline: #334155;
+  
+  --font-inter: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-slate-200 font-inter antialiased overflow-x-hidden;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.2) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(15, 23, 42, 1) 0px, transparent 100%);
+    min-height: 100vh;
+  }
+
+  /* Animación de fondo para que el glass se note */
+  body::before {
+    content: "";
+    position: fixed;
+    top: -20%;
+    left: -10%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+    z-index: -1;
+    filter: blur(80px);
+    animation: floating 20s infinite alternate;
+  }
+
+  @keyframes floating {
+    from { transform: translate(0, 0); }
+    to { transform: translate(100px, 100px); }
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-2xl rounded-[32px];
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  .kpi-card {
+    @apply bg-white/[0.04] backdrop-blur-2xl border border-white/5 shadow-xl transition-all duration-700 rounded-[28px] overflow-hidden relative;
+  }
+
+  .kpi-card::after {
+    content: "";
+    @apply absolute inset-0 opacity-0 transition-opacity duration-700 bg-gradient-to-br from-white/5 to-transparent pointer-events-none;
+  }
+
+  .kpi-card:hover::after {
+    @apply opacity-100;
+  }
+
+  .kpi-card:hover {
+    @apply border-white/10 translate-y-[-2px] shadow-white/[0.02];
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-5 py-3.5 text-slate-500 transition-all duration-500 rounded-[20px] font-medium tracking-tight;
+    @apply hover:bg-white/[0.03] hover:text-white scale-95 active:scale-90;
+  }
+
+  .sidebar-link-active {
+    @apply flex items-center gap-3 px-5 py-3.5 bg-white/[0.08] text-white border border-white/10 rounded-[20px] scale-100 shadow-xl shadow-black/40;
+  }
+  
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+}

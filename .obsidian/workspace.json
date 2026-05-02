@@ -1,0 +1,229 @@
+{
+  "main": {
+    "id": "444ba876b6abf891",
+    "type": "split",
+    "children": [
+      {
+        "id": "9231adcea13a66b3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6497539cc452c446",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Vista gráfica"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "78737dbb921eea9b",
+    "type": "split",
+    "children": [
+      {
+        "id": "c2a759129c800eee",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "14ac63d0765d8fbe",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de archivos"
+            }
+          },
+          {
+            "id": "27748ce34de41510",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Buscar"
+            }
+          },
+          {
+            "id": "b9afe855d9b3aed8",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 317.5
+  },
+  "right": {
+    "id": "c67fa14e849a72aa",
+    "type": "split",
+    "children": [
+      {
+        "id": "71dc388837ae2122",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "90eb35ec3f47e690",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Enlaces entrantes"
+            }
+          },
+          {
+            "id": "ce916cf99c3f11c8",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Enlaces salientes"
+            }
+          },
+          {
+            "id": "86e2d77acc360b39",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "2ae652619386cb29",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas las propiedades"
+            }
+          },
+          {
+            "id": "8fb91ebc0b3a48c1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Esquema"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Crear nueva base": false
+    }
+  },
+  "active": "6497539cc452c446",
+  "lastOpenFiles": [
+    "app/public/photos/resistencia-domicilio_portada.png",
+    "app/public/photos/machagai-donacion-benchu_portada.png",
+    "app/public/photos/machagai-donacion-angel-la-gata_portada.png",
+    "attachments/propiedades/Machagai - Donacion Angel la Gata/portada.png",
+    "attachments/propiedades/Machagai - Donacion Benchu/portada.png",
+    "raw/Captura de pantalla 2026-05-02 a la(s) 5.40.50 p. m..png",
+    "attachments/propiedades/Resistencia - Domicilio/portada.png",
+    "attachments/propiedades/Resistencia - Domicilio/Captura de pantalla 2026-05-02 a la(s) 5.37.08 p. m..png",
+    "clean_obsidian_headers.py",
+    "update_all_properties.py",
+    "app/public/photos/la-california-lotes-287-y-288_portada.png",
+    "attachments/propiedades/La California/portada.png",
+    "wiki/attachments/propiedades/La California/portada.png",
+    "wiki/attachments/propiedades/La California",
+    "log.md",
+    "LLM_WIKI.md",
+    "index.md",
+    "Home.md",
+    "Colonia Popular.md",
+    "Dashboard.canvas",
+    "wiki/attachments/propiedades/Colonia Popular - Chacra 95",
+    "attachments/propiedades/Colonia Popular - Chacra 95",
+    "app/README.md",
+    "scratch/update_colonia.py",
+    "scratch",
+    "wiki/attachments/propiedades/Machagai - Ruta 16 - Chacra 30",
+    "wiki/attachments/propiedades/Machagai - Encina",
+    "wiki/attachments/propiedades/Machagai - Farmacia",
+    "app/node_modules/electron-to-chromium/README.md",
+    "app/node_modules/sprintf-js/README.md",
+    "wiki/propiedades/Machagai - Alberdi.md",
+    "wiki/propiedades/Colonia Popular - Chacra 95 - Parcela 05, Manzana 46.md",
+    "wiki/propiedades/Colonia Popular - Chacra 95 - Parcela 04, Manzana 46.md",
+    "wiki/entidades/Sergio Joaquín CONRADI.md",
+    "wiki/entidades/Radis Domingo Miguel.md",
+    "templates/Propiedad.md",
+    "wiki/Índice General de Propiedades.md",
+    "app/node_modules/leaflet/README.md",
+    "app/node_modules/leaflet/CHANGELOG.md",
+    "app/node_modules/@react-leaflet/core/README.md",
+    "app/node_modules/@react-leaflet/core/LICENSE.md",
+    "app/node_modules/react-leaflet/README.md",
+    "app/node_modules/react-leaflet/LICENSE.md",
+    "app/node_modules/js-yaml/README.md",
+    "app/node_modules/extend-shallow/README.md",
+    "app/node_modules/gray-matter/README.md",
+    "app/node_modules/gray-matter/CHANGELOG.md"
+  ]
+}
