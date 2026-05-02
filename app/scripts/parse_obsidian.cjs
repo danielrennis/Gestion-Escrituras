@@ -5,29 +5,17 @@ const matter = require('gray-matter');
 const projectRoot = path.join(__dirname, '../../');
 const propertiesDir = path.join(projectRoot, 'wiki/propiedades');
 const outputFilePath = path.join(projectRoot, 'app/src/data/properties.json');
-const destDir = path.join(projectRoot, 'app/public/photos');
+const destPhotosDir = path.join(projectRoot, 'app/public/photos');
+const destDocsDir = path.join(projectRoot, 'app/public/attachments');
 
-if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+if (!fs.existsSync(destPhotosDir)) fs.mkdirSync(destPhotosDir, { recursive: true });
+if (!fs.existsSync(destDocsDir)) fs.mkdirSync(destDocsDir, { recursive: true });
 
 const cleanName = (name) => {
   if (!name) return "";
-  
-  // 1. Quitar corchetes, prefijos y datos en paréntesis
-  let n = name.replace(/\[\[|\]\]/g, '')
-              .replace(/^(Nudo Propietario|Usufructuario|Titular|Vendedor|Comprador|Anterior titular|Nuevo titular):\s*/i, '')
-              .split('(')[0]
-              .trim();
-
-  // 2. Reemplazo específico de Chacon por Hugo Daniel Rennis
+  let n = name.replace(/\[\[|\]\]/g, '').replace(/^(Nudo Propietario|Usufructuario|Titular|Vendedor|Comprador|Anterior titular|Nuevo titular):\s*/i, '').split('(')[0].trim();
   if (n.toLowerCase().includes('chacon')) return "Hugo Daniel Rennis";
-
-  // 3. Convertir APELLIDOS MAYÚSCULAS a Proper Case
-  return n.split(' ').map(word => {
-    if (word.length > 1 && word === word.toUpperCase()) {
-      return word.charAt(0) + word.slice(1).toLowerCase();
-    }
-    return word;
-  }).join(' ');
+  return n.split(' ').map(word => (word.length > 1 && word === word.toUpperCase()) ? word.charAt(0) + word.slice(1).toLowerCase() : word).join(' ');
 };
 
 const cleanSurface = (sup) => {
@@ -35,11 +23,8 @@ const cleanSurface = (sup) => {
   const match = sup.match(/^([\d,.]+)\s*(m²|m2|Ha|hectáreas|hectareas|h)/i);
   if (match) {
     let valStr = match[1];
-    if (valStr.includes(',') && valStr.includes('.')) {
-      valStr = valStr.replace(/\./g, '').replace(',', '.');
-    } else if (valStr.includes(',')) {
-      valStr = valStr.replace(',', '.');
-    }
+    if (valStr.includes(',') && valStr.includes('.')) valStr = valStr.replace(/\./g, '').replace(',', '.');
+    else if (valStr.includes(',')) valStr = valStr.replace(',', '.');
     let num = parseFloat(valStr);
     if (isNaN(num)) return sup.split('(')[0].trim();
     if (match[2].toLowerCase().includes('h')) num = num * 10000;
@@ -61,8 +46,6 @@ const parseProperties = () => {
   const files = fs.readdirSync(propertiesDir);
   const properties = [];
 
-  console.log(`🔍 Limpiando titulares y estandarizando nombres...`);
-
   files.forEach(file => {
     if (!file.endsWith('.md')) return;
 
@@ -75,43 +58,49 @@ const parseProperties = () => {
       const tipo = (data.tipo || "").toLowerCase();
       if (tipo === 'inmueble' || tipo === 'lote') {
         
-        let localidad = data.localidad || "";
-        localidad = localidad.replace(/Departamento.*?,/gi, '').replace(/Provincia.*?/gi, '').replace(/,\s*,/g, ',').trim();
-        if (localidad && !localidad.toLowerCase().includes('chaco')) localidad += ', Chaco';
-
+        // 1. Procesar Portada
         let foto_url = null;
         if (data.foto_portada) {
           const sourcePath = path.join(projectRoot, data.foto_portada);
           const slug = file.replace('.md', '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
           const ext = path.extname(data.foto_portada) || '.png';
           const destName = `${slug}_portada${ext}`;
-          const destPath = path.join(destDir, destName);
           if (fs.existsSync(sourcePath)) {
-            fs.copyFileSync(sourcePath, destPath);
+            fs.copyFileSync(sourcePath, path.join(destPhotosDir, destName));
             foto_url = `/photos/${destName}`;
           }
         }
 
-        // Limpiar lista de titulares y filtrar duplicados o vacíos
-        const titularesLimpios = (data.titulares || [])
-          .map(t => cleanName(t))
-          .filter(t => t.length > 0);
-        
-        // Si hay varios y uno es Hugo Daniel Rennis, ponerlo primero
-        titularesLimpios.sort((a, b) => a.includes('Hugo Daniel') ? -1 : 1);
-        
-        // Eliminar duplicados exactos (ej: si Chacon y Rennis resultan en el mismo nombre)
-        const titularesUnicos = [...new Set(titularesLimpios)];
+        // 2. Extraer Adjuntos (Escrituras, etc.)
+        const adjuntos = [];
+        const adjuntosMatch = content.match(/## Documentación Adjunta\n([\s\S]*?)(?=\n#|$)/);
+        if (adjuntosMatch) {
+          const lines = adjuntosMatch[1].split('\n');
+          lines.forEach(line => {
+            const fileMatch = line.match(/\[(.*?)\]\((.*?)\)/);
+            if (fileMatch) {
+              const fileName = fileMatch[1];
+              const filePathRaw = fileMatch[2].replace('file://', '').replace(/%20/g, ' ');
+              
+              // Copiar el archivo real a la carpeta pública si existe
+              if (fs.existsSync(filePathRaw)) {
+                const ext = path.extname(filePathRaw);
+                const safeName = `${file.replace('.md', '')}_${fileName}`.replace(/[^a-z0-9.]+/gi, '-');
+                fs.copyFileSync(filePathRaw, path.join(destDocsDir, safeName));
+                adjuntos.push({ nombre: fileName, url: `/attachments/${safeName}` });
+              }
+            }
+          });
+        }
 
         properties.push({
           id: file.replace('.md', ''),
-          filename: file,
           ...data,
-          localidad: localidad,
           superficie_limpia: cleanSurface(data.superficie),
           estado_limpio: cleanStatus(data.estado_legal),
-          titulares_limpios: titularesUnicos,
+          titulares_limpios: (data.titulares || []).map(t => cleanName(t)).filter(t => t.length > 0),
           foto_portada: foto_url,
+          adjuntos: adjuntos,
           resumen: content.split('##')[0].replace(/#.*?\n/, '').trim()
         });
       }
@@ -121,7 +110,7 @@ const parseProperties = () => {
   });
 
   fs.writeFileSync(outputFilePath, JSON.stringify(properties, null, 2));
-  console.log(`✅ Indexación exitosa. Titulares normalizados.`);
+  console.log(`✅ Indexación completa con ${properties.length} propiedades y sus documentos.`);
 };
 
 parseProperties();

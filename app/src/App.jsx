@@ -292,7 +292,7 @@ function PropertyDetail() {
           </div>
 
           <div className="kpi-card p-10">
-            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-8">Métricas del Activo</span>
+            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-8">Métricas y Gestión</span>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-3 pb-6 border-b border-white/5">
                 <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Estado Jurídico</span>
@@ -300,9 +300,16 @@ function PropertyDetail() {
                   <span className={`text-[10px] font-bold leading-tight block uppercase ${property.estado_limpio.includes('Limpio') ? 'text-emerald-400' : 'text-amber-400'}`}>{property.estado_limpio}</span>
                 </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Impuestos / Tasas</span>
-                <span className="text-[10px] font-black px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full uppercase">AL DÍA</span>
+              
+              <div className="flex flex-col gap-4">
+                <div className="flex justify-between items-center group cursor-pointer hover:bg-white/[0.02] p-2 rounded-xl transition-all">
+                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Impuestos (TGI/API)</span>
+                  <span className="text-[10px] font-black px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full uppercase">AL DÍA</span>
+                </div>
+                <div className="flex justify-between items-center group cursor-pointer hover:bg-white/[0.02] p-2 rounded-xl transition-all">
+                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Multas / Infracciones</span>
+                  <span className="text-[10px] font-black px-3 py-1 bg-slate-800 text-slate-500 border border-white/5 rounded-full uppercase">SIN REGISTRO</span>
+                </div>
               </div>
             </div>
           </div>
@@ -310,15 +317,29 @@ function PropertyDetail() {
           <div className="kpi-card p-8 bg-gradient-to-br from-orange-500/10 to-transparent">
             <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-8">Documentación Digital</span>
             <div className="flex flex-col gap-3">
-              <div className="p-4 bg-white/[0.03] border border-white/10 rounded-[20px] flex items-center gap-4 hover:bg-white/[0.08] transition-all cursor-pointer group">
-                <div className="h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-all">
-                  <span className="material-symbols-outlined !text-[20px]">description</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-white font-bold uppercase tracking-tight">Escritura Principal</span>
-                  <span className="text-[9px] text-slate-600 font-mono italic">PDF • 4.2 MB</span>
-                </div>
-              </div>
+              {property.adjuntos && property.adjuntos.length > 0 ? (
+                property.adjuntos.map((doc, idx) => (
+                  <a 
+                    key={idx}
+                    href={doc.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="p-4 bg-white/[0.03] border border-white/10 rounded-[20px] flex items-center gap-4 hover:bg-white/[0.08] hover:border-orange-500/30 transition-all group"
+                  >
+                    <div className="h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-all">
+                      <span className="material-symbols-outlined !text-[20px]">
+                        {doc.nombre.toLowerCase().endsWith('.pdf') ? 'picture_as_pdf' : 'image'}
+                      </span>
+                    </div>
+                    <div className="flex flex-col overflow-hidden">
+                      <span className="text-[10px] text-white font-bold uppercase tracking-tight truncate">{doc.nombre}</span>
+                      <span className="text-[9px] text-slate-600 font-mono italic">Documento Verificado</span>
+                    </div>
+                  </a>
+                ))
+              ) : (
+                <p className="text-[10px] text-slate-600 italic px-4">No hay documentos adjuntos cargados.</p>
+              )}
             </div>
           </div>
         </div>
