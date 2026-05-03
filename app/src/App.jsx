@@ -41,29 +41,15 @@ function Sidebar() {
       </nav>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
         @media print {
           @page { size: A4; margin: 0; }
-          body * { visibility: hidden !important; }
-          .sales-sheet, .sales-sheet * { visibility: visible !important; }
-          .sales-sheet { 
-            position: absolute !important; 
-            left: 0 !important; 
-            top: 0 !important; 
-            width: 210mm !important; 
-            height: 297mm !important;
-            background: white !important;
-            display: block !important;
-            z-index: 99999 !important;
-            padding: 0 !important;
-            margin: 0 !important;
-          }
-          /* Forzar que el mapa se vea en la impresión */
-          .leaflet-control-container { display: none !important; }
-          .leaflet-tile-container { filter: grayscale(0) !important; }
+          body { background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+          #root { display: none !important; } /* Escondemos toda la app */
+          .sales-sheet-print-container { display: block !important; } /* Solo mostramos el contenedor de impresión */
         }
-        .sales-sheet { display: none; }
+        .sales-sheet-print-container { display: none; }
       `}</style>
 
       <div className="mt-auto px-4 border-t border-slate-800/50 pt-6">
@@ -556,71 +542,44 @@ function PropertyDetail({ properties }) {
 
 function SalesSheet({ property, coords }) {
   return (
-    <div className="sales-sheet bg-white text-slate-900 flex flex-col" style={{ width: '210mm', height: '297mm', fontFamily: "'Inter', sans-serif" }}>
-      {/* TOP BAR */}
-      <header className="absolute top-0 left-0 w-full pt-12 px-[25mm] z-20 flex items-center justify-between pointer-events-none">
-        <div className="text-xl font-bold tracking-tighter text-white drop-shadow-sm">RENNIS REALTY</div>
-        <div className="font-sans tracking-tight uppercase font-light text-xs text-white border-[0.5pt] border-white px-3 py-1 bg-black/10 backdrop-blur-sm">FOR SALE</div>
-      </header>
-
-      {/* SECTION 1: HERO SECTION */}
-      <section className="relative w-full h-[45%] overflow-hidden">
-        <img src={property.foto_url} className="w-full h-full object-cover" alt="Hero" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex flex-col justify-end px-[25mm] pb-12">
-          <h1 className="text-[42pt] font-bold text-white uppercase tracking-tighter leading-[1.1]">{property.id}</h1>
+    <div className="sales-sheet-print-container bg-white text-black" style={{ fontFamily: "'Inter', sans-serif", width: '210mm', height: '297mm' }}>
+      {/* HEADER HERO */}
+      <div className="relative w-full h-[45%] overflow-hidden bg-slate-100">
+        <img src={property.foto_url} className="w-full h-full object-cover" alt="Property" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end px-16 pb-12">
+          <h1 className="text-[42pt] font-bold text-white uppercase tracking-tighter">{property.id}</h1>
         </div>
-      </section>
+      </div>
 
-      {/* MAIN CONTENT */}
-      <main className="flex-1 px-[25mm] pt-10 flex flex-col gap-8 bg-white">
-        {/* SECTION 2: LOCATION AND SURFACE */}
-        <section className="flex flex-col gap-6">
-          <div className="flex flex-col">
-            <span className="text-[8pt] font-semibold text-slate-500 uppercase tracking-widest mb-1">Localidad</span>
-            <span className="text-[20pt] font-semibold uppercase text-black leading-none">{property.localidad}, CHACO</span>
+      {/* BODY */}
+      <div className="p-16 flex flex-col gap-10">
+        <div className="grid grid-cols-2 gap-10">
+          <div>
+            <span className="text-[10pt] font-bold text-slate-400 uppercase tracking-widest block mb-1">Localidad</span>
+            <span className="text-[24pt] font-bold uppercase text-black">{property.localidad}, CHACO</span>
           </div>
-          <div className="flex flex-col">
-            <span className="text-[8pt] font-semibold text-slate-500 uppercase tracking-widest mb-1">Superficie Total</span>
-            <span className="text-[32pt] font-bold uppercase text-black leading-none">{property.superficie_m2} M²</span>
+          <div>
+            <span className="text-[10pt] font-bold text-slate-400 uppercase tracking-widest block mb-1">Superficie</span>
+            <span className="text-[32pt] font-black uppercase text-black">{property.superficie_m2} M²</span>
           </div>
-          <div className="w-full h-[0.25pt] bg-neutral-200 mt-2"></div>
-        </section>
-
-        {/* SECTION 3: MAP SECTION */}
-        <section className="w-full">
-          <div className="aspect-[21/9] bg-[#F5F5F5] border-[0.25pt] border-neutral-200 relative overflow-hidden rounded-sm">
-             <MapContainer center={coords} zoom={16} zoomControl={false} dragging={false} scrollWheelZoom={false} className="h-full w-full opacity-80">
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <Marker position={coords} />
-              </MapContainer>
-          </div>
-        </section>
-
-        {/* SECTION 4: LOCATION DETAILS */}
-        <section className="mt-auto pb-24 grid grid-cols-12 gap-5 items-end">
-          <div className="col-span-7 flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-[14pt] font-semibold uppercase text-black">Ubicación & Referencia</h2>
-              <div className="w-12 h-[0.5pt] bg-black"></div>
-            </div>
-            <p className="text-[12pt] text-slate-600 leading-relaxed tracking-wide italic font-light">
-                {property.direccion.toUpperCase()}
-            </p>
-          </div>
-          <div className="col-span-5 text-right">
-            <span className="text-[8pt] italic text-slate-400 uppercase tracking-[0.2em] block mb-2">Confidential Listing</span>
-            <span className="text-[8pt] font-semibold text-slate-500 uppercase">Ref: {property.nomenclatura}</span>
-          </div>
-        </section>
-      </main>
-
-      {/* FOOTER */}
-      <footer className="absolute bottom-0 w-full flex justify-between items-center px-[25mm] py-8 border-t-[0.25pt] border-neutral-200 bg-white">
-        <div className="text-lg font-black text-black">RENNIS REALTY</div>
-        <div className="flex gap-8">
-          <span className="text-[8pt] uppercase tracking-widest text-neutral-400">Management Console</span>
-          <span className="text-[8pt] uppercase tracking-widest text-neutral-400">© ALL RIGHTS RESERVED</span>
         </div>
+
+        <div className="w-full h-[350px] border border-slate-200 rounded-lg overflow-hidden relative">
+           <MapContainer center={coords} zoom={16} zoomControl={false} dragging={false} scrollWheelZoom={false} className="h-full w-full">
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <Marker position={coords} />
+            </MapContainer>
+        </div>
+
+        <div>
+          <span className="text-[10pt] font-bold text-slate-400 uppercase tracking-widest block mb-2">Ubicación</span>
+          <p className="text-[14pt] text-slate-700 leading-tight italic">"{property.direccion}"</p>
+        </div>
+      </div>
+
+      <footer className="mt-auto p-16 border-t border-slate-100 flex justify-between items-center opacity-40 grayscale">
+        <span className="text-2xl font-black tracking-tighter">RENNIS REALTY</span>
+        <span className="text-xs font-bold uppercase tracking-widest">{new Date().toLocaleDateString('es-AR')}</span>
       </footer>
     </div>
   );
