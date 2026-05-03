@@ -64,4 +64,5 @@ El presente documento es un Segundo Testimonio de la Escritura Pública Nº 198 
 ## Historial de Procesamiento
 - **2026-05-01**: Ingesta de 5 imágenes correspondientes a la documentación inicial de la propiedad.
 - **Origen**: Archivos procesados desde la carpeta `raw/`.
-- **Estado**: Pendiente de extracción de metadata y datos catastrales.
+- **Estado**: Pendiente de extracción de metadata y datos catastrales.- [Multa_Malezas_2025_Acta.jpg](file:///Volumes/Proyectos/Escrituras/attachments/propiedades/Machagai%20-%20Encina/Multa_Malezas_2025_Acta.jpg)
+- [Multa_Malezas_2025_Plan_Pago.jpg](file:///Volumes/Proyectos/Escrituras/attachments/propiedades/Machagai%20-%20Encina/Multa_Malezas_2025_Plan_Pago.jpg)
