@@ -634,10 +634,10 @@ export default function App() {
 
   const handlePrint = (property, coords) => {
     setPrintData({ property, coords });
-    // Pequeño delay para asegurar que React renderizó el componente oculto
+    // Mayor delay para asegurar que React renderizó el componente y las imágenes empezaron a cargar
     setTimeout(() => {
       window.print();
-    }, 100);
+    }, 500);
   };
 
   useEffect(() => {
@@ -674,17 +674,19 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className="h-screen bg-[#020617] flex overflow-hidden">
-        <Sidebar />
-        <div className="flex-1 ml-64 flex flex-col h-full overflow-y-auto scroll-smooth">
-          <Topbar />
-          <Routes>
-            <Route path="/" element={<Dashboard properties={properties} globalDebt={globalTotalDeuda} />} />
-            <Route path="/property/:id" element={<PropertyDetail properties={properties} onPrint={handlePrint} />} />
-          </Routes>
+      <>
+        <div className="no-print flex min-h-screen bg-[#020617] text-slate-200 selection:bg-orange-500/30">
+          <Sidebar />
+          <div className="flex-1 ml-64 flex flex-col h-full overflow-y-auto scroll-smooth">
+            <Topbar />
+            <Routes>
+              <Route path="/" element={<Dashboard properties={properties} globalDebt={globalTotalDeuda} />} />
+              <Route path="/property/:id" element={<PropertyDetail properties={properties} onPrint={handlePrint} />} />
+            </Routes>
+          </div>
         </div>
         <PrintFicha property={printData.property} coords={printData.coords} />
-      </div>
+      </>
     </BrowserRouter>
   );
 }

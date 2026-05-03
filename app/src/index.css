@@ -89,24 +89,22 @@
     overflow: visible !important;
   }
 
-  /* Ocultar todo el dashboard */
-  #root > div:not(.print-container), 
-  aside, 
-  header, 
+  /* Ocultar elementos específicos */
   .no-print {
     display: none !important;
   }
 
-  /* Mostrar solo el contenedor de impresión */
+  /* El contenedor de impresión debe ser visible y ocupar la página */
   .print-container {
     display: block !important;
+    background: white !important;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 99999;
-    background: white !important;
+    margin: 0;
+    padding: 0;
+    width: 210mm;
+    height: 296mm;
   }
 
   @page {
