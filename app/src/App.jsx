@@ -652,8 +652,8 @@ function generarFichaPDF(property, coords) {
 
       <!-- SECTION 3: MAP SECTION -->
       <section class="w-full">
-        <div class="aspect-[21/9] bg-[#F5F5F5] border-[0.25pt] border-neutral-200 relative overflow-hidden">
-          <iframe src="${osmEmbedUrl}" style="width:100%; height:130px; border:none; filter:grayscale(1) contrast(1.1) opacity(0.7);"></iframe>
+        <div style="width:100%; height:180px; background:#F5F5F5; border:0.25pt solid #e2e8f0; position:relative; overflow:hidden;">
+          <iframe src="${osmEmbedUrl}" style="width:100%; height:100%; border:none; filter:grayscale(1) contrast(1.1) opacity(0.7);"></iframe>
         </div>
       </section>
 
