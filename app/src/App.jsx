@@ -532,9 +532,6 @@ function PropertyDetail({ properties }) {
 function generarFichaPDF(property, coords) {
   const mapLat = coords[0];
   const mapLng = coords[1];
-  const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${mapLat},${mapLng}&zoom=16&size=800x300&maptype=roadmap&markers=color:black%7C${mapLat},${mapLng}&style=feature:all|saturation:-100&key=` 
-    || `https://tile.openstreetmap.org/16/${Math.floor((mapLng+180)/360*Math.pow(2,16))}/${Math.floor((1-Math.log(Math.tan(mapLat*Math.PI/180)+1/Math.cos(mapLat*Math.PI/180))/Math.PI)/2*Math.pow(2,16))}.png`;
-  
   const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${mapLng-0.005},${mapLat-0.003},${mapLng+0.005},${mapLat+0.003}&layer=mapnik&marker=${mapLat},${mapLng}`;
 
   const html = `<!DOCTYPE html>
@@ -547,21 +544,22 @@ function generarFichaPDF(property, coords) {
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;900&display=swap" rel="stylesheet"/>
   <style>
     @media print {
-      body { background: white; }
-      .no-print { display: none; }
+      body { background: white; margin: 0; padding: 0; }
+      .no-print { display: none !important; }
       @page { size: A4 portrait; margin: 0; }
     }
     body {
       background-color: #f3f3f3;
       display: flex;
       justify-content: center;
-      padding-top: 40px;
-      padding-bottom: 40px;
+      padding: 40px 0;
       font-family: 'Inter', sans-serif;
+      margin: 0;
     }
     .a4-page {
       width: 210mm;
       height: 297mm;
+      max-height: 297mm;
       background-color: #ffffff;
       box-shadow: 0 0 10px rgba(0,0,0,0.05);
       position: relative;
@@ -575,73 +573,72 @@ function generarFichaPDF(property, coords) {
   <button onclick="window.print()" class="no-print" style="position:fixed;top:20px;right:20px;z-index:999;background:#000;color:#fff;border:none;padding:12px 28px;font-family:Inter,sans-serif;font-weight:700;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:6px;">IMPRIMIR / GUARDAR PDF</button>
 
   <div class="a4-page">
-
     <!-- HERO -->
-    <section class="relative w-full h-[45%] overflow-hidden">
-      <img src="${property.foto_url}" class="w-full h-full object-cover" alt="${property.id}"/>
-      <div class="absolute inset-0 flex flex-col justify-end px-[25mm] pb-12" style="background:linear-gradient(to top, rgba(0,0,0,0.5), transparent)">
-        <h1 class="text-white uppercase" style="font-size:42pt;font-weight:700;letter-spacing:-0.04em;line-height:1.1">${property.id}</h1>
+    <section style="position:relative;width:100%;height:38%;overflow:hidden;flex-shrink:0">
+      <img src="${property.foto_url}" style="width:100%;height:100%;object-fit:cover" alt="${property.id}"/>
+      <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.5), transparent);display:flex;flex-direction:column;justify-content:flex-end;padding:0 25mm 30px 25mm">
+        <h1 style="color:white;text-transform:uppercase;font-size:38pt;font-weight:700;letter-spacing:-0.04em;line-height:1;margin:0">${property.id}</h1>
       </div>
     </section>
 
     <!-- CONTENT -->
-    <main class="flex-1 px-[25mm] pt-10 flex flex-col gap-8">
+    <main style="flex:1;padding:24px 25mm 0 25mm;display:flex;flex-direction:column;gap:20px;overflow:hidden">
       <!-- LOCATION + SURFACE -->
-      <section class="flex flex-col gap-6">
-        <div class="flex flex-col">
-          <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;margin-bottom:4px">Localidad</span>
-          <span style="font-size:20pt;font-weight:600;text-transform:uppercase;color:#000;line-height:1">${(property.localidad || '').split(',')[0].trim()}, CHACO</span>
+      <section style="display:flex;flex-direction:column;gap:16px">
+        <div>
+          <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;display:block;margin-bottom:2px">Localidad</span>
+          <span style="font-size:18pt;font-weight:600;text-transform:uppercase;color:#000;line-height:1">${(property.localidad || '').split(',')[0].trim()}, CHACO</span>
         </div>
-        <div class="flex flex-col">
-          <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;margin-bottom:4px">Superficie Total</span>
-          <span style="font-size:32pt;font-weight:700;text-transform:uppercase;color:#000;line-height:1">${property.superficie_m2} M²</span>
+        <div>
+          <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;display:block;margin-bottom:2px">Superficie Total</span>
+          <span style="font-size:28pt;font-weight:700;text-transform:uppercase;color:#000;line-height:1">${property.superficie_m2} M²</span>
         </div>
-        <div style="width:100%;height:0.25pt;background:#e5e5e5;margin-top:8px"></div>
+        <div style="width:100%;height:0.5px;background:#e5e5e5"></div>
       </section>
 
       <!-- MAP -->
-      <section class="w-full">
-        <div style="aspect-ratio:21/9;background:#F5F5F5;border:0.25pt solid #e5e5e5;position:relative;overflow:hidden">
+      <section style="width:100%;flex-shrink:1">
+        <div style="width:100%;height:140px;background:#F5F5F5;border:0.5px solid #e5e5e5;position:relative;overflow:hidden">
           <iframe src="${osmEmbedUrl}" style="width:100%;height:100%;border:none;filter:grayscale(40%) opacity(0.7)"></iframe>
         </div>
       </section>
 
       <!-- LOCATION DETAILS -->
-      <section class="mt-auto pb-24 grid grid-cols-12 items-end" style="gap:5mm">
-        <div class="col-span-7 flex flex-col gap-4">
-          <div class="flex flex-col gap-2">
-            <h2 style="font-size:14pt;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#000">Ubicación & Referencia</h2>
-            <div style="width:48px;height:0.5pt;background:#000"></div>
+      <section style="margin-top:auto;padding-bottom:60px;display:grid;grid-template-columns:7fr 5fr;gap:5mm;align-items:end">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div>
+            <h2 style="font-size:12pt;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#000;margin:0 0 4px 0">Ubicación & Referencia</h2>
+            <div style="width:48px;height:0.5px;background:#000"></div>
           </div>
-          <p style="font-size:12pt;color:#444748;line-height:1.6;letter-spacing:0.02em">
+          <p style="font-size:10pt;color:#444748;line-height:1.5;letter-spacing:0.02em;margin:0">
             ${(property.direccion || '').toUpperCase()}
           </p>
         </div>
-        <div class="col-span-5 text-right">
-          <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;margin-bottom:4px;display:block">Titularidad Dominial</span>
-          <span style="font-size:14pt;font-weight:700;color:#000;display:block;margin-bottom:12px">${(property.titulares || []).join(' & ')}</span>
-          <span style="font-size:8pt;font-style:italic;color:#5e5e5e;text-transform:uppercase;letter-spacing:0.2em;display:block;margin-bottom:8px">Confidential Listing</span>
-          <span style="font-size:8pt;font-weight:600;color:#646464;text-transform:uppercase">Ref: ${property.nomenclatura || 'S/N'}</span>
+        <div style="text-align:right">
+          <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;display:block;margin-bottom:2px">Titularidad Dominial</span>
+          <span style="font-size:12pt;font-weight:700;color:#000;display:block;margin-bottom:10px">${(property.titulares || []).join(' & ')}</span>
+          <span style="font-size:7pt;font-style:italic;color:#5e5e5e;text-transform:uppercase;letter-spacing:0.2em;display:block;margin-bottom:4px">Confidential Listing</span>
+          <span style="font-size:7pt;font-weight:600;color:#646464;text-transform:uppercase">Ref: ${property.nomenclatura || 'S/N'}</span>
         </div>
       </section>
     </main>
 
     <!-- FOOTER -->
-    <footer class="absolute bottom-0 w-full flex justify-between items-center px-[25mm] py-8" style="border-top:0.25pt solid #e5e5e5;background:white">
-      <div style="font-size:18px;font-weight:900;color:#000">RENNIS REALTY</div>
-      <div class="flex gap-8">
-        <span style="font-size:8pt;text-transform:uppercase;letter-spacing:0.1em;color:#999">GESTIÓN INMOBILIARIA</span>
-        <span style="font-size:8pt;text-transform:uppercase;letter-spacing:0.1em;color:#999">${new Date().toLocaleDateString('es-AR')}</span>
+    <footer style="position:absolute;bottom:0;width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 25mm;border-top:0.5px solid #e5e5e5;background:white">
+      <div style="font-size:14px;font-weight:900;color:#000">RENNIS REALTY</div>
+      <div style="display:flex;gap:24px">
+        <span style="font-size:7pt;text-transform:uppercase;letter-spacing:0.1em;color:#999">GESTIÓN INMOBILIARIA</span>
+        <span style="font-size:7pt;text-transform:uppercase;letter-spacing:0.1em;color:#999">${new Date().toLocaleDateString('es-AR')}</span>
       </div>
-      <div style="font-size:8pt;text-transform:uppercase;letter-spacing:0.1em;color:#000">© ALL RIGHTS RESERVED</div>
+      <div style="font-size:7pt;text-transform:uppercase;letter-spacing:0.1em;color:#000">© ALL RIGHTS RESERVED</div>
     </footer>
   </div>
 </body>
 </html>`;
 
-  const w = window.open('', '_blank');
-  w.document.write(html);
-  w.document.close();
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
 }
 
 export default function App() {
