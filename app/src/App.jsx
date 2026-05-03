@@ -575,11 +575,6 @@ function generarFichaPDF(property, coords) {
   <button onclick="window.print()" class="no-print" style="position:fixed;top:20px;right:20px;z-index:999;background:#000;color:#fff;border:none;padding:12px 28px;font-family:Inter,sans-serif;font-weight:700;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:6px;">IMPRIMIR / GUARDAR PDF</button>
 
   <div class="a4-page">
-    <!-- TOP BAR -->
-    <header class="absolute top-0 left-0 w-full pt-12 px-[25mm] z-20 flex items-center justify-between pointer-events-none">
-      <div class="text-xl font-bold tracking-tighter text-white drop-shadow-sm">RENNIS REALTY</div>
-      <div class="tracking-tight uppercase font-light text-xs text-white border-[0.5pt] border-white px-3 py-1" style="background:rgba(0,0,0,0.1);backdrop-filter:blur(8px)">FOR SALE</div>
-    </header>
 
     <!-- HERO -->
     <section class="relative w-full h-[45%] overflow-hidden">
