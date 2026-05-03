@@ -671,8 +671,12 @@ function generarFichaPDF(property, coords) {
 
         <div class="flex flex-col gap-1 col-span-1">
           <span class="text-[7pt] font-black text-slate-400 uppercase tracking-widest">Titularidad</span>
-          <p class="text-[12pt] font-extrabold text-primary leading-tight uppercase mt-2">
-            ${(property.titulares || []).join(' / ') || '---'}
+          <p class="text-[12pt] text-primary leading-tight uppercase mt-2">
+            ${(property.titulares || []).map((t, idx) => 
+              idx === 0 
+                ? `<span class="font-black">${t}</span>` 
+                : `<span class="font-normal text-slate-600"> / ${t}</span>`
+            ).join('') || '---'}
           </p>
         </div>
 
