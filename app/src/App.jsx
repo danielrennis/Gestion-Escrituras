@@ -628,15 +628,15 @@ function generarFichaPDF(property, coords) {
     </header>
 
     <!-- SECTION 1: HERO SECTION -->
-    <section class="relative w-full h-[33%] overflow-hidden bg-black">
+    <section class="relative w-full h-[30%] overflow-hidden bg-black">
       <img src="${heroImg}" class="w-full h-full object-cover" alt="Property Hero" />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end px-[25mm] pb-8">
-        <h1 class="text-[36pt] leading-[1.0] font-black text-white uppercase tracking-tighter">${property.id}</h1>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end px-[25mm] pb-6">
+        <h1 class="text-[34pt] leading-[1.0] font-black text-white uppercase tracking-tighter">${property.id}</h1>
       </div>
     </section>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 px-[25mm] pt-6 flex flex-col gap-4 bg-white overflow-hidden">
+    <main class="flex-1 px-[25mm] pt-6 flex flex-col gap-6 bg-white">
       <!-- SECTION 2: LOCATION AND SURFACE -->
       <section class="flex flex-col gap-3">
         <div class="flex flex-col">
@@ -653,12 +653,12 @@ function generarFichaPDF(property, coords) {
       <!-- SECTION 3: MAP SECTION -->
       <section class="w-full">
         <div class="aspect-[21/9] bg-[#F5F5F5] border-[0.25pt] border-neutral-200 relative overflow-hidden">
-          <iframe src="${osmEmbedUrl}" style="width:100%; height:140px; border:none; filter:grayscale(1) contrast(1.1) opacity(0.7);"></iframe>
+          <iframe src="${osmEmbedUrl}" style="width:100%; height:130px; border:none; filter:grayscale(1) contrast(1.1) opacity(0.7);"></iframe>
         </div>
       </section>
 
       <!-- SECTION 4: LOCATION & OWNERSHIP -->
-      <section class="mt-auto pb-16 grid grid-cols-12 gap-6 items-end">
+      <section class="pb-24 grid grid-cols-12 gap-6 items-start">
         <div class="col-span-7 flex flex-col gap-4">
           <div class="flex flex-col gap-1.5">
             <h2 class="text-[11pt] font-bold uppercase text-primary tracking-widest">Detalles & Titularidad</h2>
@@ -675,8 +675,8 @@ function generarFichaPDF(property, coords) {
              </div>
           </div>
         </div>
-        <div class="col-span-5 text-right">
-          <span class="text-[7pt] italic text-slate-400 uppercase tracking-[0.2em] block mb-1.5">Institutional Report</span>
+        <div class="col-span-5 text-right flex flex-col gap-1 mt-10">
+          <span class="text-[7pt] italic text-slate-400 uppercase tracking-[0.2em] block">Institutional Report</span>
           <span class="text-[7pt] font-bold text-slate-500 uppercase tracking-widest">Ref: ${property.nomenclatura || property.id}</span>
         </div>
       </section>
