@@ -703,9 +703,13 @@ function generarFichaPDF(property, coords) {
 </body>
 </html>`;
 
-  const base64Html = btoa(unescape(encodeURIComponent(html)));
-  const dataUrl = `data:text/html;base64,${base64Html}`;
-  window.open(dataUrl, '_blank');
+  const blob = new Blob([html], { type: 'text/html' });
+  const blobUrl = URL.createObjectURL(blob);
+  const newWin = window.open(blobUrl, '_blank');
+  
+  if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
+    alert('El navegador bloqueó la apertura de la ficha. Por favor, permití los popups para este sitio.');
+  }
 }
 
 export default function App() {
