@@ -42,15 +42,14 @@ function Sidebar() {
 
       <style>{`
         @media print {
-          aside, header, button, .no-print { display: none !important; }
-          main { margin: 0 !important; padding: 0 !important; width: 100% !important; background: white !important; color: black !important; }
-          .kpi-card { border: 1px solid #eee !important; box-shadow: none !important; background: white !important; color: black !important; }
-          .print-only { display: block !important; }
-          .text-slate-400, .text-slate-500 { color: #555 !important; }
-          .text-white { color: black !important; }
-          img { max-height: 400px !important; width: 100% !important; object-fit: cover !important; }
+          @page { margin: 0; }
+          body { background: white !important; }
+          .no-print { display: none !important; }
+          aside, header, nav, button { display: none !important; }
+          main { margin: 0 !important; padding: 0 !important; width: 100% !important; background: white !important; }
+          .sales-sheet { display: block !important; background: white !important; min-height: 100vh; padding: 0; }
         }
-        .print-only { display: none; }
+        .sales-sheet { display: none; }
       `}</style>
 
       <div className="mt-auto px-4 border-t border-slate-800/50 pt-6">
@@ -536,7 +535,61 @@ function PropertyDetail({ properties }) {
         </div>
 
       </div>
+      <SalesSheet property={property} />
     </main>
+  );
+}
+
+function SalesSheet({ property }) {
+  return (
+    <div className="sales-sheet font-sans bg-white p-20 text-slate-900">
+      <div className="relative w-full h-[500px] mb-16 overflow-hidden rounded-3xl shadow-2xl">
+        <img src={property.foto_url} className="absolute inset-0 w-full h-full object-cover" alt="Property" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        <div className="absolute bottom-12 left-12 right-12">
+          <h1 className="text-6xl font-black text-white tracking-tighter mb-2">{property.id}</h1>
+          <p className="text-orange-400 text-lg font-bold tracking-[0.3em] uppercase">{property.localidad}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-12 mb-16">
+        <div className="col-span-2">
+          <span className="text-[10px] font-black text-slate-400 tracking-[0.2em] uppercase block mb-6 border-b border-slate-100 pb-4">Descripción General</span>
+          <div className="text-xl text-slate-700 leading-relaxed italic pr-12 font-medium">
+             <div dangerouslySetInnerHTML={{ __html: (property.resumen || "").replace(/\n/g, '<br/>') }} />
+          </div>
+        </div>
+        
+        <div className="flex flex-col gap-10">
+          <span className="text-[10px] font-black text-slate-400 tracking-[0.2em] uppercase block mb-6 border-b border-slate-100 pb-4">Especificaciones Técnicas</span>
+          <div className="flex flex-col gap-8">
+            <div>
+              <label className="text-[10px] text-orange-600 font-black uppercase tracking-widest block mb-1">Superficie Total</label>
+              <p className="text-3xl font-black text-slate-900">{property.superficie_m2} m²</p>
+            </div>
+            <div>
+              <label className="text-[10px] text-orange-600 font-black uppercase tracking-widest block mb-1">Ubicación / Dirección</label>
+              <p className="text-lg font-bold text-slate-800 leading-tight">{property.direccion}</p>
+            </div>
+            <div>
+              <label className="text-[10px] text-orange-600 font-black uppercase tracking-widest block mb-1">Nomenclatura Catastral</label>
+              <p className="text-sm font-mono text-slate-600">{property.nomenclatura}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-auto pt-16 border-t border-slate-100 flex justify-between items-center opacity-50 grayscale">
+        <div>
+          <span className="text-xl font-black tracking-tighter text-slate-900">RENNIS REALTY</span>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Consultoría & Gestión Inmobiliaria</p>
+        </div>
+        <div className="text-right">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Documento Generado el</p>
+          <p className="text-xs font-bold text-slate-900">{new Date().toLocaleDateString('es-AR')}</p>
+        </div>
+      </div>
+    </div>
   );
 }
 
