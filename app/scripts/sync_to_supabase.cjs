@@ -3,7 +3,22 @@ const fs = require('fs');
 const path = require('path');
 
 const SUPABASE_URL = 'https://zfwexmhfybvuscaejfuq.supabase.co';
-const SUPABASE_SERVICE_ROLE_KEY = 'SECRET_KEY_REMOVED';
+
+// Intentar cargar la clave desde .env.local
+let SUPABASE_SERVICE_ROLE_KEY = '';
+const envPath = path.join(__dirname, '../../.env.local');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  const serviceMatch = envContent.match(/SUPABASE_SERVICE_ROLE_KEY=(.*)/);
+  const anonMatch = envContent.match(/VITE_SUPABASE_ANON_KEY=(.*)/);
+  if (serviceMatch) SUPABASE_SERVICE_ROLE_KEY = serviceMatch[1].trim();
+  else if (anonMatch) SUPABASE_SERVICE_ROLE_KEY = anonMatch[1].trim();
+}
+
+if (!SUPABASE_SERVICE_ROLE_KEY || SUPABASE_SERVICE_ROLE_KEY === 'SECRET_KEY_REMOVED') {
+  console.error('❌ Error: No se encontró la clave en .env.local');
+  process.exit(1);
+}
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
