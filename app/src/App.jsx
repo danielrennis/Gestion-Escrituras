@@ -67,7 +67,7 @@ function Topbar() {
   );
 }
 
-function Dashboard({ properties }) {
+function Dashboard({ properties, globalDebt }) {
   const navigate = useNavigate();
   
   const stats = useMemo(() => {
@@ -98,7 +98,9 @@ function Dashboard({ properties }) {
         <div className="kpi-card p-5">
           <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Saldo Deudor Total</span>
           <div className="flex items-baseline justify-end gap-2 mt-1">
-            <span className="text-2xl font-black tracking-tight text-orange-400">$0</span>
+            <span className={`text-2xl font-black tracking-tight ${globalDebt > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+              ${globalDebt.toLocaleString('es-AR')}
+            </span>
           </div>
           <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Impuestos + Multas</span>
         </div>
@@ -521,22 +523,38 @@ function PropertyDetail({ properties }) {
 
 export default function App() {
   const [properties, setProperties] = useState([]);
+  const [movimientos, setMovimientos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProperties = async () => {
-      const { data, error } = await supabase
+    const fetchData = async () => {
+      const { data: props, error: propsError } = await supabase
         .from('propiedades')
         .select('*')
         .order('id', { ascending: true });
       
-      if (error) console.error('Error fetching properties:', error);
-      else setProperties(data);
+      const { data: movs, error: movsError } = await supabase
+        .from('movimientos')
+        .select('*');
+      
+      if (propsError) console.error('Error fetching properties:', propsError);
+      if (movsError) console.error('Error fetching movements:', movsError);
+
+      setProperties(props || []);
+      setMovimientos(movs || []);
       setLoading(false);
     };
 
-    fetchProperties();
+    fetchData();
   }, []);
+
+  const globalTotalDeuda = useMemo(() => {
+    return movimientos.reduce((acc, mov) => {
+      const monto = parseFloat(mov.monto);
+      const factor = mov.tipo_movimiento === 'DEUDA' ? 1 : -1;
+      return acc + (monto * factor);
+    }, 0);
+  }, [movimientos]);
 
   if (loading) return <div className="h-screen bg-[#020617] flex items-center justify-center text-white font-black tracking-widest">LOADING DATABASE...</div>;
 
@@ -547,7 +565,7 @@ export default function App() {
         <div className="flex-1 ml-64 flex flex-col h-full overflow-y-auto scroll-smooth">
           <Topbar />
           <Routes>
-            <Route path="/" element={<Dashboard properties={properties} />} />
+            <Route path="/" element={<Dashboard properties={properties} globalDebt={globalTotalDeuda} />} />
             <Route path="/property/:id" element={<PropertyDetail properties={properties} />} />
           </Routes>
         </div>
