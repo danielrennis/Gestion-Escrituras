@@ -556,50 +556,72 @@ function PropertyDetail({ properties }) {
 
 function SalesSheet({ property, coords }) {
   return (
-    <div className="sales-sheet bg-white text-slate-900 overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
-      {/* 1. PORTADA GIGANTE */}
-      <div className="w-full h-[45%] relative">
-        <img src={property.foto_url} className="w-full h-full object-cover" alt="Property Hero" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
-        <div className="absolute bottom-10 left-16">
-          <h1 className="text-7xl font-black tracking-tighter text-slate-900 leading-none mb-2">{property.id}</h1>
-          <p className="text-orange-500 text-2xl font-black uppercase tracking-[0.2em]">{property.localidad}, Chaco</p>
-        </div>
-      </div>
+    <div className="sales-sheet bg-white text-slate-900 flex flex-col" style={{ width: '210mm', height: '297mm', fontFamily: "'Inter', sans-serif" }}>
+      {/* TOP BAR */}
+      <header className="absolute top-0 left-0 w-full pt-12 px-[25mm] z-20 flex items-center justify-between pointer-events-none">
+        <div className="text-xl font-bold tracking-tighter text-white drop-shadow-sm">RENNIS REALTY</div>
+        <div className="font-sans tracking-tight uppercase font-light text-xs text-white border-[0.5pt] border-white px-3 py-1 bg-black/10 backdrop-blur-sm">FOR SALE</div>
+      </header>
 
-      {/* 2. DATOS DE IMPACTO */}
-      <div className="px-16 py-12 grid grid-cols-2 gap-10 border-b border-slate-100">
-        <div className="flex flex-col">
-          <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Superficie Total</span>
-          <div className="text-7xl font-black text-slate-900 leading-none">
-            {property.superficie_m2} <span className="text-2xl text-orange-500 font-black">M²</span>
+      {/* SECTION 1: HERO SECTION */}
+      <section className="relative w-full h-[45%] overflow-hidden">
+        <img src={property.foto_url} className="w-full h-full object-cover" alt="Hero" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex flex-col justify-end px-[25mm] pb-12">
+          <h1 className="text-[42pt] font-bold text-white uppercase tracking-tighter leading-[1.1]">{property.id}</h1>
+        </div>
+      </section>
+
+      {/* MAIN CONTENT */}
+      <main className="flex-1 px-[25mm] pt-10 flex flex-col gap-8 bg-white">
+        {/* SECTION 2: LOCATION AND SURFACE */}
+        <section className="flex flex-col gap-6">
+          <div className="flex flex-col">
+            <span className="text-[8pt] font-semibold text-slate-500 uppercase tracking-widest mb-1">Localidad</span>
+            <span className="text-[20pt] font-semibold uppercase text-black leading-none">{property.localidad}, CHACO</span>
           </div>
-        </div>
-        <div className="flex flex-col justify-center">
-          <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Ubicación Exacta</span>
-          <p className="text-2xl font-bold text-slate-800 leading-tight italic">"{property.direccion}"</p>
-        </div>
-      </div>
+          <div className="flex flex-col">
+            <span className="text-[8pt] font-semibold text-slate-500 uppercase tracking-widest mb-1">Superficie Total</span>
+            <span className="text-[32pt] font-bold uppercase text-black leading-none">{property.superficie_m2} M²</span>
+          </div>
+          <div className="w-full h-[0.25pt] bg-neutral-200 mt-2"></div>
+        </section>
 
-      {/* 3. MAPA GIGANTE */}
-      <div className="px-16 py-10 flex-1">
-        <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 block">Geolocalización Catastral</span>
-        <div className="w-full h-[400px] rounded-3xl overflow-hidden border border-slate-100 shadow-xl">
-           <MapContainer center={coords} zoom={16} zoomControl={false} dragging={false} scrollWheelZoom={false} className="h-full w-full">
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <Marker position={coords} />
-            </MapContainer>
-        </div>
-      </div>
+        {/* SECTION 3: MAP SECTION */}
+        <section className="w-full">
+          <div className="aspect-[21/9] bg-[#F5F5F5] border-[0.25pt] border-neutral-200 relative overflow-hidden rounded-sm">
+             <MapContainer center={coords} zoom={16} zoomControl={false} dragging={false} scrollWheelZoom={false} className="h-full w-full opacity-80">
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <Marker position={coords} />
+              </MapContainer>
+          </div>
+        </section>
 
-      {/* 4. BRANDING PIE */}
-      <div className="absolute bottom-10 left-16 right-16 flex justify-between items-center opacity-30">
-        <span className="text-3xl font-black tracking-tighter text-slate-900">RENNIS REALTY</span>
-        <div className="text-right">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ficha Técnica Oficial</p>
-          <p className="text-xs font-bold text-slate-900">{new Date().toLocaleDateString('es-AR')}</p>
+        {/* SECTION 4: LOCATION DETAILS */}
+        <section className="mt-auto pb-24 grid grid-cols-12 gap-5 items-end">
+          <div className="col-span-7 flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-[14pt] font-semibold uppercase text-black">Ubicación & Referencia</h2>
+              <div className="w-12 h-[0.5pt] bg-black"></div>
+            </div>
+            <p className="text-[12pt] text-slate-600 leading-relaxed tracking-wide italic font-light">
+                {property.direccion.toUpperCase()}
+            </p>
+          </div>
+          <div className="col-span-5 text-right">
+            <span className="text-[8pt] italic text-slate-400 uppercase tracking-[0.2em] block mb-2">Confidential Listing</span>
+            <span className="text-[8pt] font-semibold text-slate-500 uppercase">Ref: {property.nomenclatura}</span>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="absolute bottom-0 w-full flex justify-between items-center px-[25mm] py-8 border-t-[0.25pt] border-neutral-200 bg-white">
+        <div className="text-lg font-black text-black">RENNIS REALTY</div>
+        <div className="flex gap-8">
+          <span className="text-[8pt] uppercase tracking-widest text-neutral-400">Management Console</span>
+          <span className="text-[8pt] uppercase tracking-widest text-neutral-400">© ALL RIGHTS RESERVED</span>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
