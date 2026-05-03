@@ -623,29 +623,29 @@ function generarFichaPDF(property, coords) {
 
   <div class="a4-page">
     <!-- TOP APP BAR -->
-    <header class="absolute top-0 left-0 w-full pt-10 px-[25mm] z-20 flex items-center justify-between pointer-events-none">
+    <header class="absolute top-0 left-0 w-full pt-8 px-[25mm] z-20 flex items-center justify-between pointer-events-none">
       <div class="text-xl font-black tracking-tighter text-white drop-shadow-sm">RENNIS REALTY</div>
     </header>
 
     <!-- SECTION 1: HERO SECTION -->
-    <section class="relative w-full h-[40%] overflow-hidden bg-black">
+    <section class="relative w-full h-[33%] overflow-hidden bg-black">
       <img src="${heroImg}" class="w-full h-full object-cover" alt="Property Hero" />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end px-[25mm] pb-10">
-        <h1 class="text-[38pt] leading-[1.0] font-black text-white uppercase tracking-tighter">${property.id}</h1>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end px-[25mm] pb-8">
+        <h1 class="text-[36pt] leading-[1.0] font-black text-white uppercase tracking-tighter">${property.id}</h1>
       </div>
     </section>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 px-[25mm] pt-8 flex flex-col gap-6 bg-white">
+    <main class="flex-1 px-[25mm] pt-6 flex flex-col gap-4 bg-white overflow-hidden">
       <!-- SECTION 2: LOCATION AND SURFACE -->
-      <section class="flex flex-col gap-4">
+      <section class="flex flex-col gap-3">
         <div class="flex flex-col">
-          <span class="text-[7pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-1">Localidad</span>
-          <span class="text-[18pt] leading-none font-bold uppercase text-primary">${(property.localidad || '').split(' - ')[0].toUpperCase()}, CHACO</span>
+          <span class="text-[7pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-0.5">Localidad</span>
+          <span class="text-[16pt] leading-none font-bold uppercase text-primary">${(property.localidad || '').split(/[-,]/)[0].trim().toUpperCase()}, CHACO</span>
         </div>
         <div class="flex flex-col">
-          <span class="text-[7pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-1">Superficie Total</span>
-          <span class="text-[28pt] leading-none font-black uppercase text-primary">${property.superficie_m2} M²</span>
+          <span class="text-[7pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-0.5">Superficie Total</span>
+          <span class="text-[26pt] leading-none font-black uppercase text-primary">${property.superficie_m2} M²</span>
         </div>
         <div class="w-full h-[0.25pt] bg-neutral-200 mt-1"></div>
       </section>
@@ -653,30 +653,30 @@ function generarFichaPDF(property, coords) {
       <!-- SECTION 3: MAP SECTION -->
       <section class="w-full">
         <div class="aspect-[21/9] bg-[#F5F5F5] border-[0.25pt] border-neutral-200 relative overflow-hidden">
-          <iframe src="${osmEmbedUrl}" style="width:100%; height:180px; border:none; filter:grayscale(1) contrast(1.1) opacity(0.7);"></iframe>
+          <iframe src="${osmEmbedUrl}" style="width:100%; height:140px; border:none; filter:grayscale(1) contrast(1.1) opacity(0.7);"></iframe>
         </div>
       </section>
 
       <!-- SECTION 4: LOCATION & OWNERSHIP -->
-      <section class="mt-auto pb-20 grid grid-cols-12 gap-8 items-end">
-        <div class="col-span-7 flex flex-col gap-5">
-          <div class="flex flex-col gap-2">
-            <h2 class="text-[12pt] font-bold uppercase text-primary tracking-widest">Detalles & Titularidad</h2>
+      <section class="mt-auto pb-16 grid grid-cols-12 gap-6 items-end">
+        <div class="col-span-7 flex flex-col gap-4">
+          <div class="flex flex-col gap-1.5">
+            <h2 class="text-[11pt] font-bold uppercase text-primary tracking-widest">Detalles & Titularidad</h2>
             <div class="w-12 h-[0.5pt] bg-primary"></div>
           </div>
           <div class="flex flex-col gap-3">
              <div class="flex flex-col">
                 <span class="text-[6pt] font-black text-slate-400 uppercase mb-0.5">Ubicación</span>
-                <p class="text-[10pt] leading-tight text-slate-600 italic font-light uppercase">${(property.direccion || '').toUpperCase()}</p>
+                <p class="text-[9pt] leading-tight text-slate-600 italic font-light uppercase">${(property.direccion || '').toUpperCase()}</p>
              </div>
              <div class="flex flex-col">
                 <span class="text-[6pt] font-black text-slate-400 uppercase mb-0.5">Titular Dominial</span>
-                <p class="text-[10pt] leading-tight text-primary font-bold uppercase">${(property.titulares || []).join(' / ')}</p>
+                <p class="text-[9pt] leading-tight text-primary font-bold uppercase">${(property.titulares || []).join(' / ')}</p>
              </div>
           </div>
         </div>
         <div class="col-span-5 text-right">
-          <span class="text-[7pt] italic text-slate-400 uppercase tracking-[0.2em] block mb-2">Institutional Report</span>
+          <span class="text-[7pt] italic text-slate-400 uppercase tracking-[0.2em] block mb-1.5">Institutional Report</span>
           <span class="text-[7pt] font-bold text-slate-500 uppercase tracking-widest">Ref: ${property.nomenclatura || property.id}</span>
         </div>
       </section>
