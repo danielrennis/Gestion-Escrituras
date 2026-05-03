@@ -634,75 +634,75 @@ function generarFichaPDF(property, coords) {
     <div class="blue-accent"></div>
 
     <!-- BLACK HEADER SECTION -->
-    <header class="bg-surface-dark h-[45%] w-full relative flex flex-col justify-between px-16 py-20 overflow-hidden">
+    <header class="bg-surface-dark h-[35%] w-full relative flex flex-col justify-between px-16 py-16 overflow-hidden">
       <div class="z-20">
-        <span class="text-white text-[12pt] font-black tracking-[0.3em] uppercase opacity-90">RENNIS REALTY</span>
+        <span class="text-white text-[10pt] font-black tracking-[0.3em] uppercase opacity-90">RENNIS REALTY</span>
       </div>
       
       <div class="z-20 mt-auto">
-        <h1 class="text-white text-[58pt] leading-[0.9] font-black tracking-tighter uppercase break-words">
+        <h1 class="text-white text-[52pt] leading-[0.85] font-black tracking-tighter uppercase break-words">
           ${property.id.replace(' - ', '<br/>')}
         </h1>
       </div>
       
       <!-- SUBTLE TEXT -->
-      <div class="absolute bottom-8 right-16 z-20 text-right opacity-30">
-        <span class="text-white text-[7pt] font-bold uppercase tracking-[0.4em]">Propiedad Registrada • Chaco Argentina</span>
+      <div class="absolute bottom-6 right-16 z-20 text-right opacity-30">
+        <span class="text-white text-[6pt] font-bold uppercase tracking-[0.4em]">Propiedad Registrada • Chaco Argentina</span>
       </div>
     </header>
 
     <!-- PHOTO SECTION (Full Width) -->
-    <section class="w-full h-[20%] overflow-hidden bg-slate-200">
+    <section class="w-full h-[18%] overflow-hidden bg-slate-200">
       <img src="${heroImg}" class="w-full h-full object-cover grayscale-[0.2] contrast-[1.1]" alt="Property" />
     </section>
 
     <!-- WHITE INFORMATION SECTION -->
-    <main class="flex-1 px-16 py-12 flex flex-col justify-between bg-white">
+    <main class="flex-1 px-16 py-10 flex flex-col justify-between bg-white">
       
       <!-- INFO CARDS -->
-      <div class="grid grid-cols-3 gap-12">
+      <div class="grid grid-cols-3 gap-10">
         <div class="flex flex-col gap-1">
-          <span class="text-[7pt] font-black text-slate-400 uppercase tracking-widest">Superficie Total</span>
+          <span class="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Superficie Total</span>
           <div class="flex items-baseline gap-1">
-            <span class="text-[28pt] font-black text-primary tracking-tighter">${property.superficie_m2 || property.superficie || '---'}</span>
-            <span class="text-[10pt] font-bold text-slate-400 uppercase">${property.superficie_m2 ? 'm²' : ''}</span>
+            <span class="text-[24pt] font-black text-primary tracking-tighter">${property.superficie_m2 || property.superficie || '---'}</span>
+            <span class="text-[9pt] font-bold text-slate-400 uppercase">${property.superficie_m2 ? 'm²' : ''}</span>
           </div>
         </div>
 
         <div class="flex flex-col gap-1 col-span-1">
-          <span class="text-[7pt] font-black text-slate-400 uppercase tracking-widest">Titularidad</span>
-          <p class="text-[12pt] text-primary leading-tight uppercase mt-2">
+          <span class="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Titularidad</span>
+          <div class="text-[10pt] text-primary leading-tight uppercase mt-1">
             ${(property.titulares || []).map((t, idx) => 
               idx === 0 
                 ? `<span class="font-black">${t}</span>` 
                 : `<span class="font-normal text-slate-600"> / ${t}</span>`
             ).join('') || '---'}
-          </p>
+          </div>
         </div>
 
         <div class="flex flex-col gap-1">
-          <span class="text-[7pt] font-black text-slate-400 uppercase tracking-widest">Ubicación</span>
-          <p class="text-[12pt] font-extrabold text-primary leading-tight uppercase mt-2">
+          <span class="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Ubicación</span>
+          <p class="text-[10pt] font-extrabold text-primary leading-tight uppercase mt-1">
             ${(property.direccion || property.localidad || '---').toUpperCase()}
           </p>
         </div>
       </div>
 
       <!-- MAP SECTION -->
-      <div class="w-full flex flex-col gap-4 mt-8">
-        <div class="flex items-center gap-4">
-          <span class="text-[8pt] font-black uppercase tracking-[0.2em]">Geolocalización Digital</span>
-          <div class="flex-1 h-[1pt] bg-slate-100"></div>
+      <div class="w-full flex flex-col gap-3 mt-4">
+        <div class="flex items-center gap-3">
+          <span class="text-[7pt] font-black uppercase tracking-[0.2em]">Geolocalización Digital</span>
+          <div class="flex-1 h-[0.5pt] bg-slate-100"></div>
         </div>
-        <div class="w-full h-[140px] rounded-xl overflow-hidden border border-slate-100 relative shadow-sm">
+        <div class="w-full h-[120px] rounded-xl overflow-hidden border border-slate-100 relative shadow-sm">
           <iframe src="${osmEmbedUrl}" style="width:100%; height:100%; border:none; filter: grayscale(1) contrast(1.2);"></iframe>
         </div>
       </div>
 
       <!-- FOOTER -->
-      <footer class="pt-8 border-t border-slate-100 flex justify-between items-end">
+      <footer class="pt-6 border-t border-slate-100 flex justify-between items-end">
         <div class="flex flex-col gap-0.5">
-          <span class="text-[14pt] font-black tracking-tighter">RENNIS REALTY</span>
+          <span class="text-[12pt] font-black tracking-tighter">RENNIS REALTY</span>
           <span class="text-[6pt] text-slate-400 uppercase tracking-widest font-bold">Documento de Carácter Informativo</span>
         </div>
         <div class="text-right">
