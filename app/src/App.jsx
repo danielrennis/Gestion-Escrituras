@@ -192,7 +192,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-function PropertyDetail({ properties }) {
+function PropertyDetail({ properties, onPrint }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [movimientos, setMovimientos] = useState([]);
@@ -309,7 +309,7 @@ function PropertyDetail({ properties }) {
         <div className="absolute bottom-10 left-12 flex flex-col gap-3 z-20">
           <div className="flex gap-4 mb-4 no-print">
             <button onClick={() => navigate('/')} className="px-6 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/20 transition-all">← Volver</button>
-            <button onClick={() => generarFichaPDF(property, coords)} className="px-6 py-2 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
+            <button onClick={() => onPrint(property, coords)} className="px-6 py-2 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
               <span className="material-symbols-outlined !text-[16px]">picture_as_pdf</span>
               Generar Ficha
             </button>
@@ -542,180 +542,103 @@ function PropertyDetail({ properties }) {
 
 
 
-function generarFichaPDF(property, coords) {
-  const mapLat = coords[0];
-  const mapLng = coords[1];
+function PrintFicha({ property, coords }) {
+  if (!property) return null;
+  const mapLat = coords?.[0] || -27.45;
+  const mapLng = coords?.[1] || -58.98;
   const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${mapLng-0.005},${mapLat-0.003},${mapLng+0.005},${mapLat+0.003}&layer=mapnik&marker=${mapLat},${mapLng}`;
-
   const heroImg = getImageUrl(property.foto_url || property.foto_portada);
 
-  const html = `<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"><\/script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;800;900&display=swap" rel="stylesheet"/>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#000000",
-            "accent-blue": "#3b82f6",
-            "surface-dark": "#020617"
-          },
-          fontFamily: {
-            "inter": ["Inter", "sans-serif"]
-          }
-        }
-      }
-    }
-  <\/script>
-  <style>
-    * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; print-color-adjust: exact !important; }
-    @media print {
-      body { background: white !important; margin: 0 !important; }
-      .no-print { display: none !important; }
-      @page { size: A4 portrait; margin: 0; }
-      .a4-page { box-shadow: none !important; border: none !important; }
-    }
-    body {
-      background-color: #f3f3f3;
-      display: flex;
-      justify-content: center;
-      padding: 0;
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-    }
-    .a4-page {
-      width: 210mm;
-      height: 296mm;
-      background-color: #ffffff;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
-    }
-    .no-print {
-      position: fixed;
-      top: 25px;
-      right: 25px;
-      z-index: 9999;
-      background: #3b82f6;
-      color: #fff;
-      border: none;
-      padding: 14px 30px;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor: pointer;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      box-shadow: 0 15px 30px rgba(59,130,246,0.4);
-      text-transform: uppercase;
-    }
-    .blue-accent {
-      position: absolute;
-      top: -120px;
-      left: -120px;
-      width: 320px;
-      height: 320px;
-      background: #3b82f6;
-      border-radius: 50%;
-      z-index: 10;
-    }
-  </style>
-</head>
-<body class="text-primary">
-  <button onclick="window.print()" class="no-print">Imprimir Ficha Editorial</button>
+  return (
+    <div className="print-container">
+      <div className="w-[210mm] h-[296mm] bg-white relative overflow-hidden flex flex-col font-['Inter']">
+        <div className="absolute -top-[120px] -left-[120px] w-[320px] h-[320px] bg-[#3b82f6] rounded-full z-10"></div>
 
-  <div class="a4-page">
-    <div class="blue-accent"></div>
-
-    <header class="bg-surface-dark h-[32%] w-full relative flex flex-col justify-between px-16 py-14 overflow-hidden">
-      <div class="z-20">
-        <span class="text-white text-[10pt] font-black tracking-[0.3em] uppercase opacity-90">RENNIS REALTY</span>
-      </div>
-      
-      <div class="z-20 mt-auto">
-        <h1 class="text-white text-[48pt] leading-[0.85] font-black tracking-tighter uppercase break-words">
-          ${property.id.replace(' - ', '<br/>')}
-        </h1>
-      </div>
-      
-      <div class="absolute bottom-6 right-16 z-20 text-right opacity-30">
-        <span class="text-white text-[6pt] font-bold uppercase tracking-[0.4em]">Propiedad Registrada • Chaco Argentina</span>
-      </div>
-    </header>
-
-    <section class="w-full h-[18%] overflow-hidden bg-slate-200">
-      <img src="${heroImg}" class="w-full h-full object-cover grayscale-[0.1] contrast-[1.1]" alt="Property" />
-    </section>
-
-    <main class="flex-1 px-16 py-8 flex flex-col justify-between bg-white">
-      <div class="grid grid-cols-3 gap-10">
-        <div class="flex flex-col gap-1">
-          <span class="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Superficie Total</span>
-          <div class="flex items-baseline gap-1">
-            <span class="text-[24pt] font-black text-primary tracking-tighter">${property.superficie_m2 || property.superficie || '---'}</span>
-            <span class="text-[9pt] font-bold text-slate-400 uppercase">${property.superficie_m2 ? 'm²' : ''}</span>
+        <header className="bg-[#020617] h-[32%] w-full relative flex flex-col justify-between px-16 py-14 overflow-hidden">
+          <div className="z-20">
+            <span className="text-white text-[10pt] font-black tracking-[0.3em] uppercase opacity-90">RENNIS REALTY</span>
           </div>
-        </div>
-
-        <div class="flex flex-col gap-1 col-span-1">
-          <span class="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Titularidad</span>
-          <div class="text-[10pt] text-primary leading-tight uppercase mt-1">
-            ${(property.titulares || []).map((t, idx) => 
-              idx === 0 
-                ? `<span class="font-black">${t}</span>` 
-                : `<span class="font-normal text-slate-600"> / ${t}</span>`
-            ).join('') || '---'}
+          <div className="z-20 mt-auto">
+            <h1 className="text-white text-[48pt] leading-[0.85] font-black tracking-tighter uppercase" 
+                dangerouslySetInnerHTML={{ __html: property.id.replace(' - ', '<br/>') }} />
           </div>
-        </div>
+          <div className="absolute bottom-6 right-16 z-20 text-right opacity-30">
+            <span className="text-white text-[6pt] font-bold uppercase tracking-[0.4em]">Propiedad Registrada • Chaco Argentina</span>
+          </div>
+        </header>
 
-        <div class="flex flex-col gap-1">
-          <span class="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Ubicación</span>
-          <p class="text-[10pt] font-extrabold text-primary leading-tight uppercase mt-1">
-            ${(property.direccion || property.localidad || '---').toUpperCase()}
-          </p>
-        </div>
+        <section className="w-full h-[18%] overflow-hidden bg-slate-200">
+          <img src={heroImg} className="w-full h-full object-cover grayscale-[0.1] contrast-[1.1]" alt="Property" />
+        </section>
+
+        <main className="flex-1 px-16 py-8 flex flex-col justify-between bg-white text-black">
+          <div className="grid grid-cols-3 gap-10">
+            <div className="flex flex-col gap-1">
+              <span className="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Superficie Total</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-[24pt] font-black text-black tracking-tighter">{property.superficie_m2 || property.superficie || '---'}</span>
+                <span className="text-[9pt] font-bold text-slate-400 uppercase">{property.superficie_m2 ? 'm²' : ''}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1 col-span-1">
+              <span className="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Titularidad</span>
+              <div className="text-[10pt] text-black leading-tight uppercase mt-1">
+                {(property.titulares || []).map((t, idx) => (
+                  <span key={idx}>
+                    {idx === 0 ? <span className="font-black">{t}</span> : <span className="font-normal text-slate-600"> / {t}</span>}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Ubicación</span>
+              <p className="text-[10pt] font-extrabold text-black leading-tight uppercase mt-1">
+                {(property.direccion || property.localidad || '---').toUpperCase()}
+              </p>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-col gap-2 mt-4">
+            <div className="flex items-center gap-3">
+              <span className="text-[7pt] font-black uppercase tracking-[0.2em]">Geolocalización Digital</span>
+              <div className="flex-1 h-[0.5pt] bg-slate-100"></div>
+            </div>
+            <div className="w-full h-[120px] rounded-xl overflow-hidden border border-slate-100 relative shadow-sm">
+              <iframe src={osmEmbedUrl} style={{ width: '100%', height: '100%', border: 'none', filter: 'grayscale(1) contrast(1.2)' }}></iframe>
+            </div>
+          </div>
+
+          <footer className="pt-4 border-t border-slate-100 flex justify-between items-end">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[12pt] font-black tracking-tighter">RENNIS REALTY</span>
+              <span className="text-[6pt] text-slate-400 uppercase tracking-widest font-bold">Documento de Carácter Informativo</span>
+            </div>
+            <div className="text-right">
+              <span className="text-[7pt] font-bold text-black uppercase tracking-widest">Ref: {property.id}</span>
+              <p className="text-[6pt] text-slate-400 uppercase mt-0.5">Generado el {new Date().toLocaleDateString('es-AR')}</p>
+            </div>
+          </footer>
+        </main>
       </div>
-
-      <div class="w-full flex flex-col gap-2 mt-4">
-        <div class="flex items-center gap-3">
-          <span class="text-[7pt] font-black uppercase tracking-[0.2em]">Geolocalización Digital</span>
-          <div class="flex-1 h-[0.5pt] bg-slate-100"></div>
-        </div>
-        <div class="w-full h-[120px] rounded-xl overflow-hidden border border-slate-100 relative shadow-sm">
-          <iframe src="${osmEmbedUrl}" style="width:100%; height:100%; border:none; filter: grayscale(1) contrast(1.2);"></iframe>
-        </div>
-      </div>
-
-      <footer class="pt-4 border-t border-slate-100 flex justify-between items-end">
-        <div class="flex flex-col gap-0.5">
-          <span class="text-[12pt] font-black tracking-tighter">RENNIS REALTY</span>
-          <span class="text-[6pt] text-slate-400 uppercase tracking-widest font-bold">Documento de Carácter Informativo</span>
-        </div>
-        <div class="text-right">
-          <span class="text-[7pt] font-bold text-primary uppercase tracking-widest">Ref: ${property.id}</span>
-          <p class="text-[6pt] text-slate-400 uppercase mt-0.5">Generado el ${new Date().toLocaleDateString('es-AR')}</p>
-        </div>
-      </footer>
-    </main>
-  </div>
-</body>
-</html>`;
-
-  const newWin = window.open('', '_blank');
-  newWin.document.write(html);
-  newWin.document.close();
+    </div>
+  );
 }
 
 export default function App() {
   const [properties, setProperties] = useState([]);
   const [movimientos, setMovimientos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [printData, setPrintData] = useState({ property: null, coords: null });
+
+  const handlePrint = (property, coords) => {
+    setPrintData({ property, coords });
+    // Pequeño delay para asegurar que React renderizó el componente oculto
+    setTimeout(() => {
+      window.print();
+    }, 100);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -757,9 +680,10 @@ export default function App() {
           <Topbar />
           <Routes>
             <Route path="/" element={<Dashboard properties={properties} globalDebt={globalTotalDeuda} />} />
-            <Route path="/property/:id" element={<PropertyDetail properties={properties} />} />
+            <Route path="/property/:id" element={<PropertyDetail properties={properties} onPrint={handlePrint} />} />
           </Routes>
         </div>
+        <PrintFicha property={printData.property} coords={printData.coords} />
       </div>
     </BrowserRouter>
   );
