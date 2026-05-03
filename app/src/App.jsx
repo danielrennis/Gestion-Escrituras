@@ -45,33 +45,23 @@ function Sidebar() {
         
         @media print {
           @page { size: A4; margin: 0; }
-          html, body { background: white !important; margin: 0; padding: 0; -webkit-print-color-adjust: exact; }
-          #root > div > div > div:not(.sales-sheet), 
-          #root > div > div > aside,
-          #root > div > div > header,
-          .no-print, button, nav { 
-            display: none !important; 
-          }
-          main { 
-            display: block !important; 
-            margin: 0 !important; 
-            padding: 0 !important; 
-            width: 100% !important;
-            height: auto !important;
-            background: white !important;
-          }
+          body * { visibility: hidden !important; }
+          .sales-sheet, .sales-sheet * { visibility: visible !important; }
           .sales-sheet { 
-            display: block !important; 
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 210mm;
-            min-height: 297mm;
+            position: absolute !important; 
+            left: 0 !important; 
+            top: 0 !important; 
+            width: 210mm !important; 
+            height: 297mm !important;
             background: white !important;
-            z-index: 9999;
-            padding: 0;
-            margin: 0;
+            display: block !important;
+            z-index: 99999 !important;
+            padding: 0 !important;
+            margin: 0 !important;
           }
+          /* Forzar que el mapa se vea en la impresión */
+          .leaflet-control-container { display: none !important; }
+          .leaflet-tile-container { filter: grayscale(0) !important; }
         }
         .sales-sheet { display: none; }
       `}</style>
@@ -559,79 +549,54 @@ function PropertyDetail({ properties }) {
         </div>
 
       </div>
-      <SalesSheet property={property} />
+      <SalesSheet property={property} coords={coords} />
     </main>
   );
 }
 
-function SalesSheet({ property }) {
+function SalesSheet({ property, coords }) {
   return (
-    <div className="sales-sheet bg-white text-slate-900" style={{ fontFamily: "'Outfit', sans-serif" }}>
-      {/* HEADER HERO */}
-      <div className="w-full h-[600px] relative overflow-hidden">
+    <div className="sales-sheet bg-white text-slate-900 overflow-hidden" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      {/* 1. PORTADA GIGANTE */}
+      <div className="w-full h-[45%] relative">
         <img src={property.foto_url} className="w-full h-full object-cover" alt="Property Hero" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent" />
-        <div className="absolute bottom-20 left-20">
-          <span className="text-orange-500 font-black tracking-[0.5em] uppercase text-xs mb-4 block">Ficha de Activo Dominial</span>
-          <h1 className="text-8xl font-black tracking-tighter text-slate-900 leading-[0.8] mb-4">{property.id}</h1>
-          <div className="flex items-center gap-4 text-slate-500 font-bold uppercase tracking-widest text-sm">
-            <span className="material-symbols-outlined !text-orange-500">location_on</span>
-            {property.localidad}
-          </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+        <div className="absolute bottom-10 left-16">
+          <h1 className="text-7xl font-black tracking-tighter text-slate-900 leading-none mb-2">{property.id}</h1>
+          <p className="text-orange-500 text-2xl font-black uppercase tracking-[0.2em]">{property.localidad}, Chaco</p>
         </div>
       </div>
 
-      <div className="p-20 pt-0 grid grid-cols-12 gap-20">
-        {/* COLUMNA DATOS */}
-        <div className="col-span-4 border-r border-slate-100 pr-12">
-          <div className="flex flex-col gap-12">
-            <div>
-              <label className="text-[10px] font-black text-orange-500 uppercase tracking-[0.2em] block mb-2">Superficie Total</label>
-              <p className="text-4xl font-black text-slate-900 leading-none">{property.superficie_m2} <span className="text-lg text-slate-400">m²</span></p>
-            </div>
-            <div>
-              <label className="text-[10px] font-black text-orange-500 uppercase tracking-[0.2em] block mb-2">Dirección de Referencia</label>
-              <p className="text-xl font-bold text-slate-800 leading-tight italic">"{property.direccion}"</p>
-            </div>
-            <div>
-              <label className="text-[10px] font-black text-orange-500 uppercase tracking-[0.2em] block mb-2">Información Catastral</label>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-500 uppercase">Nomenclatura</p>
-                <p className="text-sm font-mono font-black text-slate-900">{property.nomenclatura}</p>
-                <div className="h-4" />
-                <p className="text-xs font-bold text-slate-500 uppercase">Matrícula / Folio</p>
-                <p className="text-sm font-black text-slate-900">{property.matricula}</p>
-              </div>
-            </div>
+      {/* 2. DATOS DE IMPACTO */}
+      <div className="px-16 py-12 grid grid-cols-2 gap-10 border-b border-slate-100">
+        <div className="flex flex-col">
+          <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Superficie Total</span>
+          <div className="text-7xl font-black text-slate-900 leading-none">
+            {property.superficie_m2} <span className="text-2xl text-orange-500 font-black">M²</span>
           </div>
         </div>
-
-        {/* COLUMNA DESCRIPCIÓN */}
-        <div className="col-span-8">
-          <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-8">Memoria Descriptiva & Auditoría</label>
-          <div className="text-xl text-slate-700 leading-relaxed font-light text-justify">
-             <div dangerouslySetInnerHTML={{ __html: (property.resumen || "").replace(/\n/g, '<br/>') }} />
-          </div>
-
-          <div className="mt-20 p-10 bg-slate-50 rounded-3xl border border-slate-100">
-             <div className="flex justify-between items-center mb-6">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Titularidad Dominial</span>
-                <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[9px] font-black rounded-full uppercase">Verificado</span>
-             </div>
-             <p className="text-2xl font-black text-slate-900">{property.titulares?.join(' & ')}</p>
-          </div>
+        <div className="flex flex-col justify-center">
+          <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Ubicación Exacta</span>
+          <p className="text-2xl font-bold text-slate-800 leading-tight italic">"{property.direccion}"</p>
         </div>
       </div>
 
-      {/* FOOTER */}
-      <div className="absolute bottom-0 left-0 w-full p-20 flex justify-between items-end border-t border-slate-50">
-        <div>
-          <h3 className="text-3xl font-black tracking-tighter text-slate-900">RENNIS REALTY</h3>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Consultoría Estratégica Inmobiliaria</p>
+      {/* 3. MAPA GIGANTE */}
+      <div className="px-16 py-10 flex-1">
+        <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 block">Geolocalización Catastral</span>
+        <div className="w-full h-[400px] rounded-3xl overflow-hidden border border-slate-100 shadow-xl">
+           <MapContainer center={coords} zoom={16} zoomControl={false} dragging={false} scrollWheelZoom={false} className="h-full w-full">
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <Marker position={coords} />
+            </MapContainer>
         </div>
-        <div className="text-right flex flex-col gap-1 items-end">
-          <div className="w-12 h-1 bg-orange-500 rounded-full mb-4" />
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Generado por Gestión Escrituras</p>
+      </div>
+
+      {/* 4. BRANDING PIE */}
+      <div className="absolute bottom-10 left-16 right-16 flex justify-between items-center opacity-30">
+        <span className="text-3xl font-black tracking-tighter text-slate-900">RENNIS REALTY</span>
+        <div className="text-right">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ficha Técnica Oficial</p>
           <p className="text-xs font-bold text-slate-900">{new Date().toLocaleDateString('es-AR')}</p>
         </div>
       </div>
