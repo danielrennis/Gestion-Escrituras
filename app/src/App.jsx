@@ -590,7 +590,7 @@ function generarFichaPDF(property, coords) {
       <section class="flex flex-col gap-6">
         <div class="flex flex-col">
           <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;margin-bottom:4px">Localidad</span>
-          <span style="font-size:20pt;font-weight:600;text-transform:uppercase;color:#000;line-height:1">${property.localidad}, CHACO</span>
+          <span style="font-size:20pt;font-weight:600;text-transform:uppercase;color:#000;line-height:1">${(property.localidad || '').split(',')[0].trim()}, CHACO</span>
         </div>
         <div class="flex flex-col">
           <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;margin-bottom:4px">Superficie Total</span>
