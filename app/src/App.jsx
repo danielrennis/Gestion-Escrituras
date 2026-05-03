@@ -40,6 +40,19 @@ function Sidebar() {
         </Link>
       </nav>
 
+      <style>{`
+        @media print {
+          aside, header, button, .no-print { display: none !important; }
+          main { margin: 0 !important; padding: 0 !important; width: 100% !important; background: white !important; color: black !important; }
+          .kpi-card { border: 1px solid #eee !important; box-shadow: none !important; background: white !important; color: black !important; }
+          .print-only { display: block !important; }
+          .text-slate-400, .text-slate-500 { color: #555 !important; }
+          .text-white { color: black !important; }
+          img { max-height: 400px !important; width: 100% !important; object-fit: cover !important; }
+        }
+        .print-only { display: none; }
+      `}</style>
+
       <div className="mt-auto px-4 border-t border-slate-800/50 pt-6">
         <div className="sidebar-link opacity-50 cursor-not-allowed">
           <span className="material-symbols-outlined !text-[20px]">settings</span>
@@ -294,7 +307,13 @@ function PropertyDetail({ properties }) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/20 to-transparent z-10" />
         <div className="absolute bottom-10 left-12 flex flex-col gap-3 z-20">
-          <button onClick={() => navigate('/')} className="w-fit px-6 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/20 transition-all mb-4">← Volver</button>
+          <div className="flex gap-4 mb-4 no-print">
+            <button onClick={() => navigate('/')} className="px-6 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/20 transition-all">← Volver</button>
+            <button onClick={() => window.print()} className="px-6 py-2 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
+              <span className="material-symbols-outlined !text-[16px]">picture_as_pdf</span>
+              Generar Ficha
+            </button>
+          </div>
           <h1 className="text-5xl font-black text-white tracking-tighter">{property.id}</h1>
           <div className="flex items-center gap-3 text-orange-400">
             <span className="material-symbols-outlined !text-[20px]">location_on</span>
