@@ -194,6 +194,8 @@ function PropertyDetail({ properties }) {
     fecha_documento: new Date().toISOString().split('T')[0]
   });
 
+  const [file, setFile] = useState(null);
+
   const property = useMemo(() => properties.find(p => p.id === id), [id, properties]);
 
   const fetchMovimientos = async () => {
@@ -214,19 +216,43 @@ function PropertyDetail({ properties }) {
 
   const handleAddMovimiento = async (e) => {
     e.preventDefault();
+    let finalUrl = '';
+
+    // Si hay archivo, lo subimos primero
+    if (file) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${id}/${Date.now()}.${fileExt}`;
+      const { data, error: uploadError } = await supabase.storage
+        .from('comprobantes')
+        .upload(fileName, file);
+      
+      if (uploadError) {
+        alert('Error al subir archivo: ' + uploadError.message);
+        return;
+      }
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('comprobantes')
+        .getPublicUrl(fileName);
+      
+      finalUrl = publicUrl;
+    }
+
     const { error } = await supabase
       .from('movimientos')
       .insert({
         ...formData,
         propiedad_id: id,
-        monto: parseFloat(formData.monto)
+        monto: parseFloat(formData.monto),
+        archivo_url: finalUrl || formData.archivo_url
       });
     
     if (error) {
-      alert('Error al cargar: ' + error.message);
+      alert('Error al cargar movimiento: ' + error.message);
     } else {
       setShowForm(false);
       setFormData({ ...formData, monto: '', descripcion: '', archivo_url: '' });
+      setFile(null);
       fetchMovimientos();
     }
   };
@@ -363,13 +389,12 @@ function PropertyDetail({ properties }) {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-[9px] font-black text-slate-500 uppercase">Link / Nombre Comprobante</label>
+                  <label className="text-[9px] font-black text-slate-500 uppercase">Adjuntar Comprobante (Foto/PDF)</label>
                   <input 
-                    type="text"
-                    value={formData.archivo_url}
-                    onChange={e => setFormData({...formData, archivo_url: e.target.value})}
-                    className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
-                    placeholder="Ej: recibo_enero.jpg"
+                    type="file"
+                    accept="image/*,application/pdf"
+                    onChange={e => setFile(e.target.files[0])}
+                    className="bg-slate-800 border border-white/10 rounded-xl p-2.5 text-white text-[10px] outline-none focus:border-orange-500/50 file:bg-orange-500/10 file:border-0 file:text-orange-500 file:text-[9px] file:font-black file:uppercase file:px-4 file:py-1 file:rounded-lg file:mr-4"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -403,6 +428,7 @@ function PropertyDetail({ properties }) {
                       <th className="pb-4">Concepto</th>
                       <th className="pb-4 text-right">Monto</th>
                       <th className="pb-4 w-8"></th>
+                      <th className="pb-4 w-8"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -412,6 +438,13 @@ function PropertyDetail({ properties }) {
                         <td className="py-4 text-slate-300">{m.descripcion}</td>
                         <td className={`py-4 text-right font-bold ${m.tipo_movimiento === 'DEUDA' ? 'text-orange-400' : 'text-emerald-400'}`}>
                           {m.tipo_movimiento === 'DEUDA' ? '-' : '+'} ${parseFloat(m.monto).toLocaleString('es-AR')}
+                        </td>
+                        <td className="py-4 text-right">
+                          {m.archivo_url && (
+                            <a href={m.archivo_url} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-white transition-colors">
+                              <span className="material-symbols-outlined !text-[16px]">attachment</span>
+                            </a>
+                          )}
                         </td>
                         <td className="py-4 text-right">
                           <button onClick={() => handleDeleteMovimiento(m.id)} className="text-slate-700 hover:text-red-500 transition-colors">
@@ -439,6 +472,7 @@ function PropertyDetail({ properties }) {
                       <th className="pb-4">Concepto</th>
                       <th className="pb-4 text-right">Monto</th>
                       <th className="pb-4 w-8"></th>
+                      <th className="pb-4 w-8"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -448,6 +482,13 @@ function PropertyDetail({ properties }) {
                         <td className="py-4 text-slate-300">{m.descripcion}</td>
                         <td className={`py-4 text-right font-bold ${m.tipo_movimiento === 'DEUDA' ? 'text-orange-400' : 'text-emerald-400'}`}>
                           {m.tipo_movimiento === 'DEUDA' ? '-' : '+'} ${parseFloat(m.monto).toLocaleString('es-AR')}
+                        </td>
+                        <td className="py-4 text-right">
+                          {m.archivo_url && (
+                            <a href={m.archivo_url} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-white transition-colors">
+                              <span className="material-symbols-outlined !text-[16px]">attachment</span>
+                            </a>
+                          )}
                         </td>
                         <td className="py-4 text-right">
                           <button onClick={() => handleDeleteMovimiento(m.id)} className="text-slate-700 hover:text-red-500 transition-colors">
