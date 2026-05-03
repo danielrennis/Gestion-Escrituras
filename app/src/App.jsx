@@ -182,25 +182,63 @@ function PropertyDetail({ properties }) {
   const navigate = useNavigate();
   const [movimientos, setMovimientos] = useState([]);
   const [loadingMov, setLoadingMov] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  
+  // Estado para el formulario de carga
+  const [formData, setFormData] = useState({
+    cuenta: 'IMPUESTOS',
+    tipo_movimiento: 'DEUDA',
+    monto: '',
+    descripcion: '',
+    fecha_documento: new Date().toISOString().split('T')[0]
+  });
 
   const property = useMemo(() => properties.find(p => p.id === id), [id, properties]);
 
+  const fetchMovimientos = async () => {
+    const { data, error } = await supabase
+      .from('movimientos')
+      .select('*')
+      .eq('propiedad_id', id)
+      .order('fecha_documento', { ascending: false });
+    
+    if (error) console.error('Error fetching movements:', error);
+    else setMovimientos(data);
+    setLoadingMov(false);
+  };
+
   useEffect(() => {
-    if (id) {
-      const fetchMovimientos = async () => {
-        const { data, error } = await supabase
-          .from('movimientos')
-          .select('*')
-          .eq('propiedad_id', id)
-          .order('fecha_documento', { ascending: false });
-        
-        if (error) console.error('Error fetching movements:', error);
-        else setMovimientos(data);
-        setLoadingMov(false);
-      };
+    if (id) fetchMovimientos();
+  }, [id]);
+
+  const handleAddMovimiento = async (e) => {
+    e.preventDefault();
+    const { error } = await supabase
+      .from('movimientos')
+      .insert({
+        ...formData,
+        propiedad_id: id,
+        monto: parseFloat(formData.monto)
+      });
+    
+    if (error) {
+      alert('Error al cargar: ' + error.message);
+    } else {
+      setShowForm(false);
+      setFormData({ ...formData, monto: '', descripcion: '' });
       fetchMovimientos();
     }
-  }, [id]);
+  };
+
+  const handleDeleteMovimiento = async (movId) => {
+    if (!window.confirm('¿Confirmas que querés borrar este movimiento?')) return;
+    const { error } = await supabase.from('movimientos').delete().eq('id', movId);
+    if (error) alert('Error al borrar');
+    else fetchMovimientos();
+  };
+
+  const movImpuestos = movimientos.filter(m => m.cuenta === 'IMPUESTOS');
+  const movMultas = movimientos.filter(m => m.cuenta === 'MULTAS');
 
   const saldos = useMemo(() => {
     return movimientos.reduce((acc, mov) => {
@@ -220,8 +258,8 @@ function PropertyDetail({ properties }) {
   if (!property) return <div className="p-10 text-white">Propiedad no encontrada.</div>;
 
   return (
-    <main className="flex flex-col animate-in fade-in duration-700 h-full overflow-y-auto bg-[#020617] z-0 relative">
-      <div className="w-full bg-slate-900 border-b border-white/10 relative overflow-hidden flex-shrink-0" style={{ height: '400px' }}>
+    <main className="flex flex-col animate-in fade-in duration-700 h-full overflow-y-auto bg-[#020617] z-0 relative pb-20">
+      <div className="w-full bg-slate-900 border-b border-white/10 relative overflow-hidden flex-shrink-0" style={{ height: '350px' }}>
         {property.foto_url && (
           <img src={property.foto_url} className="absolute inset-0 w-full h-full object-cover brightness-75 z-0" alt="Portada" />
         )}
@@ -236,123 +274,194 @@ function PropertyDetail({ properties }) {
         </div>
       </div>
 
-      <div className="p-12 grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-[1800px] mx-auto w-full relative z-30">
-        <div className="lg:col-span-2 flex flex-col gap-10">
-          <div className="kpi-card p-12">
-            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-10">Ficha Técnica Legal</span>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-20">
-              <div>
-                <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Nomenclatura Catastral</label>
-                <p className="text-sm text-slate-300 font-medium leading-relaxed">{property.nomenclatura || "---"}</p>
-              </div>
-              <div>
-                <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Matrícula / Folio Real</label>
-                <p className="text-sm text-slate-300 font-medium">{property.matricula || "---"}</p>
-              </div>
-              <div>
-                <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Superficie Total</label>
-                <p className="text-sm text-slate-200 font-bold leading-relaxed">{property.superficie_m2} m²</p>
-              </div>
-              <div>
-                <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Titular Dominial</label>
-                <p className="text-sm text-orange-200/80 font-bold leading-relaxed">{property.titulares?.join(', ')}</p>
-              </div>
-              <div className="md:col-span-2 p-8 bg-white/[0.02] border border-white/5 rounded-[32px]">
-                <label className="text-[10px] text-slate-600 uppercase font-black tracking-widest block mb-3">Ubicación de Referencia</label>
-                <p className="text-sm text-slate-400 leading-relaxed italic">"{property.direccion}"</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="kpi-card p-12">
-            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-10">Historial y Auditoría Legal</span>
-            <div className="prose prose-invert prose-sm max-w-none text-slate-400 leading-relaxed space-y-6">
-              <div dangerouslySetInnerHTML={{ __html: (property.resumen || "").replace(/\n/g, '<br/>') }} />
-            </div>
-          </div>
-
-          <div className="kpi-card p-10 border-orange-500/10">
-            <div className="flex justify-between items-center mb-10">
-              <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">Cuenta Corriente de Activo</span>
-              <button className="px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-lg text-[9px] font-black text-orange-400 hover:bg-orange-500 hover:text-white transition-all uppercase tracking-widest">
-                + Cargar Comprobante
-              </button>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="text-[9px] text-slate-600 uppercase font-black tracking-widest border-b border-white/5">
-                    <th className="py-4">Fecha</th>
-                    <th className="py-4">Cuenta</th>
-                    <th className="py-4">Concepto</th>
-                    <th className="py-4 text-right">Monto</th>
-                    <th className="py-4 text-center w-20">Doc</th>
-                  </tr>
-                </thead>
-                <tbody className="text-[11px]">
-                  {movimientos.length > 0 ? (
-                    movimientos.map((mov) => (
-                      <tr key={mov.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
-                        <td className="py-4 font-mono text-slate-500">{mov.fecha_documento}</td>
-                        <td className="py-4">
-                          <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${mov.cuenta === 'IMPUESTOS' ? 'bg-blue-500/10 text-blue-400' : 'bg-purple-500/10 text-purple-400'}`}>
-                            {mov.cuenta}
-                          </span>
-                        </td>
-                        <td className="py-4 text-slate-300">{mov.descripcion}</td>
-                        <td className={`py-4 text-right font-bold ${mov.tipo_movimiento === 'DEUDA' ? 'text-orange-400' : 'text-emerald-400'}`}>
-                          {mov.tipo_movimiento === 'DEUDA' ? '-' : '+'} ${parseFloat(mov.monto).toLocaleString('es-AR')}
-                        </td>
-                        <td className="py-4 text-center">
-                          {mov.archivo_url && (
-                            <a href={mov.archivo_url} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-white transition-colors">
-                              <span className="material-symbols-outlined !text-[18px]">attachment</span>
-                            </a>
-                          )}
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="5" className="py-12 text-center text-slate-600 italic">
-                        No se registran movimientos contables para esta propiedad.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-10">
-          <div className="kpi-card h-64 overflow-hidden relative z-10">
+      <div className="px-12 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8 w-full relative z-30">
+        
+        {/* PANEL LATERAL: MAPA Y SALDOS */}
+        <div className="flex flex-col gap-8 order-2 lg:order-1">
+          <div className="kpi-card h-64 overflow-hidden relative">
             <MapContainer center={coords} zoom={14} className="h-full w-full">
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <Marker position={coords} />
             </MapContainer>
           </div>
 
-          <div className="kpi-card p-10">
-            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-8">Gestión de Cuentas</span>
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center p-2 rounded-xl">
-                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Saldo Impuestos</span>
-                  <span className={`text-[10px] font-black px-3 py-1 rounded-full ${saldos.IMPUESTOS > 0 ? 'bg-orange-500/10 text-orange-400' : 'bg-emerald-500/10 text-emerald-400'}`}>
-                    ${saldos.IMPUESTOS.toLocaleString('es-AR')}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-2 rounded-xl">
-                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Saldo Multas</span>
-                  <span className={`text-[10px] font-black px-3 py-1 rounded-full ${saldos.MULTAS > 0 ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
-                    ${saldos.MULTAS.toLocaleString('es-AR')}
-                  </span>
-                </div>
+          <div className="kpi-card p-8">
+            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-6">Resumen de Cuenta</span>
+            <div className="space-y-4">
+              <div className="flex flex-col gap-1">
+                <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Impuestos</span>
+                <span className={`text-2xl font-black ${saldos.IMPUESTOS > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+                  ${saldos.IMPUESTOS.toLocaleString('es-AR')}
+                </span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Multas</span>
+                <span className={`text-2xl font-black ${saldos.MULTAS > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+                  ${saldos.MULTAS.toLocaleString('es-AR')}
+                </span>
               </div>
             </div>
           </div>
+
+          <button 
+            onClick={() => setShowForm(!showForm)}
+            className="w-full py-4 bg-orange-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+          >
+            {showForm ? '× Cancelar Carga' : '+ Cargar Movimiento'}
+          </button>
         </div>
+
+        {/* CONTENIDO PRINCIPAL: TABLAS */}
+        <div className="lg:col-span-3 flex flex-col gap-8 order-1 lg:order-2">
+          
+          {showForm && (
+            <div className="kpi-card p-10 border-orange-500/30 animate-in slide-in-from-top duration-300">
+              <form onSubmit={handleAddMovimiento} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="flex flex-col gap-2">
+                  <label className="text-[9px] font-black text-slate-500 uppercase">Cuenta</label>
+                  <select 
+                    value={formData.cuenta}
+                    onChange={e => setFormData({...formData, cuenta: e.target.value})}
+                    className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
+                  >
+                    <option value="IMPUESTOS">IMPUESTOS</option>
+                    <option value="MULTAS">MULTAS</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[9px] font-black text-slate-500 uppercase">Tipo</label>
+                  <select 
+                    value={formData.tipo_movimiento}
+                    onChange={e => setFormData({...formData, tipo_movimiento: e.target.value})}
+                    className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
+                  >
+                    <option value="DEUDA">DEUDA (SUMA)</option>
+                    <option value="PAGO">PAGO (RESTA)</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[9px] font-black text-slate-500 uppercase">Monto ($)</label>
+                  <input 
+                    type="number"
+                    required
+                    value={formData.monto}
+                    onChange={e => setFormData({...formData, monto: e.target.value})}
+                    className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
+                    placeholder="Ej: 15000"
+                  />
+                </div>
+                <div className="md:col-span-2 flex flex-col gap-2">
+                  <label className="text-[9px] font-black text-slate-500 uppercase">Descripción / Concepto</label>
+                  <input 
+                    type="text"
+                    required
+                    value={formData.descripcion}
+                    onChange={e => setFormData({...formData, descripcion: e.target.value})}
+                    className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
+                    placeholder="Ej: Cuota 1 Plan de Pago"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[9px] font-black text-slate-500 uppercase">Fecha</label>
+                  <input 
+                    type="date"
+                    required
+                    value={formData.fecha_documento}
+                    onChange={e => setFormData({...formData, fecha_documento: e.target.value})}
+                    className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
+                  />
+                </div>
+                <div className="md:col-span-3">
+                  <button type="submit" className="w-full py-4 bg-white text-slate-900 rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-orange-500 hover:text-white transition-all">
+                    Confirmar Registro en Supabase
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            {/* TABLA IMPUESTOS */}
+            <div className="kpi-card p-8 border-blue-500/10">
+              <span className="text-[10px] font-black text-blue-400 tracking-[0.2em] uppercase block mb-6">Cuenta Corriente Impuestos</span>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[10px]">
+                  <thead>
+                    <tr className="border-b border-white/5 text-slate-600 font-black uppercase tracking-widest">
+                      <th className="pb-4">Fecha</th>
+                      <th className="pb-4">Concepto</th>
+                      <th className="pb-4 text-right">Monto</th>
+                      <th className="pb-4 w-8"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {movImpuestos.map(m => (
+                      <tr key={m.id} className="border-b border-white/5 hover:bg-white/[0.01]">
+                        <td className="py-4 font-mono text-slate-500">{m.fecha_documento}</td>
+                        <td className="py-4 text-slate-300">{m.descripcion}</td>
+                        <td className={`py-4 text-right font-bold ${m.tipo_movimiento === 'DEUDA' ? 'text-orange-400' : 'text-emerald-400'}`}>
+                          {m.tipo_movimiento === 'DEUDA' ? '-' : '+'} ${parseFloat(m.monto).toLocaleString('es-AR')}
+                        </td>
+                        <td className="py-4 text-right">
+                          <button onClick={() => handleDeleteMovimiento(m.id)} className="text-slate-700 hover:text-red-500 transition-colors">
+                            <span className="material-symbols-outlined !text-[16px]">delete</span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {movImpuestos.length === 0 && (
+                      <tr><td colSpan="4" className="py-10 text-center text-slate-600 italic">Sin movimientos</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* TABLA MULTAS */}
+            <div className="kpi-card p-8 border-purple-500/10">
+              <span className="text-[10px] font-black text-purple-400 tracking-[0.2em] uppercase block mb-6">Cuenta Corriente Multas</span>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[10px]">
+                  <thead>
+                    <tr className="border-b border-white/5 text-slate-600 font-black uppercase tracking-widest">
+                      <th className="pb-4">Fecha</th>
+                      <th className="pb-4">Concepto</th>
+                      <th className="pb-4 text-right">Monto</th>
+                      <th className="pb-4 w-8"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {movMultas.map(m => (
+                      <tr key={m.id} className="border-b border-white/5 hover:bg-white/[0.01]">
+                        <td className="py-4 font-mono text-slate-500">{m.fecha_documento}</td>
+                        <td className="py-4 text-slate-300">{m.descripcion}</td>
+                        <td className={`py-4 text-right font-bold ${m.tipo_movimiento === 'DEUDA' ? 'text-orange-400' : 'text-emerald-400'}`}>
+                          {m.tipo_movimiento === 'DEUDA' ? '-' : '+'} ${parseFloat(m.monto).toLocaleString('es-AR')}
+                        </td>
+                        <td className="py-4 text-right">
+                          <button onClick={() => handleDeleteMovimiento(m.id)} className="text-slate-700 hover:text-red-500 transition-colors">
+                            <span className="material-symbols-outlined !text-[16px]">delete</span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {movMultas.length === 0 && (
+                      <tr><td colSpan="4" className="py-10 text-center text-slate-600 italic">Sin movimientos</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div className="kpi-card p-10">
+            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-8">Información Histórica</span>
+            <div className="prose prose-invert prose-sm max-w-none text-slate-400 leading-relaxed">
+              <div dangerouslySetInnerHTML={{ __html: (property.resumen || "").replace(/\n/g, '<br/>') }} />
+            </div>
+          </div>
+        </div>
+
       </div>
     </main>
   );
