@@ -40,17 +40,7 @@ function Sidebar() {
         </Link>
       </nav>
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        
-        @media print {
-          @page { size: A4; margin: 0; }
-          body { background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          #root { display: none !important; } /* Escondemos toda la app */
-          .sales-sheet-print-container { display: block !important; } /* Solo mostramos el contenedor de impresión */
-        }
-        .sales-sheet-print-container { display: none; }
-      `}</style>
+
 
       <div className="mt-auto px-4 border-t border-slate-800/50 pt-6">
         <div className="sidebar-link opacity-50 cursor-not-allowed">
@@ -308,7 +298,7 @@ function PropertyDetail({ properties }) {
         <div className="absolute bottom-10 left-12 flex flex-col gap-3 z-20">
           <div className="flex gap-4 mb-4 no-print">
             <button onClick={() => navigate('/')} className="px-6 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/20 transition-all">← Volver</button>
-            <button onClick={() => window.print()} className="px-6 py-2 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
+            <button onClick={() => generarFichaPDF(property, coords)} className="px-6 py-2 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
               <span className="material-symbols-outlined !text-[16px]">picture_as_pdf</span>
               Generar Ficha
             </button>
@@ -535,54 +525,126 @@ function PropertyDetail({ properties }) {
         </div>
 
       </div>
-      <SalesSheet property={property} coords={coords} />
     </main>
   );
 }
 
-function SalesSheet({ property, coords }) {
-  return (
-    <div className="sales-sheet-print-container bg-white text-black" style={{ fontFamily: "'Inter', sans-serif", width: '210mm', height: '297mm' }}>
-      {/* HEADER HERO */}
-      <div className="relative w-full h-[45%] overflow-hidden bg-slate-100">
-        <img src={property.foto_url} className="w-full h-full object-cover" alt="Property" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end px-16 pb-12">
-          <h1 className="text-[42pt] font-bold text-white uppercase tracking-tighter">{property.id}</h1>
-        </div>
+function generarFichaPDF(property, coords) {
+  const mapLat = coords[0];
+  const mapLng = coords[1];
+  const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${mapLat},${mapLng}&zoom=16&size=800x300&maptype=roadmap&markers=color:black%7C${mapLat},${mapLng}&style=feature:all|saturation:-100&key=` 
+    || `https://tile.openstreetmap.org/16/${Math.floor((mapLng+180)/360*Math.pow(2,16))}/${Math.floor((1-Math.log(Math.tan(mapLat*Math.PI/180)+1/Math.cos(mapLat*Math.PI/180))/Math.PI)/2*Math.pow(2,16))}.png`;
+  
+  const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${mapLng-0.005},${mapLat-0.003},${mapLng+0.005},${mapLat+0.003}&layer=mapnik&marker=${mapLat},${mapLng}`;
+
+  const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Ficha - ${property.id}</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    @media print {
+      body { background: white; }
+      .no-print { display: none; }
+      @page { size: A4 portrait; margin: 0; }
+    }
+    body {
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      padding-top: 40px;
+      padding-bottom: 40px;
+      font-family: 'Inter', sans-serif;
+    }
+    .a4-page {
+      width: 210mm;
+      height: 297mm;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="window.print()" class="no-print" style="position:fixed;top:20px;right:20px;z-index:999;background:#000;color:#fff;border:none;padding:12px 28px;font-family:Inter,sans-serif;font-weight:700;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:6px;">IMPRIMIR / GUARDAR PDF</button>
+
+  <div class="a4-page">
+    <!-- TOP BAR -->
+    <header class="absolute top-0 left-0 w-full pt-12 px-[25mm] z-20 flex items-center justify-between pointer-events-none">
+      <div class="text-xl font-bold tracking-tighter text-white drop-shadow-sm">RENNIS REALTY</div>
+      <div class="tracking-tight uppercase font-light text-xs text-white border-[0.5pt] border-white px-3 py-1" style="background:rgba(0,0,0,0.1);backdrop-filter:blur(8px)">FOR SALE</div>
+    </header>
+
+    <!-- HERO -->
+    <section class="relative w-full h-[45%] overflow-hidden">
+      <img src="${property.foto_url}" class="w-full h-full object-cover" alt="${property.id}"/>
+      <div class="absolute inset-0 flex flex-col justify-end px-[25mm] pb-12" style="background:linear-gradient(to top, rgba(0,0,0,0.5), transparent)">
+        <h1 class="text-white uppercase" style="font-size:42pt;font-weight:700;letter-spacing:-0.04em;line-height:1.1">${property.id}</h1>
       </div>
+    </section>
 
-      {/* BODY */}
-      <div className="p-16 flex flex-col gap-10">
-        <div className="grid grid-cols-2 gap-10">
-          <div>
-            <span className="text-[10pt] font-bold text-slate-400 uppercase tracking-widest block mb-1">Localidad</span>
-            <span className="text-[24pt] font-bold uppercase text-black">{property.localidad}, CHACO</span>
+    <!-- CONTENT -->
+    <main class="flex-1 px-[25mm] pt-10 flex flex-col gap-8">
+      <!-- LOCATION + SURFACE -->
+      <section class="flex flex-col gap-6">
+        <div class="flex flex-col">
+          <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;margin-bottom:4px">Localidad</span>
+          <span style="font-size:20pt;font-weight:600;text-transform:uppercase;color:#000;line-height:1">${property.localidad}, CHACO</span>
+        </div>
+        <div class="flex flex-col">
+          <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;margin-bottom:4px">Superficie Total</span>
+          <span style="font-size:32pt;font-weight:700;text-transform:uppercase;color:#000;line-height:1">${property.superficie_m2} M²</span>
+        </div>
+        <div style="width:100%;height:0.25pt;background:#e5e5e5;margin-top:8px"></div>
+      </section>
+
+      <!-- MAP -->
+      <section class="w-full">
+        <div style="aspect-ratio:21/9;background:#F5F5F5;border:0.25pt solid #e5e5e5;position:relative;overflow:hidden">
+          <iframe src="${osmEmbedUrl}" style="width:100%;height:100%;border:none;filter:grayscale(40%) opacity(0.7)"></iframe>
+        </div>
+      </section>
+
+      <!-- LOCATION DETAILS -->
+      <section class="mt-auto pb-24 grid grid-cols-12 items-end" style="gap:5mm">
+        <div class="col-span-7 flex flex-col gap-4">
+          <div class="flex flex-col gap-2">
+            <h2 style="font-size:14pt;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#000">Ubicación & Referencia</h2>
+            <div style="width:48px;height:0.5pt;background:#000"></div>
           </div>
-          <div>
-            <span className="text-[10pt] font-bold text-slate-400 uppercase tracking-widest block mb-1">Superficie</span>
-            <span className="text-[32pt] font-black uppercase text-black">{property.superficie_m2} M²</span>
-          </div>
+          <p style="font-size:12pt;color:#444748;line-height:1.6;letter-spacing:0.02em">
+            ${(property.direccion || '').toUpperCase()}
+          </p>
         </div>
+        <div class="col-span-5 text-right">
+          <span style="font-size:8pt;font-style:italic;color:#5e5e5e;text-transform:uppercase;letter-spacing:0.2em;display:block;margin-bottom:8px">Confidential Listing</span>
+          <span style="font-size:8pt;font-weight:600;color:#646464;text-transform:uppercase">Ref: ${property.nomenclatura || 'S/N'}</span>
+        </div>
+      </section>
+    </main>
 
-        <div className="w-full h-[350px] border border-slate-200 rounded-lg overflow-hidden relative">
-           <MapContainer center={coords} zoom={16} zoomControl={false} dragging={false} scrollWheelZoom={false} className="h-full w-full">
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <Marker position={coords} />
-            </MapContainer>
-        </div>
-
-        <div>
-          <span className="text-[10pt] font-bold text-slate-400 uppercase tracking-widest block mb-2">Ubicación</span>
-          <p className="text-[14pt] text-slate-700 leading-tight italic">"{property.direccion}"</p>
-        </div>
+    <!-- FOOTER -->
+    <footer class="absolute bottom-0 w-full flex justify-between items-center px-[25mm] py-8" style="border-top:0.25pt solid #e5e5e5;background:white">
+      <div style="font-size:18px;font-weight:900;color:#000">RENNIS REALTY</div>
+      <div class="flex gap-8">
+        <span style="font-size:8pt;text-transform:uppercase;letter-spacing:0.1em;color:#999">GESTIÓN INMOBILIARIA</span>
+        <span style="font-size:8pt;text-transform:uppercase;letter-spacing:0.1em;color:#999">${new Date().toLocaleDateString('es-AR')}</span>
       </div>
+      <div style="font-size:8pt;text-transform:uppercase;letter-spacing:0.1em;color:#000">© ALL RIGHTS RESERVED</div>
+    </footer>
+  </div>
+</body>
+</html>`;
 
-      <footer className="mt-auto p-16 border-t border-slate-100 flex justify-between items-center opacity-40 grayscale">
-        <span className="text-2xl font-black tracking-tighter">RENNIS REALTY</span>
-        <span className="text-xs font-bold uppercase tracking-widest">{new Date().toLocaleDateString('es-AR')}</span>
-      </footer>
-    </div>
-  );
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
 }
 
 export default function App() {
