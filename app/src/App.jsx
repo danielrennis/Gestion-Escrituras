@@ -573,10 +573,12 @@ function generarFichaPDF(property, coords) {
     }
   <\/script>
   <style>
+    * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; print-color-adjust: exact !important; }
     @media print {
-      body { background: white !important; margin: 0 !important; overflow: hidden !important; }
+      body { background: white !important; margin: 0 !important; }
       .no-print { display: none !important; }
       @page { size: A4 portrait; margin: 0; }
+      .a4-page { box-shadow: none !important; border: none !important; }
     }
     body {
       background-color: #f3f3f3;
@@ -585,7 +587,6 @@ function generarFichaPDF(property, coords) {
       padding: 0;
       margin: 0;
       font-family: 'Inter', sans-serif;
-      -webkit-print-color-adjust: exact;
     }
     .a4-page {
       width: 210mm;
@@ -616,10 +617,10 @@ function generarFichaPDF(property, coords) {
     }
     .blue-accent {
       position: absolute;
-      top: -100px;
-      left: -100px;
-      width: 300px;
-      height: 300px;
+      top: -120px;
+      left: -120px;
+      width: 320px;
+      height: 320px;
       background: #3b82f6;
       border-radius: 50%;
       z-index: 10;
@@ -630,36 +631,29 @@ function generarFichaPDF(property, coords) {
   <button onclick="window.print()" class="no-print">Imprimir Ficha Editorial</button>
 
   <div class="a4-page">
-    <!-- GRAPHIC ACCENT -->
     <div class="blue-accent"></div>
 
-    <!-- BLACK HEADER SECTION -->
-    <header class="bg-surface-dark h-[35%] w-full relative flex flex-col justify-between px-16 py-16 overflow-hidden">
+    <header class="bg-surface-dark h-[32%] w-full relative flex flex-col justify-between px-16 py-14 overflow-hidden">
       <div class="z-20">
         <span class="text-white text-[10pt] font-black tracking-[0.3em] uppercase opacity-90">RENNIS REALTY</span>
       </div>
       
       <div class="z-20 mt-auto">
-        <h1 class="text-white text-[52pt] leading-[0.85] font-black tracking-tighter uppercase break-words">
+        <h1 class="text-white text-[48pt] leading-[0.85] font-black tracking-tighter uppercase break-words">
           ${property.id.replace(' - ', '<br/>')}
         </h1>
       </div>
       
-      <!-- SUBTLE TEXT -->
       <div class="absolute bottom-6 right-16 z-20 text-right opacity-30">
         <span class="text-white text-[6pt] font-bold uppercase tracking-[0.4em]">Propiedad Registrada • Chaco Argentina</span>
       </div>
     </header>
 
-    <!-- PHOTO SECTION (Full Width) -->
     <section class="w-full h-[18%] overflow-hidden bg-slate-200">
-      <img src="${heroImg}" class="w-full h-full object-cover grayscale-[0.2] contrast-[1.1]" alt="Property" />
+      <img src="${heroImg}" class="w-full h-full object-cover grayscale-[0.1] contrast-[1.1]" alt="Property" />
     </section>
 
-    <!-- WHITE INFORMATION SECTION -->
-    <main class="flex-1 px-16 py-10 flex flex-col justify-between bg-white">
-      
-      <!-- INFO CARDS -->
+    <main class="flex-1 px-16 py-8 flex flex-col justify-between bg-white">
       <div class="grid grid-cols-3 gap-10">
         <div class="flex flex-col gap-1">
           <span class="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Superficie Total</span>
@@ -688,8 +682,7 @@ function generarFichaPDF(property, coords) {
         </div>
       </div>
 
-      <!-- MAP SECTION -->
-      <div class="w-full flex flex-col gap-3 mt-4">
+      <div class="w-full flex flex-col gap-2 mt-4">
         <div class="flex items-center gap-3">
           <span class="text-[7pt] font-black uppercase tracking-[0.2em]">Geolocalización Digital</span>
           <div class="flex-1 h-[0.5pt] bg-slate-100"></div>
@@ -699,8 +692,7 @@ function generarFichaPDF(property, coords) {
         </div>
       </div>
 
-      <!-- FOOTER -->
-      <footer class="pt-6 border-t border-slate-100 flex justify-between items-end">
+      <footer class="pt-4 border-t border-slate-100 flex justify-between items-end">
         <div class="flex flex-col gap-0.5">
           <span class="text-[12pt] font-black tracking-tighter">RENNIS REALTY</span>
           <span class="text-[6pt] text-slate-400 uppercase tracking-widest font-bold">Documento de Carácter Informativo</span>
@@ -715,13 +707,9 @@ function generarFichaPDF(property, coords) {
 </body>
 </html>`;
 
-  const blob = new Blob([html], { type: 'text/html' });
-  const blobUrl = URL.createObjectURL(blob);
-  const newWin = window.open(blobUrl, '_blank');
-  
-  if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
-    alert('El navegador bloqueó la apertura de la ficha. Por favor, permití los popups para este sitio.');
-  }
+  const newWin = window.open('', '_blank');
+  newWin.document.write(html);
+  newWin.document.close();
 }
 
 export default function App() {
