@@ -576,7 +576,7 @@ function generarFichaPDF(property, coords) {
   <\/script>
   <style>
     @media print {
-      body { background: white !important; }
+      body { background: white !important; margin: 0 !important; overflow: hidden !important; }
       .no-print { display: none !important; }
       @page { size: A4 portrait; margin: 0; }
     }
@@ -591,7 +591,7 @@ function generarFichaPDF(property, coords) {
     }
     .a4-page {
       width: 210mm;
-      height: 297mm;
+      height: 296mm;
       background-color: #ffffff;
       position: relative;
       overflow: hidden;
