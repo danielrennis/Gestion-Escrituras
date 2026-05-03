@@ -555,20 +555,18 @@ function generarFichaPDF(property, coords) {
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"><\/script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;800;900&display=swap" rel="stylesheet"/>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
             "primary": "#000000",
-            "surface": "#f9f9f9",
-            "on-surface": "#1a1c1c",
-            "on-surface-variant": "#444748",
-            "secondary": "#5e5e5e"
+            "accent-blue": "#3b82f6",
+            "surface-dark": "#020617"
           },
           fontFamily: {
-            "inter": ["Inter"]
+            "inter": ["Inter", "sans-serif"]
           }
         }
       }
@@ -604,7 +602,7 @@ function generarFichaPDF(property, coords) {
       top: 25px;
       right: 25px;
       z-index: 9999;
-      background: #000;
+      background: #3b82f6;
       color: #fff;
       border: none;
       padding: 14px 30px;
@@ -613,93 +611,103 @@ function generarFichaPDF(property, coords) {
       cursor: pointer;
       font-size: 11px;
       letter-spacing: 0.1em;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 15px 30px rgba(59,130,246,0.4);
       text-transform: uppercase;
+    }
+    .blue-accent {
+      position: absolute;
+      top: -100px;
+      left: -100px;
+      width: 300px;
+      height: 300px;
+      background: #3b82f6;
+      border-radius: 50%;
+      z-index: 10;
     }
   </style>
 </head>
-<body class="text-on-surface">
-  <button onclick="window.print()" class="no-print">Imprimir Ficha Oficial</button>
+<body class="text-primary">
+  <button onclick="window.print()" class="no-print">Imprimir Ficha Editorial</button>
 
   <div class="a4-page">
-    <!-- TOP APP BAR -->
-    <header class="absolute top-0 left-0 w-full pt-8 px-[25mm] z-20 flex items-center justify-between pointer-events-none">
-      <div class="text-xl font-black tracking-tighter text-white drop-shadow-sm">RENNIS REALTY</div>
+    <!-- GRAPHIC ACCENT -->
+    <div class="blue-accent"></div>
+
+    <!-- BLACK HEADER SECTION -->
+    <header class="bg-surface-dark h-[45%] w-full relative flex flex-col justify-between px-16 py-20 overflow-hidden">
+      <div class="z-20">
+        <span class="text-white text-[12pt] font-black tracking-[0.3em] uppercase opacity-90">RENNIS REALTY</span>
+      </div>
+      
+      <div class="z-20 mt-auto">
+        <h1 class="text-white text-[58pt] leading-[0.9] font-black tracking-tighter uppercase break-words">
+          ${property.id.replace(' - ', '<br/>')}
+        </h1>
+      </div>
+      
+      <!-- SUBTLE TEXT -->
+      <div class="absolute bottom-8 right-16 z-20 text-right opacity-30">
+        <span class="text-white text-[7pt] font-bold uppercase tracking-[0.4em]">Propiedad Registrada • Chaco Argentina</span>
+      </div>
     </header>
 
-    <!-- SECTION 1: HERO SECTION -->
-    <section class="relative w-full h-[30%] overflow-hidden bg-black">
-      <img src="${heroImg}" class="w-full h-full object-cover" alt="Property Hero" />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end px-[25mm] pb-6">
-        <h1 class="text-[34pt] leading-[1.0] font-black text-white uppercase tracking-tighter">${property.id}</h1>
-      </div>
+    <!-- PHOTO SECTION (Full Width) -->
+    <section class="w-full h-[20%] overflow-hidden bg-slate-200">
+      <img src="${heroImg}" class="w-full h-full object-cover grayscale-[0.2] contrast-[1.1]" alt="Property" />
     </section>
 
-    <!-- MAIN CONTENT -->
-    <main class="flex-1 px-[25mm] pt-6 flex flex-col gap-6 bg-white">
-      <!-- SECTION 2: LOCATION AND SURFACE -->
-      <section class="flex flex-col gap-3">
-        <div class="flex flex-col">
-          <span class="text-[7pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-0.5">Localidad</span>
-          <span class="text-[16pt] leading-none font-bold uppercase text-primary">${(property.localidad || '').split(/[-,]/)[0].trim().toUpperCase()}, CHACO</span>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-[7pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-0.5">Superficie Total</span>
-          <span class="text-[26pt] leading-none font-black uppercase text-primary">${property.superficie_m2} M²</span>
-        </div>
-        <div class="w-full h-[0.25pt] bg-neutral-200 mt-1"></div>
-      </section>
-
-      <!-- SECTION 3: MAP SECTION -->
-      <section class="w-full">
-        <div style="width:100%; height:180px; background:#F5F5F5; border:0.25pt solid #e2e8f0; position:relative; overflow:hidden;">
-          <iframe src="${osmEmbedUrl}" style="width:100%; height:100%; border:none; filter:grayscale(1) contrast(1.1) opacity(0.7);"></iframe>
-        </div>
-      </section>
-
-      <!-- SECTION 4: LOCATION & OWNERSHIP -->
-      <section class="pb-24 grid grid-cols-12 gap-6 items-start">
-        <div class="col-span-7 flex flex-col gap-4">
-          <div class="flex flex-col gap-1.5">
-            <h2 class="text-[11pt] font-bold uppercase text-primary tracking-widest">Detalles & Titularidad</h2>
-            <div class="w-12 h-[0.5pt] bg-primary"></div>
-          </div>
-          <div class="flex flex-col gap-3">
-             <div class="flex flex-col">
-                <span class="text-[6pt] font-black text-slate-400 uppercase mb-0.5">Ubicación</span>
-                <p class="text-[9pt] leading-tight text-slate-600 italic font-light uppercase">${(property.direccion || '').toUpperCase()}</p>
-             </div>
-             <div class="flex flex-col">
-                <span class="text-[6pt] font-black text-slate-400 uppercase mb-0.5">Titular Dominial</span>
-                <p class="text-[9pt] leading-tight text-primary font-bold uppercase">${(property.titulares || []).join(' / ')}</p>
-             </div>
+    <!-- WHITE INFORMATION SECTION -->
+    <main class="flex-1 px-16 py-12 flex flex-col justify-between bg-white">
+      
+      <!-- INFO CARDS -->
+      <div class="grid grid-cols-3 gap-12">
+        <div class="flex flex-col gap-1">
+          <span class="text-[7pt] font-black text-slate-400 uppercase tracking-widest">Superficie Total</span>
+          <div class="flex items-baseline gap-1">
+            <span class="text-[28pt] font-black text-primary tracking-tighter">${property.superficie_m2 || property.superficie || '---'}</span>
+            <span class="text-[10pt] font-bold text-slate-400 uppercase">${property.superficie_m2 ? 'm²' : ''}</span>
           </div>
         </div>
-        <div class="col-span-5 text-right flex flex-col gap-1 mt-10">
-          <span class="text-[7pt] italic text-slate-400 uppercase tracking-[0.2em] block">Institutional Report</span>
-          <span class="text-[7pt] font-bold text-slate-500 uppercase tracking-widest">Ref: ${property.nomenclatura || property.id}</span>
+
+        <div class="flex flex-col gap-1 col-span-1">
+          <span class="text-[7pt] font-black text-slate-400 uppercase tracking-widest">Titularidad</span>
+          <p class="text-[12pt] font-extrabold text-primary leading-tight uppercase mt-2">
+            ${(property.titulares || []).join(' / ') || '---'}
+          </p>
         </div>
-      </section>
+
+        <div class="flex flex-col gap-1">
+          <span class="text-[7pt] font-black text-slate-400 uppercase tracking-widest">Ubicación</span>
+          <p class="text-[12pt] font-extrabold text-primary leading-tight uppercase mt-2">
+            ${(property.direccion || property.localidad || '---').toUpperCase()}
+          </p>
+        </div>
+      </div>
+
+      <!-- MAP SECTION -->
+      <div class="w-full flex flex-col gap-4 mt-8">
+        <div class="flex items-center gap-4">
+          <span class="text-[8pt] font-black uppercase tracking-[0.2em]">Geolocalización Digital</span>
+          <div class="flex-1 h-[1pt] bg-slate-100"></div>
+        </div>
+        <div class="w-full h-[140px] rounded-xl overflow-hidden border border-slate-100 relative shadow-sm">
+          <iframe src="${osmEmbedUrl}" style="width:100%; height:100%; border:none; filter: grayscale(1) contrast(1.2);"></iframe>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="pt-8 border-t border-slate-100 flex justify-between items-end">
+        <div class="flex flex-col gap-0.5">
+          <span class="text-[14pt] font-black tracking-tighter">RENNIS REALTY</span>
+          <span class="text-[6pt] text-slate-400 uppercase tracking-widest font-bold">Documento de Carácter Informativo</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[7pt] font-bold text-primary uppercase tracking-widest">Ref: ${property.id}</span>
+          <p class="text-[6pt] text-slate-400 uppercase mt-0.5">Generado el ${new Date().toLocaleDateString('es-AR')}</p>
+        </div>
+      </footer>
     </main>
-
-    <!-- FOOTER -->
-    <footer class="absolute bottom-0 w-full flex justify-between items-center px-[25mm] py-6 border-t-[0.25pt] border-neutral-100 bg-white">
-      <div class="text-base font-black text-primary tracking-tighter">RENNIS REALTY</div>
-      <div class="flex gap-6">
-        <span class="text-[7pt] uppercase tracking-widest text-slate-400 font-bold">Oficina Central</span>
-        <span class="text-[7pt] uppercase tracking-widest text-slate-400 font-bold">Contacto Legal</span>
-      </div>
-      <div class="text-[7pt] uppercase tracking-widest text-primary font-bold">
-        © ${new Date().getFullYear()}
-      </div>
-    </footer>
   </div>
-  <script>
-    // Pequeño delay para asegurar que el iframe del mapa cargue antes de imprimir
-    setTimeout(() => {
-      // window.print();
-    }, 1000);
-  <\/script>
 </body>
 </html>`;
 
