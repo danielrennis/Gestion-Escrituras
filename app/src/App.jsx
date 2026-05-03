@@ -668,10 +668,156 @@ function generarFichaPDF(property, coords) {
 </body>
 </html>`;
 
+function generarFichaPDF(property, coords) {
+  const mapLat = coords[0];
+  const mapLng = coords[1];
+  const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${mapLng-0.005},${mapLat-0.003},${mapLng+0.005},${mapLat+0.003}&layer=mapnik&marker=${mapLat},${mapLng}`;
+
+  const heroImg = getImageUrl(property.foto_url || property.foto_portada);
+
+  const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"><\/script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#000000",
+            "surface": "#f9f9f9",
+            "on-surface": "#1a1c1c",
+            "on-surface-variant": "#444748",
+            "secondary": "#5e5e5e"
+          },
+          fontFamily: {
+            "inter": ["Inter"]
+          }
+        }
+      }
+    }
+  <\/script>
+  <style>
+    @media print {
+      body { background: white; }
+      .no-print { display: none !important; }
+      @page { size: A4 portrait; margin: 0; }
+    }
+    body {
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .a4-page {
+      width: 210mm;
+      height: 297mm;
+      background-color: #ffffff;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .no-print {
+      position: fixed;
+      top: 25px;
+      right: 25px;
+      z-index: 9999;
+      background: #000;
+      color: #fff;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body class="text-on-surface">
+  <button onclick="window.print()" class="no-print">Imprimir Documento Premium</button>
+
+  <div class="a4-page">
+    <!-- TOP APP BAR -->
+    <header class="absolute top-0 left-0 w-full pt-12 px-[25mm] z-20 flex items-center justify-between pointer-events-none">
+      <div class="text-xl font-black tracking-tighter text-white drop-shadow-sm">RENNIS REALTY</div>
+      <div class="font-sans tracking-tight uppercase font-light text-[10px] text-white border-[0.5pt] border-white px-3 py-1 bg-black/10 backdrop-blur-sm">FOR SALE</div>
+    </header>
+
+    <!-- SECTION 1: HERO SECTION -->
+    <section class="relative w-full h-[45%] overflow-hidden bg-black">
+      <img src="${heroImg}" class="w-full h-full object-cover" alt="Property Hero" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end px-[25mm] pb-12">
+        <h1 class="text-[42pt] leading-[1.1] font-black text-white uppercase tracking-tighter">${property.id}</h1>
+      </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 px-[25mm] pt-10 flex flex-col gap-8 bg-white">
+      <!-- SECTION 2: LOCATION AND SURFACE -->
+      <section class="flex flex-col gap-6">
+        <div class="flex flex-col">
+          <span class="text-[8pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-1">Localidad</span>
+          <span class="text-[20pt] leading-none font-bold uppercase text-primary">${(property.localidad || '').toUpperCase()}, CHACO</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-[8pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-1">Superficie Total</span>
+          <span class="text-[32pt] leading-none font-black uppercase text-primary">${property.superficie_m2} M²</span>
+        </div>
+        <div class="w-full h-[0.25pt] bg-neutral-200 mt-2"></div>
+      </section>
+
+      <!-- SECTION 3: MAP SECTION -->
+      <section class="w-full">
+        <div class="aspect-[21/9] bg-[#F5F5F5] border-[0.25pt] border-neutral-200 relative overflow-hidden">
+          <iframe src="${osmEmbedUrl}" style="width:100%; height:100%; border:none; filter:grayscale(1) contrast(1.1) opacity(0.7);"></iframe>
+        </div>
+      </section>
+
+      <!-- SECTION 4: LOCATION DETAILS -->
+      <section class="mt-auto pb-24 grid grid-cols-12 gap-8 items-end">
+        <div class="col-span-7 flex flex-col gap-4">
+          <div class="flex flex-col gap-2">
+            <h2 class="text-[14pt] font-bold uppercase text-primary tracking-widest">Detalles de Ubicación</h2>
+            <div class="w-12 h-[0.5pt] bg-primary"></div>
+          </div>
+          <p class="text-[12pt] leading-relaxed text-slate-600 italic font-light uppercase">
+            ${(property.direccion || '').toUpperCase()}
+          </p>
+        </div>
+        <div class="col-span-5 text-right">
+          <span class="text-[8pt] italic text-slate-400 uppercase tracking-[0.2em] block mb-2">Confidential Listing</span>
+          <span class="text-[8pt] font-bold text-slate-500 uppercase tracking-widest">Ref: ${property.nomenclatura || property.id}</span>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="absolute bottom-0 w-full flex justify-between items-center px-[25mm] py-8 border-t-[0.25pt] border-neutral-100 bg-white">
+      <div class="text-lg font-black text-primary tracking-tighter">RENNIS REALTY</div>
+      <div class="flex gap-8">
+        <span class="text-[8pt] uppercase tracking-widest text-slate-400 font-bold">Oficina Central</span>
+        <span class="text-[8pt] uppercase tracking-widest text-slate-400 font-bold">Contacto Legal</span>
+      </div>
+      <div class="text-[8pt] uppercase tracking-widest text-primary font-bold">
+        © ${new Date().getFullYear()} ALL RIGHTS RESERVED
+      </div>
+    </footer>
+  </div>
+</body>
+</html>`;
+
   const blob = new Blob([html], { type: 'text/html' });
   const blobUrl = URL.createObjectURL(blob);
-  
-  // Abrimos directamente el Blob URL. Esto soluciona la pérdida de foco y estabilidad del contenido.
   window.open(blobUrl, '_blank');
 }
 
