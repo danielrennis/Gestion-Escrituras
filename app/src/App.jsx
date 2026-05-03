@@ -190,6 +190,7 @@ function PropertyDetail({ properties }) {
     tipo_movimiento: 'DEUDA',
     monto: '',
     descripcion: '',
+    archivo_url: '',
     fecha_documento: new Date().toISOString().split('T')[0]
   });
 
@@ -225,7 +226,7 @@ function PropertyDetail({ properties }) {
       alert('Error al cargar: ' + error.message);
     } else {
       setShowForm(false);
-      setFormData({ ...formData, monto: '', descripcion: '' });
+      setFormData({ ...formData, monto: '', descripcion: '', archivo_url: '' });
       fetchMovimientos();
     }
   };
@@ -359,6 +360,16 @@ function PropertyDetail({ properties }) {
                     onChange={e => setFormData({...formData, descripcion: e.target.value})}
                     className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
                     placeholder="Ej: Cuota 1 Plan de Pago"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[9px] font-black text-slate-500 uppercase">Link / Nombre Comprobante</label>
+                  <input 
+                    type="text"
+                    value={formData.archivo_url}
+                    onChange={e => setFormData({...formData, archivo_url: e.target.value})}
+                    className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
+                    placeholder="Ej: recibo_enero.jpg"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
