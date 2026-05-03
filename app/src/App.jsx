@@ -546,7 +546,8 @@ function PrintFicha({ property, coords }) {
   if (!property) return null;
   const mapLat = coords?.[0] || -27.45;
   const mapLng = coords?.[1] || -58.98;
-  const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${mapLng-0.005},${mapLat-0.003},${mapLng+0.005},${mapLat+0.003}&layer=mapnik&marker=${mapLat},${mapLng}`;
+  // Bbox más ajustado para mayor zoom y legibilidad
+  const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${mapLng-0.003},${mapLat-0.002},${mapLng+0.003},${mapLat+0.002}&layer=mapnik&marker=${mapLat},${mapLng}`;
   const heroImg = getImageUrl(property.foto_url || property.foto_portada);
 
   return (
@@ -605,7 +606,7 @@ function PrintFicha({ property, coords }) {
               <span className="text-[7pt] font-black uppercase tracking-[0.2em]">Geolocalización Digital</span>
               <div className="flex-1 h-[0.5pt] bg-slate-100"></div>
             </div>
-            <div className="w-full h-[120px] rounded-xl overflow-hidden border border-slate-100 relative shadow-sm">
+            <div className="w-full h-[220px] rounded-xl overflow-hidden border border-slate-100 relative shadow-sm">
               <iframe src={osmEmbedUrl} style={{ width: '100%', height: '100%', border: 'none', filter: 'grayscale(1) contrast(1.2)' }}></iframe>
             </div>
           </div>
