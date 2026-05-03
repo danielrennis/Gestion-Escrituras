@@ -624,7 +624,6 @@ function generarFichaPDF(property, coords) {
     <!-- TOP APP BAR -->
     <header class="absolute top-0 left-0 w-full pt-12 px-[25mm] z-20 flex items-center justify-between pointer-events-none">
       <div class="text-xl font-black tracking-tighter text-white drop-shadow-sm">RENNIS REALTY</div>
-      <div class="font-sans tracking-tight uppercase font-light text-[10px] text-white border-[0.5pt] border-white px-3 py-1 bg-black/10 backdrop-blur-sm">FOR SALE</div>
     </header>
 
     <!-- SECTION 1: HERO SECTION -->
@@ -641,7 +640,7 @@ function generarFichaPDF(property, coords) {
       <section class="flex flex-col gap-6">
         <div class="flex flex-col">
           <span class="text-[8pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-1">Localidad</span>
-          <span class="text-[20pt] leading-none font-bold uppercase text-primary">${(property.localidad || '').toUpperCase()}, CHACO</span>
+          <span class="text-[20pt] leading-none font-bold uppercase text-primary">${(property.localidad || '').split(' - ')[0].toUpperCase()}, CHACO</span>
         </div>
         <div class="flex flex-col">
           <span class="text-[8pt] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-1">Superficie Total</span>
@@ -657,19 +656,26 @@ function generarFichaPDF(property, coords) {
         </div>
       </section>
 
-      <!-- SECTION 4: LOCATION DETAILS -->
+      <!-- SECTION 4: LOCATION & OWNERSHIP -->
       <section class="mt-auto pb-24 grid grid-cols-12 gap-8 items-end">
-        <div class="col-span-7 flex flex-col gap-4">
+        <div class="col-span-7 flex flex-col gap-6">
           <div class="flex flex-col gap-2">
-            <h2 class="text-[14pt] font-bold uppercase text-primary tracking-widest">Detalles de Ubicación</h2>
+            <h2 class="text-[14pt] font-bold uppercase text-primary tracking-widest">Detalles & Titularidad</h2>
             <div class="w-12 h-[0.5pt] bg-primary"></div>
           </div>
-          <p class="text-[12pt] leading-relaxed text-slate-600 italic font-light uppercase">
-            ${(property.direccion || '').toUpperCase()}
-          </p>
+          <div class="flex flex-col gap-4">
+             <div class="flex flex-col">
+                <span class="text-[7pt] font-black text-slate-400 uppercase mb-1">Ubicación</span>
+                <p class="text-[11pt] leading-tight text-slate-600 italic font-light uppercase">${(property.direccion || '').toUpperCase()}</p>
+             </div>
+             <div class="flex flex-col">
+                <span class="text-[7pt] font-black text-slate-400 uppercase mb-1">Titular Dominial</span>
+                <p class="text-[11pt] leading-tight text-primary font-bold uppercase">${(property.titulares || []).join(' / ')}</p>
+             </div>
+          </div>
         </div>
         <div class="col-span-5 text-right">
-          <span class="text-[8pt] italic text-slate-400 uppercase tracking-[0.2em] block mb-2">Confidential Listing</span>
+          <span class="text-[8pt] italic text-slate-400 uppercase tracking-[0.2em] block mb-2">Institutional Report</span>
           <span class="text-[8pt] font-bold text-slate-500 uppercase tracking-widest">Ref: ${property.nomenclatura || property.id}</span>
         </div>
       </section>
