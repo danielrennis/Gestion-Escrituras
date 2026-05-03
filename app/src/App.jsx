@@ -623,6 +623,8 @@ function generarFichaPDF(property, coords) {
           </p>
         </div>
         <div class="col-span-5 text-right">
+          <span style="font-size:8pt;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#646464;margin-bottom:4px;display:block">Titularidad Dominial</span>
+          <span style="font-size:14pt;font-weight:700;color:#000;display:block;margin-bottom:12px">${(property.titulares || []).join(' & ')}</span>
           <span style="font-size:8pt;font-style:italic;color:#5e5e5e;text-transform:uppercase;letter-spacing:0.2em;display:block;margin-bottom:8px">Confidential Listing</span>
           <span style="font-size:8pt;font-weight:600;color:#646464;text-transform:uppercase">Ref: ${property.nomenclatura || 'S/N'}</span>
         </div>
