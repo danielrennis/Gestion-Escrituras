@@ -180,7 +180,36 @@ L.Icon.Default.mergeOptions({
 function PropertyDetail({ properties }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [movimientos, setMovimientos] = useState([]);
+  const [loadingMov, setLoadingMov] = useState(true);
+
   const property = useMemo(() => properties.find(p => p.id === id), [id, properties]);
+
+  useEffect(() => {
+    if (id) {
+      const fetchMovimientos = async () => {
+        const { data, error } = await supabase
+          .from('movimientos')
+          .select('*')
+          .eq('propiedad_id', id)
+          .order('fecha_documento', { ascending: false });
+        
+        if (error) console.error('Error fetching movements:', error);
+        else setMovimientos(data);
+        setLoadingMov(false);
+      };
+      fetchMovimientos();
+    }
+  }, [id]);
+
+  const saldos = useMemo(() => {
+    return movimientos.reduce((acc, mov) => {
+      const monto = parseFloat(mov.monto);
+      const factor = mov.tipo_movimiento === 'DEUDA' ? 1 : -1;
+      acc[mov.cuenta] = (acc[mov.cuenta] || 0) + (monto * factor);
+      return acc;
+    }, { IMPUESTOS: 0, MULTAS: 0 });
+  }, [movimientos]);
 
   const coords = useMemo(() => {
     if (!property?.coordenadas) return [-27.45, -58.98];
@@ -242,7 +271,6 @@ function PropertyDetail({ properties }) {
             </div>
           </div>
 
-          {/* NUEVA SECCIÓN: CUENTA CORRIENTE DETALLADA */}
           <div className="kpi-card p-10 border-orange-500/10">
             <div className="flex justify-between items-center mb-10">
               <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">Cuenta Corriente de Activo</span>
@@ -262,12 +290,35 @@ function PropertyDetail({ properties }) {
                   </tr>
                 </thead>
                 <tbody className="text-[11px]">
-                  {/* Aquí mapearemos los movimientos de Supabase más adelante */}
-                  <tr>
-                    <td colSpan="5" className="py-12 text-center text-slate-600 italic">
-                      No se registran movimientos contables para esta propiedad.
-                    </td>
-                  </tr>
+                  {movimientos.length > 0 ? (
+                    movimientos.map((mov) => (
+                      <tr key={mov.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                        <td className="py-4 font-mono text-slate-500">{mov.fecha_documento}</td>
+                        <td className="py-4">
+                          <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${mov.cuenta === 'IMPUESTOS' ? 'bg-blue-500/10 text-blue-400' : 'bg-purple-500/10 text-purple-400'}`}>
+                            {mov.cuenta}
+                          </span>
+                        </td>
+                        <td className="py-4 text-slate-300">{mov.descripcion}</td>
+                        <td className={`py-4 text-right font-bold ${mov.tipo_movimiento === 'DEUDA' ? 'text-orange-400' : 'text-emerald-400'}`}>
+                          {mov.tipo_movimiento === 'DEUDA' ? '-' : '+'} ${parseFloat(mov.monto).toLocaleString('es-AR')}
+                        </td>
+                        <td className="py-4 text-center">
+                          {mov.archivo_url && (
+                            <a href={mov.archivo_url} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-white transition-colors">
+                              <span className="material-symbols-outlined !text-[18px]">attachment</span>
+                            </a>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="py-12 text-center text-slate-600 italic">
+                        No se registran movimientos contables para esta propiedad.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -288,11 +339,15 @@ function PropertyDetail({ properties }) {
               <div className="flex flex-col gap-4">
                 <div className="flex justify-between items-center p-2 rounded-xl">
                   <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Saldo Impuestos</span>
-                  <span className="text-[10px] font-black px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">$0</span>
+                  <span className={`text-[10px] font-black px-3 py-1 rounded-full ${saldos.IMPUESTOS > 0 ? 'bg-orange-500/10 text-orange-400' : 'bg-emerald-500/10 text-emerald-400'}`}>
+                    ${saldos.IMPUESTOS.toLocaleString('es-AR')}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center p-2 rounded-xl">
                   <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Saldo Multas</span>
-                  <span className="text-[10px] font-black px-3 py-1 bg-slate-800 text-slate-500 border border-white/5 rounded-full">$0</span>
+                  <span className={`text-[10px] font-black px-3 py-1 rounded-full ${saldos.MULTAS > 0 ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
+                    ${saldos.MULTAS.toLocaleString('es-AR')}
+                  </span>
                 </div>
               </div>
             </div>
