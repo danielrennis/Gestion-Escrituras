@@ -20,17 +20,17 @@ if (!SUPABASE_SERVICE_ROLE_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 const cleanup = async () => {
-  console.log('🧹 Limpiando duplicados...');
+  console.log('🧹 Eliminando Parcela 7 de Supabase...');
   
   const { error } = await supabase
     .from('propiedades')
     .delete()
-    .eq('id', 'Machagai - Mochitti 50x50');
+    .eq('id', 'Machagai - Ruta 16 - Chacra 30 - Parcela 7');
 
   if (error) {
-    console.error('❌ Error eliminando Mochitti:', error.message);
+    console.error('❌ Error eliminando Parcela 7:', error.message);
   } else {
-    console.log('✅ Mochitti eliminado correctamente.');
+    console.log('✅ Parcela 7 eliminada correctamente.');
   }
 };
 

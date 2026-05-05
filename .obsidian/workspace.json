@@ -185,6 +185,7 @@
   },
   "active": "6497539cc452c446",
   "lastOpenFiles": [
+    "app/scripts/cleanup_p7.cjs",
     "app/scripts/cleanup_duplicates.cjs",
     "app/public/attachments/Machagai-Mochutti-50x50-Escritura-66-P-g-3",
     "app/public/attachments/Machagai-Mochutti-50x50-Escritura-66-P-g-2",
@@ -211,7 +212,6 @@
     "wiki/entidades/Hugo Daniel RENNIS.md",
     "wiki/entidades/DESARROLLOS INTEGRALES S.A..md",
     "app/src/Escrituras.code-workspace",
-    "app/scripts/update_link.cjs",
     "log.md",
     "LLM_WIKI.md",
     "Colonia Popular.md",
