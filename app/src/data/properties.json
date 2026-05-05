@@ -470,7 +470,7 @@
     "resumen": "**Resumen de la Transacción y Estado Legal:**\n\nEste documento corresponde a una escritura pública de compraventa del día 25 de Mayo de 2015, instrumentada bajo el Número Cuarenta y Uno por la Escribana Pública Autorizante Silvana Mariel Maglione en la ciudad de Machagai, Departamento 25 de Mayo, Provincia del Chaco. La venta se realiza de Miguel Angel SERAFINI a favor de [[Hugo Daniel Rennis]].\n\n**Detalles del Inmueble:**\n\n*   **Identificación Catastral:** El inmueble es identificado como Parcela Quince (15), Manzana Cien (100), Sección A, Circunscripción I, del Departamento 25 de Mayo, Provincia del Chaco.\n*   **Ubicación y Linderos:** Se describe como una figura rectangular con frente al Oeste sobre la calle pública Valentina A. de Valeri. Sus medidas son:\n    *   Frente al Oeste: 12.50 metros (contados a partir de los 25 metros del esquinero Sur-Oeste).\n    *   Lado Norte: 50 metros, lindando con Parcela Dieciséis (16).\n    *   Lado Este: 12.50 metros, lindando con Parcela Cuatro (4).\n    *   Lado Sur: 50 metros, lindando con Parcela Seis (6).\n*   **Superficie:** La superficie total del terreno es de seiscientos veinticinco metros cuadrados (625 m²).\n*   **Matrícula/Folio Real:** La propiedad se encuentra inscripta en el Registro de la Propiedad Inmueble al Folio Real Matrícula Número 4992 del Departamento 25 de Mayo.\n*   **Inscripción Catastral (Municipal):** El inmueble fue inscripto en la Dirección de Catastro de la Municipalidad de Machagai bajo el Número 4783, F° 59, Libro N° 29, con fecha 03 de Abril de 2023.\n\n**Historial de Titularidad y Adquisición:**\n\n*   **Vendedor:** Miguel Angel SERAFINI. SERAFINI había adquirido la propiedad de la Municipalidad de Machagai mediante Título de Propiedad Número 347, Ordenanza 2901/2009, de fecha 12 de agosto de 2009.\n*   **Comprador Actual:** [[Hugo Daniel Rennis]].\n*   **Precio de Venta:** La operación se realizó por la suma de Pesos Doscientos cincuenta mil ($250.000,=).\n\n**Estado Legal y Financiero:**\n\n*   **Certificaciones Legales:** Según certificación del Registro de la Propiedad Inmueble de la Provincia del Chaco (Certificado N° 2015-009133 de fecha 28 de julio de 2015), el inmueble se encuentra \"libre de disposición de sus bienes, y no reconoce embargos, hipotecas ni restricciones de ninguna naturaleza.\"\n*   **Valuación Fiscal:** La valuación fiscal vigente del inmueble asciende a $14.393,93 según la Municipalidad de Machagai, con fecha 27 de julio de 2015.\n*   **Impuestos y Gravámenes:** Se menciona el pago del Impuesto de Sellos (2.5%) por un monto de $6.250,= y el Impuesto a la Transferencia de Inmuebles (1.5%). El adquirente ([[Hugo Daniel Rennis]]) asume la responsabilidad por las deudas pendientes de cumplimiento relativas a certificados de impuesto inmobiliario, energía eléctrica y agua potable, de acuerdo con el Decreto Provincial 688/81.\n*   **Cotí:** No se solicitó Certificado de Bienes Registrables ni COTI.\n\n\n#propiedad #machagai"
   },
   {
-    "id": "Machagai - Mochitti 50x50",
+    "id": "Machagai - Mochutti 50x50",
     "tipo": "inmueble",
     "domicilio_real": "Reconquista y 17 de Agosto",
     "direccion": "Parcela 3 de la Manzana 3, Quinta 12, Sección B, Circunscripción 1",
@@ -485,7 +485,7 @@
     "superficie": "2.500,00 m²",
     "medidas": "50m x 50m",
     "coordenadas": "-26.92444, -60.05607",
-    "foto_portada": "/photos/machagai-mochitti-50x50_portada.jpg",
+    "foto_portada": "/photos/machagai-mochutti-50x50_portada.jpg",
     "ultima_actualizacion": "2026-05-05",
     "superficie_limpia": "2500 m²",
     "estado_limpio": "Limpio",
@@ -495,15 +495,15 @@
     "adjuntos": [
       {
         "nombre": "Escritura 66 - Pág 1",
-        "url": "/attachments/Machagai-Mochitti-50x50-Escritura-66-P-g-1"
+        "url": "/attachments/Machagai-Mochutti-50x50-Escritura-66-P-g-1"
       },
       {
         "nombre": "Escritura 66 - Pág 2",
-        "url": "/attachments/Machagai-Mochitti-50x50-Escritura-66-P-g-2"
+        "url": "/attachments/Machagai-Mochutti-50x50-Escritura-66-P-g-2"
       },
       {
         "nombre": "Escritura 66 - Pág 3",
-        "url": "/attachments/Machagai-Mochitti-50x50-Escritura-66-P-g-3"
+        "url": "/attachments/Machagai-Mochutti-50x50-Escritura-66-P-g-3"
       }
     ],
     "resumen": "Esta propiedad fue adquirida por **Hugo Daniel Rennis** el 11 de septiembre de 2008 mediante la Escritura Pública Número Sesenta y Seis (66)."

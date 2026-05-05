@@ -11,11 +11,11 @@ estado_legal: "Limpio"
 superficie: "2.500,00 m²"
 medidas: "50m x 50m"
 coordenadas: "-26.92444, -60.05607"
-foto_portada: "attachments/propiedades/Machagai - Mochitti 50x50/E66_P1.jpg"
+foto_portada: "attachments/propiedades/Machagai - Mochutti 50x50/E66_P1.jpg"
 ultima_actualizacion: "2026-05-05"
 ---
 
-# Machagai - Mochitti 50x50 (Parcela 3, Manzana 3, Quinta 12)
+# Machagai - Mochutti 50x50 (Parcela 3, Manzana 3, Quinta 12)
 
 Esta propiedad fue adquirida por **Hugo Daniel Rennis** el 11 de septiembre de 2008 mediante la Escritura Pública Número Sesenta y Seis (66).
 
@@ -40,12 +40,12 @@ Esta propiedad fue adquirida por **Hugo Daniel Rennis** el 11 de septiembre de 2
 *   **Estado:** Limpio (sin gravámenes ni inhibiciones al momento de la escritura).
 *   **Valuación Fiscal (2008):** $5.486,25.
 
-#propiedad #machagai #mochitti
+#propiedad #machagai #mochutti
 
 ## Documentación Adjunta
-- [Escritura 66 - Pág 1](file:///Volumes/Proyectos/Escrituras/attachments/propiedades/Machagai%20-%20Mochitti%2050x50/E66_P1.jpg)
-- [Escritura 66 - Pág 2](file:///Volumes/Proyectos/Escrituras/attachments/propiedades/Machagai%20-%20Mochitti%2050x50/E66_P2.jpg)
-- [Escritura 66 - Pág 3](file:///Volumes/Proyectos/Escrituras/attachments/propiedades/Machagai%20-%20Mochitti%2050x50/E66_P3.jpg)
+- [Escritura 66 - Pág 1](file:///Volumes/Proyectos/Escrituras/attachments/propiedades/Machagai%20-%20Mochutti%2050x50/E66_P1.jpg)
+- [Escritura 66 - Pág 2](file:///Volumes/Proyectos/Escrituras/attachments/propiedades/Machagai%20-%20Mochutti%2050x50/E66_P2.jpg)
+- [Escritura 66 - Pág 3](file:///Volumes/Proyectos/Escrituras/attachments/propiedades/Machagai%20-%20Mochutti%2050x50/E66_P3.jpg)
 
 ## Historial de Procesamiento
 - **2026-05-05**: Ingesta de 3 imágenes de la escritura enviadas vía WhatsApp.
