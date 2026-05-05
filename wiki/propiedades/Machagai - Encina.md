@@ -1,6 +1,6 @@
 ---
 tipo: "inmueble"
-domicilio_real: "Calle S/N (Manzana 83, Parcela 14)"
+domicilio_real: "Pueyrredón 128"
 direccion: "Fracción Norte de la Mitad Sud del Solar B, Manzana Ochenta y tres, Parcela 14"
 localidad: "Machagai, Departamento 25 de Mayo, Provincia del Chaco"
 matricula_folio_real: "Folio Real Matrícula 595 (Departamento 25 de Mayo)"
