@@ -1,6 +1,6 @@
 ---
 tipo: "inmueble"
-domicilio_real: "Calle Pueyrredón"
+domicilio_real: "1° de Mayo 35"
 direccion: "Inmueble urbano situado en la localidad de Machagai, Departamento 25 de Mayo, Provincia del Chaco"
 localidad: "Machagai"
 matricula_folio_real: "4289-"
