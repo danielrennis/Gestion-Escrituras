@@ -1,6 +1,6 @@
 ---
 tipo: "inmueble"
-domicilio_real: "Juan B. Alberdi y Ángel Lagatta"
+domicilio_real: "Av. Alberdi 130"
 direccion: "Esquina de calles Mtra. A. Roig Flores y Ángel Lagatta, sobre calle Juan B. Alberdi."
 localidad: "Machagai"
 matricula_folio_real: "N° 2771 (Dpto. 25 de Mayo)"
