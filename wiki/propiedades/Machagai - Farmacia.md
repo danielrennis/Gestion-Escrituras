@@ -1,6 +1,6 @@
 ---
 tipo: "inmueble"
-domicilio_real: "Valentina A. de Valeri"
+domicilio_real: "Valentina Valeri 367"
 direccion: "Frente al Oeste sobre calle pública Valentina A. de Valeri, Machagai"
 localidad: "Machagai"
 matricula_folio_real: "4992 (Registro de la Propiedad Inmueble, Chaco)"
