@@ -1,6 +1,7 @@
 ---
 foto_portada: "attachments/propiedades/Machagai - Donacion Benchu/portada.png"
 tipo: "inmueble"
+domicilio_real: "Parcela 12, Quinta 26, Fracción Sud"
 direccion: "Parcela Doce, Quinta Veintiséis, Fracción Sud, Pueblo de Machagai. Linderos: Norte con Parcela Nueve, Oeste con Parcela Trece, Este con Parcela Once, Sur con calle Angel Lagatta."
 localidad: "Machagai, Chaco"
 matricula_folio_real: "2697"
@@ -8,7 +9,8 @@ nomenclatura_castastral: "Circunscripción I Sección B Quinta 26 Parcela 12"
 partida_inmobiliaria: "Circunscripción I Sección B Quinta 26 Parcela 12"
 titulares: ["Benicio RENNIS"]
 estado_legal: "Limpio"
-superficie: "300 m² (10 metros de frente por 30 metros de fondo)"
+superficie: "300 m²"
+medidas: "10m de frente x 30m de fondo"
 coordenadas: "-26.92444, -60.05607"
 ultima_actualizacion: "2026-05-02"
 ---

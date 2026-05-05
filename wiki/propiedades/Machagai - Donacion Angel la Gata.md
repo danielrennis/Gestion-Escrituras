@@ -1,6 +1,7 @@
 ---
 foto_portada: "attachments/propiedades/Machagai - Donacion Angel la Gata/portada.png"
 tipo: inmueble
+domicilio_real: "Dante Tardelli N° 24"
 direccion: "Calle Ángel Lagatta"
 localidad: "Machagai"
 matricula_folio_real: "2698"
@@ -8,7 +9,8 @@ nomenclatura_castastral: "Circunscripción 1, Sección B, Quinta 26, Parcela 13"
 partida_inmobiliaria: "No especificada como tal, pero asociada a Nomenclatura Catastral"
 titulares: ["[[Hugo Daniel Rennis]] (DNI 10.087.084, C.U.I.L. Nº20-10087084-4)"]
 estado_legal: "Limpio"
-superficie: "300 m² (10m de frente por 30m de fondo)"
+superficie: "300 m²"
+medidas: "10m de frente x 30m de fondo"
 coordenadas: "-26.92445, -60.05594"
 ultima_actualizacion: 2026-05-02
 ---
