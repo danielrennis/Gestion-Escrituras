@@ -2,6 +2,7 @@
   {
     "id": "Colonia Popular - Chacra 95 - Parcela 04, Manzana 46",
     "tipo": "inmueble",
+    "domicilio_real": "Loteo Urbano (Calle Pública S/N)",
     "direccion": "Parcela 04, Manzana 46, Loteo Urbano",
     "localidad": "Colonia Popular, Departamento Libertad, Chaco",
     "matricula_folio_real": "7065 (Registro de la Propiedad Inmueble del Chaco)",
@@ -12,6 +13,7 @@
     ],
     "estado_legal": "Limpio",
     "superficie": "622,50 m²",
+    "medidas": "Frente 20m x Fondo 31.125m",
     "coordenadas": "-27.26964, -59.15856",
     "foto_portada": "/photos/colonia-popular-chacra-95-parcela-04-manzana-46_portada.png",
     "ultima_actualizacion": "2026-05-02",
@@ -122,6 +124,7 @@
   {
     "id": "Machagai - Alberdi",
     "tipo": "inmueble",
+    "domicilio_real": "Juan B. Alberdi y Ángel Lagatta",
     "direccion": "Esquina de calles Mtra. A. Roig Flores y Ángel Lagatta, sobre calle Juan B. Alberdi.",
     "localidad": "Machagai",
     "matricula_folio_real": "N° 2771 (Dpto. 25 de Mayo)",
@@ -133,7 +136,8 @@
       "Usufructuaria: Nancy Beatriz AGUIRRE"
     ],
     "estado_legal": "Limpio (sin embargos ni gravámenes al 19/12/2016), sujeto a Usufructo Vitalicio.",
-    "superficie": "486,59 m² (Medidas: Lado Este 17,39m; Sud 33,41m; Oeste 12,30m; Norte 12,30m; Lindero Parcela 2, 45,71m)",
+    "superficie": "486,59 m²",
+    "medidas": "Lado Este 17,39m; Sud 33,41m; Oeste 12,30m; Norte 12,30m; Lindero Parcela 2, 45,71m",
     "coordenadas": "-26.92678, -60.05086",
     "foto_portada": "/photos/machagai-alberdi_portada.png",
     "ultima_actualizacion": "2026-05-02",
@@ -203,6 +207,7 @@
   {
     "id": "Machagai - Carlitos",
     "tipo": "inmueble",
+    "domicilio_real": "Calle Pueyrredón",
     "direccion": "Inmueble urbano situado en la localidad de Machagai, Departamento 25 de Mayo, Provincia del Chaco",
     "localidad": "Machagai",
     "matricula_folio_real": "4289-",
@@ -214,6 +219,7 @@
     ],
     "estado_legal": "Limpio",
     "superficie": "250 m2",
+    "medidas": "10m de frente x 25m de fondo",
     "coordenadas": "-26.92730, -60.04398",
     "foto_portada": "/photos/machagai-carlitos_portada.png",
     "ultima_actualizacion": "2026-05-02",
@@ -364,6 +370,7 @@
   {
     "id": "Machagai - Encina",
     "tipo": "inmueble",
+    "domicilio_real": "Calle S/N (Manzana 83, Parcela 14)",
     "direccion": "Fracción Norte de la Mitad Sud del Solar B, Manzana Ochenta y tres, Parcela 14",
     "localidad": "Machagai, Departamento 25 de Mayo, Provincia del Chaco",
     "matricula_folio_real": "Folio Real Matrícula 595 (Departamento 25 de Mayo)",
@@ -374,6 +381,7 @@
     ],
     "estado_legal": "Limpio (Ver observaciones)",
     "superficie": "225 m²",
+    "medidas": "12.50m x 50.00m",
     "coordenadas": "-26.92903, -60.04465",
     "foto_portada": "/photos/machagai-encina_portada.png",
     "ultima_actualizacion": "2026-05-02",
@@ -413,6 +421,7 @@
   {
     "id": "Machagai - Farmacia",
     "tipo": "inmueble",
+    "domicilio_real": "Valentina A. de Valeri",
     "direccion": "Frente al Oeste sobre calle pública Valentina A. de Valeri, Machagai",
     "localidad": "Machagai",
     "matricula_folio_real": "4992 (Registro de la Propiedad Inmueble, Chaco)",
@@ -422,7 +431,8 @@
       "[[Hugo Daniel Rennis]]"
     ],
     "estado_legal": "Limpio (sin embargos, hipotecas ni restricciones)",
-    "superficie": "625 m² (12.50m x 50m)",
+    "superficie": "625 m²",
+    "medidas": "12.50m x 50m",
     "coordenadas": "-26.92871, -60.05328",
     "foto_portada": "/photos/machagai-farmacia_portada.png",
     "ultima_actualizacion": "2026-05-02",
@@ -704,6 +714,7 @@
     "id": "Resistencia - Domicilio",
     "foto_portada": "/photos/resistencia-domicilio_portada.png",
     "tipo": "inmueble",
+    "domicilio_real": "Alfredo Veiravé, Manzana 123, Parcela 18",
     "direccion": "400 VIVIENDAS, Parcela 18, Manzana 123, Chacra 130, lindera a Calle Alfredo Veirave",
     "localidad": "Resistencia, Chaco",
     "matricula_folio_real": "56479",
@@ -714,7 +725,8 @@
       "Judith Esther Nuñez"
     ],
     "estado_legal": "Afectado al Régimen de Protección de la Vivienda (Ley 26.994 - Bien de Familia), Limpio de embargos y medidas cautelares al 2010.",
-    "superficie": "213 m² (10.65m de frente x 20m de fondo)",
+    "superficie": "213 m²",
+    "medidas": "10.65m de frente x 20m de fondo",
     "coordenadas": "-27.46374, -59.01087",
     "ultima_actualizacion": "2026-05-02",
     "superficie_limpia": "213 m²",

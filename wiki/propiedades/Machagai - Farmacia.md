@@ -1,5 +1,6 @@
 ---
 tipo: "inmueble"
+domicilio_real: "Valentina A. de Valeri"
 direccion: "Frente al Oeste sobre calle pública Valentina A. de Valeri, Machagai"
 localidad: "Machagai"
 matricula_folio_real: "4992 (Registro de la Propiedad Inmueble, Chaco)"
@@ -7,7 +8,8 @@ nomenclatura_castastral: "Circunscripción I, Sección A, Manzana 100, Parcela 1
 partida_inmobiliaria: "[No especificada]"
 titulares: ["[[Hugo Daniel Rennis]]"]
 estado_legal: "Limpio (sin embargos, hipotecas ni restricciones)"
-superficie: "625 m² (12.50m x 50m)"
+superficie: "625 m²"
+medidas: "12.50m x 50m"
 coordenadas: "-26.92871, -60.05328"
 foto_portada: "attachments/propiedades/Machagai - Farmacia/portada.png"
 ultima_actualizacion: "2026-05-02"

@@ -1,5 +1,6 @@
 ---
 tipo: "inmueble"
+domicilio_real: "Calle S/N (Manzana 83, Parcela 14)"
 direccion: "Fracción Norte de la Mitad Sud del Solar B, Manzana Ochenta y tres, Parcela 14"
 localidad: "Machagai, Departamento 25 de Mayo, Provincia del Chaco"
 matricula_folio_real: "Folio Real Matrícula 595 (Departamento 25 de Mayo)"
@@ -8,6 +9,7 @@ partida_inmobiliaria: "No disponible"
 titulares: ["[[Hugo Daniel Rennis]] (DNI 25.504.258-1)"]
 estado_legal: "Limpio (Ver observaciones)"
 superficie: "225 m²"
+medidas: "12.50m x 50.00m"
 coordenadas: "-26.92903, -60.04465"
 foto_portada: "attachments/propiedades/Machagai - Encina/portada.png"
 ultima_actualizacion: "2026-05-02"

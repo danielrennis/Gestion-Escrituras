@@ -1,5 +1,6 @@
 ---
 tipo: "inmueble"
+domicilio_real: "Calle Pueyrredón"
 direccion: "Inmueble urbano situado en la localidad de Machagai, Departamento 25 de Mayo, Provincia del Chaco"
 localidad: "Machagai"
 matricula_folio_real: "4289-"
@@ -8,6 +9,7 @@ partida_inmobiliaria: "No especificada directamente como 'partida inmobiliaria',
 titulares: ["Elida Francisca CHACON (anterior titular)", "[[Hugo Daniel Rennis]] (nuevo titular)"]
 estado_legal: "Limpio"
 superficie: "250 m2"
+medidas: "10m de frente x 25m de fondo"
 coordenadas: "-26.92730, -60.04398"
 foto_portada: "attachments/propiedades/Machagai - Carlitos/portada.png"
 ultima_actualizacion: "2026-05-02"

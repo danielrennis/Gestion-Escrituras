@@ -11,10 +11,17 @@
             "id": "6497539cc452c446",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Vista gráfica"
+              "type": "canvas",
+              "state": {
+                "file": "Dashboard.canvas",
+                "viewState": {
+                  "x": 155,
+                  "y": 300,
+                  "zoom": 0
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Dashboard"
             }
           }
         ]
@@ -178,6 +185,15 @@
   },
   "active": "6497539cc452c446",
   "lastOpenFiles": [
+    "Home.md",
+    "index.md",
+    "wiki/entidades/Hugo Daniel RENNIS.md",
+    "wiki/entidades/DESARROLLOS INTEGRALES S.A..md",
+    "app/src/Escrituras.code-workspace",
+    "app/scripts/update_link.cjs",
+    "app/public/attachments/Machagai-Encina-Multa_Malezas_2025_Plan_Pago.jpg",
+    "app/public/attachments/Machagai-Encina-Multa_Malezas_2025_Acta.jpg",
+    "app/scripts/setup_storage.cjs",
     "app/scripts/add_fine.cjs",
     "attachments/propiedades/Machagai - Encina/Multa_Malezas_2025_Plan_Pago.jpg",
     "attachments/propiedades/Machagai - Encina/Multa_Malezas_2025_Acta.jpg",
@@ -192,17 +208,9 @@
     "app/public/attachments/Resistencia-Domicilio-IMG-7211.jpeg",
     "app/public/attachments/Resistencia-Domicilio-IMG-7210.jpeg",
     "app/public/attachments/Resistencia-Domicilio-IMG-7209.jpeg",
-    "app/public/attachments/Resistencia-Domicilio-IMG-7208.jpeg",
-    "app/public/attachments/Resistencia-Domicilio-IMG-7207.jpeg",
     "app/public/attachments/Machagai-Ruta-16-Chacra-30-Parcela-9-Oficios-de-Inscripci-n-Juzgado-16-",
-    "app/public/attachments/Machagai-Ruta-16-Chacra-30-Parcela-9-Recibo-de-Pago-de-Inmueble-Parc.-6-9-",
-    "app/public/attachments/Machagai-Ruta-16-Chacra-30-Parcela-9-Certificado-Valuaci-n-P.9",
-    "app/public/attachments/Machagai-Ruta-16-Chacra-30-Parcela-9-Certificado-Valuaci-n-P.7",
-    "app/public/attachments/Machagai-Ruta-16-Chacra-30-Parcela-9-Acta-de-Adjudicaci-n-Judicial-P-g-1-",
     "log.md",
     "LLM_WIKI.md",
-    "index.md",
-    "Home.md",
     "Colonia Popular.md",
     "Dashboard.canvas",
     "app/README.md",
@@ -223,7 +231,6 @@
     "app/node_modules/react-leaflet/LICENSE.md",
     "app/node_modules/js-yaml/README.md",
     "app/node_modules/extend-shallow/README.md",
-    "app/node_modules/gray-matter/README.md",
-    "app/node_modules/gray-matter/CHANGELOG.md"
+    "app/node_modules/gray-matter/README.md"
   ]
 }

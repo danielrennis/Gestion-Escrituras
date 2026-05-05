@@ -1,6 +1,7 @@
 ---
 foto_portada: "attachments/propiedades/Resistencia - Domicilio/portada.png"
 tipo: "inmueble"
+domicilio_real: "Alfredo Veiravé, Manzana 123, Parcela 18"
 direccion: "400 VIVIENDAS, Parcela 18, Manzana 123, Chacra 130, lindera a Calle Alfredo Veirave"
 localidad: "Resistencia, Chaco"
 matricula_folio_real: "56479"
@@ -8,7 +9,8 @@ nomenclatura_castastral: "CIRCUNSCRIPCION II- SECCION B- CHACRA 130- PARCELA 18-
 partida_inmobiliaria: "No especificada directamente (Cuenta SAMEEP: 74142)"
 titulares: ["[[Hugo Daniel Rennis]]", "Judith Esther Nuñez"]
 estado_legal: "Afectado al Régimen de Protección de la Vivienda (Ley 26.994 - Bien de Familia), Limpio de embargos y medidas cautelares al 2010."
-superficie: "213 m² (10.65m de frente x 20m de fondo)"
+superficie: "213 m²"
+medidas: "10.65m de frente x 20m de fondo"
 coordenadas: "-27.46374, -59.01087"
 ultima_actualizacion: "2026-05-02"
 ---

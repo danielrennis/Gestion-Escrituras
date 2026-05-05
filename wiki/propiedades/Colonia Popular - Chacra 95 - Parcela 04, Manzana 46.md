@@ -1,5 +1,6 @@
 ---
 tipo: "inmueble"
+domicilio_real: "Loteo Urbano (Calle Pública S/N)"
 direccion: "Parcela 04, Manzana 46, Loteo Urbano"
 localidad: "Colonia Popular, Departamento Libertad, Chaco"
 matricula_folio_real: "7065 (Registro de la Propiedad Inmueble del Chaco)"
@@ -8,6 +9,7 @@ partida_inmobiliaria: ""
 titulares: ["[[Hugo Daniel Rennis]] (DNI 25.504.258)"]
 estado_legal: "Limpio"
 superficie: "622,50 m²"
+medidas: "Frente 20m x Fondo 31.125m"
 coordenadas: "-27.26964, -59.15856"
 foto_portada: "attachments/propiedades/Colonia Popular - Chacra 95/portada.png"
 ultima_actualizacion: "2026-05-02"

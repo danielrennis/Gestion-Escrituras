@@ -1,5 +1,6 @@
 ---
 tipo: "inmueble"
+domicilio_real: "Juan B. Alberdi y Ángel Lagatta"
 direccion: "Esquina de calles Mtra. A. Roig Flores y Ángel Lagatta, sobre calle Juan B. Alberdi."
 localidad: "Machagai"
 matricula_folio_real: "N° 2771 (Dpto. 25 de Mayo)"
@@ -7,7 +8,8 @@ nomenclatura_castastral: "Circunscripción I - Sección A - Manzana 76 - Parcela
 partida_inmobiliaria: "No especificada"
 titulares: ["Nudo Propietario: [[Hugo Daniel Rennis]]", "Usufructuarios: Carlos Hugo RENNIS", "Usufructuaria: Nancy Beatriz AGUIRRE"]
 estado_legal: "Limpio (sin embargos ni gravámenes al 19/12/2016), sujeto a Usufructo Vitalicio."
-superficie: "486,59 m² (Medidas: Lado Este 17,39m; Sud 33,41m; Oeste 12,30m; Norte 12,30m; Lindero Parcela 2, 45,71m)"
+superficie: "486,59 m²"
+medidas: "Lado Este 17,39m; Sud 33,41m; Oeste 12,30m; Norte 12,30m; Lindero Parcela 2, 45,71m"
 coordenadas: "-26.92678, -60.05086"
 foto_portada: "attachments/propiedades/Machagai - Alberdi/portada.png"
 ultima_actualizacion: "2026-05-02"

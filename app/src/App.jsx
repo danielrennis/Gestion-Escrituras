@@ -139,7 +139,7 @@ function Dashboard({ properties, globalDebt }) {
             <thead>
               <tr className="text-[9px] text-slate-500 uppercase tracking-widest font-black">
                 <th className="px-4 py-3">ID Propiedad</th>
-                <th className="px-4 py-3 w-40">Localidad</th>
+                <th className="px-4 py-3 w-48">Dirección Real</th>
                 <th className="px-4 py-3 w-40">Titularidad</th>
                 <th className="px-4 py-3 text-right w-24">Superficie</th>
                 <th className="px-4 py-3 text-center w-28">Estatus Legal</th>
@@ -156,8 +156,11 @@ function Dashboard({ properties, globalDebt }) {
                   <td className="px-4 py-2.5 whitespace-nowrap rounded-l-xl border-l border-y border-transparent group-hover:border-orange-500/30">
                     <span className="font-mono font-bold text-slate-200 group-hover:text-white transition-colors">{row.id}</span>
                   </td>
-                  <td className="px-4 py-2.5 italic font-light">
-                    <div className="truncate opacity-60 group-hover:opacity-100 transition-opacity" title={row.localidad}>{row.localidad || "---"}</div>
+                  <td className="px-4 py-2.5 font-bold text-orange-400/80">
+                    <div className="truncate group-hover:text-orange-400 transition-colors" title={row.domicilio_real || row.direccion}>
+                      {row.domicilio_real || row.direccion || "---"}
+                    </div>
+                    <div className="text-[8px] uppercase tracking-tighter opacity-40 font-medium">{row.localidad}</div>
                   </td>
                   <td className="px-4 py-2.5 font-medium">
                     <div className="truncate opacity-60 group-hover:opacity-100" title={row.titulares?.join(', ')}>{row.titulares?.[0] || "---"}</div>
@@ -315,9 +318,12 @@ function PropertyDetail({ properties, onPrint }) {
             </button>
           </div>
           <h1 className="text-5xl font-black text-white tracking-tighter">{property.id}</h1>
-          <div className="flex items-center gap-3 text-orange-400">
-            <span className="material-symbols-outlined !text-[20px]">location_on</span>
-            <p className="text-[10px] uppercase tracking-[0.4em] font-black">{property.localidad}</p>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-3 text-orange-400">
+              <span className="material-symbols-outlined !text-[20px]">location_on</span>
+              <p className="text-[12px] font-black uppercase tracking-widest">{property.domicilio_real || property.direccion}</p>
+            </div>
+            <p className="text-[10px] uppercase tracking-[0.4em] font-medium text-slate-400 ml-8">{property.localidad}</p>
           </div>
         </div>
       </div>
@@ -594,9 +600,21 @@ function PrintFicha({ property, coords }) {
             </div>
 
             <div className="flex flex-col gap-1">
-              <span className="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Ubicación</span>
-              <p className="text-[10pt] font-extrabold text-black leading-tight uppercase mt-1">
-                {(property.direccion || property.localidad || '---').toUpperCase()}
+              <span className="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Ubicación (Domicilio Real)</span>
+              <p className="text-[11pt] font-black text-black leading-tight uppercase mt-1">
+                {(property.domicilio_real || property.direccion || '---').toUpperCase()}
+              </p>
+              <p className="text-[8pt] font-medium text-slate-500 uppercase tracking-wider">
+                {property.localidad.toUpperCase()}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 mt-6">
+            <div className="flex flex-col gap-1 border-l-2 border-slate-100 pl-4">
+              <span className="text-[6pt] font-black text-slate-400 uppercase tracking-widest">Medidas y Linderos</span>
+              <p className="text-[9pt] font-medium text-slate-800 leading-tight italic">
+                {property.medidas || "Consultar documentación técnica adjunta."}
               </p>
             </div>
           </div>
