@@ -1,7 +1,7 @@
 ---
 foto_portada: "attachments/propiedades/Machagai - Donacion Angel la Gata/portada.png"
 tipo: inmueble
-domicilio_real: "Dante Tardelli N° 24"
+domicilio_real: "Santa Fe 630"
 direccion: "Calle Ángel Lagatta"
 localidad: "Machagai"
 matricula_folio_real: "2698"

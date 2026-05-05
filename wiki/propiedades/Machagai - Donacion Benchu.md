@@ -1,7 +1,7 @@
 ---
 foto_portada: "attachments/propiedades/Machagai - Donacion Benchu/portada.png"
 tipo: "inmueble"
-domicilio_real: "Parcela 12, Quinta 26, Fracción Sud"
+domicilio_real: "Santa Fe 640"
 direccion: "Parcela Doce, Quinta Veintiséis, Fracción Sud, Pueblo de Machagai. Linderos: Norte con Parcela Nueve, Oeste con Parcela Trece, Este con Parcela Once, Sur con calle Angel Lagatta."
 localidad: "Machagai, Chaco"
 matricula_folio_real: "2697"
