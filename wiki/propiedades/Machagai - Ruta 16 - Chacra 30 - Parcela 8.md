@@ -1,5 +1,6 @@
 ---
 tipo: "inmueble"
+domicilio_real: "Ruta 16, Parcela 8"
 direccion: "[No posee dirección específica de calle]"
 localidad: "Machagai"
 matricula_folio_real: "507"
@@ -7,7 +8,8 @@ nomenclatura_castastral: "Circunscripción XVII, Chacra 30, Parcela 8"
 partida_inmobiliaria: "[No especificada]"
 titulares: ["[[Hugo Daniel Rennis]]"]
 estado_legal: "Limpio (Embargo levantado)"
-superficie: "5 Hectáreas"
+superficie: "50.000,00 M2"
+medidas: "5 Hectáreas"
 coordenadas: "-26.93578, -60.06527"
 foto_portada: "attachments/propiedades/Machagai - Ruta 16 - Chacra 30/portada.png"
 ultima_actualizacion: "2026-05-02"

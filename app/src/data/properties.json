@@ -472,6 +472,7 @@
   {
     "id": "Machagai - Ruta 16 - Chacra 30 - Parcela 10",
     "tipo": "inmueble",
+    "domicilio_real": "Ruta 16, Parcela 10",
     "direccion": "[No posee dirección específica de calle]",
     "localidad": "Machagai",
     "matricula_folio_real": "262",
@@ -481,7 +482,8 @@
       "[[Hugo Daniel Rennis]]"
     ],
     "estado_legal": "Limpio (Embargo levantado)",
-    "superficie": "40.000,00 M2 (equivalente a 4 Hectáreas)",
+    "superficie": "40.000,00 M2",
+    "medidas": "4 Hectáreas",
     "coordenadas": "-26.93578, -60.06527",
     "foto_portada": "/photos/machagai-ruta-16-chacra-30-parcela-10_portada.png",
     "ultima_actualizacion": "2026-05-02",
@@ -521,6 +523,7 @@
   {
     "id": "Machagai - Ruta 16 - Chacra 30 - Parcela 11",
     "tipo": "inmueble",
+    "domicilio_real": "Ruta 16, Parcela 11",
     "direccion": "[No posee dirección específica de calle]",
     "localidad": "Machagai",
     "matricula_folio_real": "263",
@@ -530,7 +533,8 @@
       "[[Hugo Daniel Rennis]]"
     ],
     "estado_legal": "Limpio (Embargo levantado)",
-    "superficie": "4 Hectáreas",
+    "superficie": "40.000,00 M2",
+    "medidas": "4 Hectáreas",
     "coordenadas": "-26.93578, -60.06527",
     "foto_portada": "/photos/machagai-ruta-16-chacra-30-parcela-11_portada.png",
     "ultima_actualizacion": "2026-05-02",
@@ -621,6 +625,7 @@
   {
     "id": "Machagai - Ruta 16 - Chacra 30 - Parcela 8",
     "tipo": "inmueble",
+    "domicilio_real": "Ruta 16, Parcela 8",
     "direccion": "[No posee dirección específica de calle]",
     "localidad": "Machagai",
     "matricula_folio_real": "507",
@@ -630,7 +635,8 @@
       "[[Hugo Daniel Rennis]]"
     ],
     "estado_legal": "Limpio (Embargo levantado)",
-    "superficie": "5 Hectáreas",
+    "superficie": "50.000,00 M2",
+    "medidas": "5 Hectáreas",
     "coordenadas": "-26.93578, -60.06527",
     "foto_portada": "/photos/machagai-ruta-16-chacra-30-parcela-8_portada.png",
     "ultima_actualizacion": "2026-05-02",
@@ -670,6 +676,7 @@
   {
     "id": "Machagai - Ruta 16 - Chacra 30 - Parcela 9",
     "tipo": "inmueble",
+    "domicilio_real": "Ruta 16, Parcela 9",
     "direccion": "[No posee dirección específica de calle]",
     "localidad": "Machagai",
     "matricula_folio_real": "510",
@@ -679,7 +686,8 @@
       "[[Hugo Daniel Rennis]]"
     ],
     "estado_legal": "Limpio (Embargo levantado)",
-    "superficie": "67.500,00 M2 (equivalente a 6 Hectáreas 75 Áreas)",
+    "superficie": "67.500,00 M2",
+    "medidas": "6 Hectáreas 75 Áreas",
     "coordenadas": "-26.93578, -60.06527",
     "foto_portada": "/photos/machagai-ruta-16-chacra-30-parcela-9_portada.png",
     "ultima_actualizacion": "2026-05-02",
