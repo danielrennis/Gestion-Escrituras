@@ -1,6 +1,6 @@
 ---
 tipo: "inmueble"
-domicilio_real: "Calle Mochitti (50x50)"
+domicilio_real: "Reconquista y 17 de Agosto"
 direccion: "Parcela 3 de la Manzana 3, Quinta 12, Sección B, Circunscripción 1"
 localidad: "Machagai"
 matricula_folio_real: "4239"
