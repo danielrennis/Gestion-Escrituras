@@ -1,3 +1,23 @@
+import React, { useMemo, useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation, useParams } from 'react-router-dom';
+import { createClient } from '@supabase/supabase-js';
+
+// Conexión a Supabase usando variables de entorno
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Resolución forzada desde GitHub (Master) para evitar problemas de servidor local/Netlify
+const getImageUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  
+  // Si la ruta es local (/photos/...), la sacamos de GitHub raw
+  const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/danielrennis/Gestion-Escrituras/main/app/public';
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${GITHUB_RAW_BASE}${cleanPath}`;
+};
+
 function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
