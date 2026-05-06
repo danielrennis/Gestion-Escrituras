@@ -1,79 +1,78 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation, useParams } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
-
-// Conexión a Supabase usando variables de entorno
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-// Resolución forzada desde GitHub (Master) para evitar problemas de servidor local/Netlify
-const getImageUrl = (path) => {
-  if (!path) return '';
-  if (path.startsWith('http')) return path;
-  
-  // Si la ruta es local (/photos/...), la sacamos de GitHub raw
-  const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/danielrennis/Gestion-Escrituras/main/app/public';
-  const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  return `${GITHUB_RAW_BASE}${cleanPath}`;
-};
-
-function Sidebar() {
+function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 border-r border-slate-800/50 bg-slate-950/90 backdrop-blur-2xl flex flex-col py-8 z-50">
-      <div className="px-8 mb-10 flex flex-col">
-        <span className="text-lg font-black tracking-[0.2em] text-white">RENNIS REALTY</span>
-        <span className="text-slate-500 text-[10px] uppercase tracking-widest mt-1">Management Console</span>
-      </div>
+    <>
+      {/* Overlay para móvil */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
       
-      <div className="px-6 mb-8">
-        <button className="w-full bg-white text-slate-950 font-bold py-2.5 rounded-lg hover:bg-slate-200 transition-all flex items-center justify-center gap-2 text-xs shadow-lg shadow-white/5">
-          <span className="material-symbols-outlined !text-[18px]">add</span>
-          NUEVA PROPIEDAD
-        </button>
-      </div>
-
-      <nav className="flex-1 flex flex-col gap-2 px-4">
-        <Link to="/" className={isActive('/') ? 'sidebar-link-active' : 'sidebar-link'}>
-          <span className="material-symbols-outlined !text-[20px]">dashboard</span>
-          <span className="text-xs font-semibold uppercase tracking-wider">Dashboard</span>
-        </Link>
-        <Link to="#" className="sidebar-link">
-          <span className="material-symbols-outlined !text-[20px]">domain</span>
-          <span className="text-xs font-semibold uppercase tracking-wider">Propiedades</span>
-        </Link>
-        <Link to="#" className="sidebar-link">
-          <span className="material-symbols-outlined !text-[20px]">account_balance</span>
-          <span className="text-xs font-semibold uppercase tracking-wider">Cuenta Corriente</span>
-        </Link>
-      </nav>
-
-
-
-      <div className="mt-auto px-4 border-t border-slate-800/50 pt-6">
-        <div className="sidebar-link opacity-50 cursor-not-allowed">
-          <span className="material-symbols-outlined !text-[20px]">settings</span>
-          <span className="text-xs font-semibold uppercase tracking-wider">Configuración</span>
+      <aside className={`fixed left-0 top-0 h-screen w-64 border-r border-slate-800/50 bg-slate-950/95 lg:bg-slate-950/90 backdrop-blur-2xl flex flex-col py-8 z-50 transition-transform duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="px-8 mb-10 flex justify-between items-center">
+          <div className="flex flex-col">
+            <span className="text-lg font-black tracking-[0.2em] text-white">RENNIS REALTY</span>
+            <span className="text-slate-500 text-[10px] uppercase tracking-widest mt-1">Management Console</span>
+          </div>
+          <button onClick={onClose} className="lg:hidden text-slate-400">
+            <span className="material-symbols-outlined">close</span>
+          </button>
         </div>
-      </div>
-    </aside>
+        
+        <div className="px-6 mb-8">
+          <button className="w-full bg-white text-slate-950 font-bold py-2.5 rounded-lg hover:bg-slate-200 transition-all flex items-center justify-center gap-2 text-xs shadow-lg shadow-white/5">
+            <span className="material-symbols-outlined !text-[18px]">add</span>
+            NUEVA PROPIEDAD
+          </button>
+        </div>
+
+        <nav className="flex-1 flex flex-col gap-2 px-4">
+          <Link to="/" onClick={onClose} className={isActive('/') ? 'sidebar-link-active' : 'sidebar-link'}>
+            <span className="material-symbols-outlined !text-[20px]">dashboard</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Dashboard</span>
+          </Link>
+          <Link to="#" onClick={onClose} className="sidebar-link">
+            <span className="material-symbols-outlined !text-[20px]">domain</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Propiedades</span>
+          </Link>
+          <Link to="#" onClick={onClose} className="sidebar-link">
+            <span className="material-symbols-outlined !text-[20px]">account_balance</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Cuenta Corriente</span>
+          </Link>
+        </nav>
+
+        <div className="mt-auto px-4 border-t border-slate-800/50 pt-6">
+          <div className="sidebar-link opacity-50 cursor-not-allowed">
+            <span className="material-symbols-outlined !text-[20px]">settings</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Configuración</span>
+          </div>
+        </div>
+      </aside>
+    </>
   );
 }
 
-function Topbar() {
+function Topbar({ onMenuClick }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-800/30 bg-slate-950/60 backdrop-blur-xl w-full flex items-center justify-between h-14 px-8">
-      <div className="flex items-center">
-        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Panel de Control Gerencial</span>
+    <header className="sticky top-0 z-40 border-b border-slate-800/30 bg-slate-950/60 backdrop-blur-xl w-full flex items-center justify-between h-14 px-4 lg:px-8">
+      <div className="flex items-center gap-4">
+        <button 
+          onClick={onMenuClick}
+          className="lg:hidden text-slate-400 hover:text-white transition-colors"
+        >
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+        <span className="text-[10px] lg:text-xs font-bold text-slate-400 uppercase tracking-widest truncate">Panel de Control Gerencial</span>
       </div>
-      <div className="flex items-center gap-6">
-        <div className="flex items-center gap-4 text-slate-400">
-          <button className="hover:text-white transition-colors"><span className="material-symbols-outlined !text-[22px]">notifications</span></button>
-          <button className="hover:text-white transition-colors"><span className="material-symbols-outlined !text-[22px]">database</span></button>
-          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-orange-600 to-orange-900 border border-orange-500 shadow-inner" />
+      <div className="flex items-center gap-3 lg:gap-6">
+        <div className="flex items-center gap-3 lg:gap-4 text-slate-400">
+          <button className="hover:text-white transition-colors"><span className="material-symbols-outlined !text-[20px] lg:!text-[22px]">notifications</span></button>
+          <button className="hidden sm:block hover:text-white transition-colors"><span className="material-symbols-outlined !text-[20px] lg:!text-[22px]">database</span></button>
+          <div className="h-7 w-7 lg:h-8 lg:w-8 rounded-full bg-gradient-to-tr from-orange-600 to-orange-900 border border-orange-500 shadow-inner" />
         </div>
       </div>
     </header>
@@ -92,50 +91,50 @@ function Dashboard({ properties, globalDebt }) {
   }, [properties]);
 
   return (
-    <main className="p-8 flex flex-col gap-8">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="kpi-card p-5">
-          <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Propiedades Totales</span>
+    <main className="p-4 lg:p-8 flex flex-col gap-6 lg:gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+        <div className="kpi-card p-4 lg:p-5">
+          <span className="text-[8px] lg:text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Propiedades</span>
           <div className="flex items-baseline justify-end gap-2 mt-1">
-            <span className="text-2xl font-black tracking-tight text-white">{stats.count}</span>
+            <span className="text-xl lg:text-2xl font-black tracking-tight text-white">{stats.count}</span>
           </div>
-          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Supabase Cloud Active</span>
+          <span className="hidden lg:block text-[10px] text-slate-600 mt-1 font-medium text-right">Cloud Active</span>
         </div>
-        <div className="kpi-card p-5">
-          <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Superficie Total</span>
+        <div className="kpi-card p-4 lg:p-5">
+          <span className="text-[8px] lg:text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Superficie</span>
           <div className="flex items-baseline justify-end gap-2 mt-1">
-            <span className="text-2xl font-black tracking-tight text-white">{stats.surface} m²</span>
+            <span className="text-xl lg:text-2xl font-black tracking-tight text-white">{stats.surface} m²</span>
           </div>
-          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Suma de activos</span>
+          <span className="hidden lg:block text-[10px] text-slate-600 mt-1 font-medium text-right">Suma activos</span>
         </div>
-        <div className="kpi-card p-5">
-          <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Saldo Deudor Total</span>
+        <div className="kpi-card p-4 lg:p-5">
+          <span className="text-[8px] lg:text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Saldo Deudor</span>
           <div className="flex items-baseline justify-end gap-2 mt-1">
-            <span className={`text-2xl font-black tracking-tight ${globalDebt > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+            <span className={`text-xl lg:text-2xl font-black tracking-tight ${globalDebt > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
               ${globalDebt.toLocaleString('es-AR')}
             </span>
           </div>
-          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Impuestos + Multas</span>
+          <span className="hidden lg:block text-[10px] text-slate-600 mt-1 font-medium text-right">Impuestos</span>
         </div>
-        <div className="kpi-card p-5">
-          <span className="text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Valuación Cartera</span>
+        <div className="kpi-card p-4 lg:p-5">
+          <span className="text-[8px] lg:text-[10px] font-black text-slate-500 tracking-[0.15em] uppercase">Valuación</span>
           <div className="flex items-baseline justify-end gap-2 mt-1">
-            <span className="text-2xl font-black tracking-tight text-emerald-400">USD --</span>
+            <span className="text-xl lg:text-2xl font-black tracking-tight text-emerald-400">USD --</span>
           </div>
-          <span className="text-[10px] text-slate-600 mt-1 font-medium block text-right">Métrica en desarrollo</span>
+          <span className="hidden lg:block text-[10px] text-slate-600 mt-1 font-medium text-right">En desarrollo</span>
         </div>
       </div>
 
       <div className="kpi-card overflow-hidden border-slate-800/40 bg-slate-950/40 backdrop-blur-md">
         <div className="px-6 py-4 border-b border-slate-800/50 bg-white/[0.02] flex justify-between items-center">
-          <span className="text-[9px] font-black text-slate-500 tracking-[0.2em] uppercase">Registro de Activos Dominiales</span>
+          <span className="text-[9px] font-black text-slate-500 tracking-[0.2em] uppercase">Registro de Activos</span>
           <div className="flex gap-2 text-emerald-500">
             <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-            <span className="text-[9px] font-bold uppercase tracking-widest">Supabase Connected</span>
+            <span className="hidden sm:inline text-[9px] font-bold uppercase tracking-widest">Supabase Connected</span>
           </div>
         </div>
         <div className="overflow-x-auto px-2 pb-2">
-          <table className="w-full text-left border-separate border-spacing-y-1">
+          <table className="w-full text-left border-separate border-spacing-y-1 min-w-[600px]">
             <thead>
               <tr className="text-[9px] text-slate-500 uppercase tracking-widest font-black">
                 <th className="px-4 py-3">ID Propiedad</th>
@@ -202,7 +201,6 @@ function PropertyDetail({ properties, onPrint }) {
   const [loadingMov, setLoadingMov] = useState(true);
   const [showForm, setShowForm] = useState(false);
   
-  // Estado para el formulario de carga
   const [formData, setFormData] = useState({
     cuenta: 'IMPUESTOS',
     tipo_movimiento: 'DEUDA',
@@ -236,7 +234,6 @@ function PropertyDetail({ properties, onPrint }) {
     e.preventDefault();
     let finalUrl = '';
 
-    // Si hay archivo, lo subimos primero
     if (file) {
       const fileExt = file.name.split('.').pop();
       const fileName = `${id}/${Date.now()}.${fileExt}`;
@@ -304,53 +301,53 @@ function PropertyDetail({ properties, onPrint }) {
 
   return (
     <main className="flex flex-col animate-in fade-in duration-700 h-full overflow-y-auto bg-[#020617] z-0 relative pb-20">
-      <div className="w-full bg-slate-900 border-b border-white/10 relative overflow-hidden flex-shrink-0" style={{ height: '350px' }}>
+      <div className="w-full bg-slate-900 border-b border-white/10 relative overflow-hidden flex-shrink-0 h-[250px] lg:h-[350px]">
         {property.foto_url && (
           <img src={getImageUrl(property.foto_url)} className="absolute inset-0 w-full h-full object-cover brightness-75 z-0" alt="Portada" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/20 to-transparent z-10" />
-        <div className="absolute bottom-10 left-12 flex flex-col gap-3 z-20">
-          <div className="flex gap-4 mb-4 no-print">
-            <button onClick={() => navigate('/')} className="px-6 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/20 transition-all">← Volver</button>
-            <button onClick={() => onPrint(property, coords)} className="px-6 py-2 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
-              <span className="material-symbols-outlined !text-[16px]">picture_as_pdf</span>
-              Generar Ficha
+        <div className="absolute bottom-6 lg:bottom-10 left-6 lg:left-12 flex flex-col gap-3 z-20 w-[calc(100%-48px)]">
+          <div className="flex gap-2 lg:gap-4 mb-2 lg:mb-4 no-print flex-wrap">
+            <button onClick={() => navigate('/')} className="px-4 lg:px-6 py-1.5 lg:py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-[8px] lg:text-[10px] font-black uppercase tracking-widest hover:bg-white/20 transition-all">← Volver</button>
+            <button onClick={() => onPrint(property, coords)} className="px-4 lg:px-6 py-1.5 lg:py-2 rounded-full bg-orange-500 text-white text-[8px] lg:text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
+              <span className="material-symbols-outlined !text-[14px] lg:!text-[16px]">picture_as_pdf</span>
+              Ficha PDF
             </button>
           </div>
-          <h1 className="text-5xl font-black text-white tracking-tighter">{property.id}</h1>
+          <h1 className="text-2xl lg:text-5xl font-black text-white tracking-tighter truncate">{property.id}</h1>
           <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-3 text-orange-400">
-              <span className="material-symbols-outlined !text-[20px]">location_on</span>
-              <p className="text-[12px] font-black uppercase tracking-widest">{property.domicilio_real || property.direccion}</p>
+            <div className="flex items-center gap-2 lg:gap-3 text-orange-400">
+              <span className="material-symbols-outlined !text-[16px] lg:!text-[20px]">location_on</span>
+              <p className="text-[10px] lg:text-[12px] font-black uppercase tracking-widest truncate">{property.domicilio_real || property.direccion}</p>
             </div>
-            <p className="text-[10px] uppercase tracking-[0.4em] font-medium text-slate-400 ml-8">{property.localidad}</p>
+            <p className="text-[8px] lg:text-[10px] uppercase tracking-[0.4em] font-medium text-slate-400 ml-6 lg:ml-8">{property.localidad}</p>
           </div>
         </div>
       </div>
 
-      <div className="px-12 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8 w-full relative z-30">
+      <div className="px-4 lg:px-12 py-6 lg:py-10 grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8 w-full relative z-30">
         
-        {/* PANEL LATERAL: MAPA Y SALDOS */}
-        <div className="flex flex-col gap-8 order-2 lg:order-1">
-          <div className="kpi-card h-64 overflow-hidden relative">
+        {/* PANEL LATERAL */}
+        <div className="flex flex-col gap-6 lg:gap-8 order-2 lg:order-1">
+          <div className="kpi-card h-48 lg:h-64 overflow-hidden relative">
             <MapContainer center={coords} zoom={14} className="h-full w-full">
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <Marker position={coords} />
             </MapContainer>
           </div>
 
-          <div className="kpi-card p-8">
-            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-6">Resumen de Cuenta</span>
-            <div className="space-y-4">
+          <div className="kpi-card p-6 lg:p-8">
+            <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-6">Estado de Cuenta</span>
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-6">
               <div className="flex flex-col gap-1">
-                <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Impuestos</span>
-                <span className={`text-2xl font-black ${saldos.IMPUESTOS > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+                <span className="text-[8px] lg:text-[9px] text-slate-500 uppercase font-black tracking-widest">Impuestos</span>
+                <span className={`text-lg lg:text-2xl font-black ${saldos.IMPUESTOS > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
                   ${saldos.IMPUESTOS.toLocaleString('es-AR')}
                 </span>
               </div>
               <div className="flex flex-col gap-1">
-                <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Multas</span>
-                <span className={`text-2xl font-black ${saldos.MULTAS > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+                <span className="text-[8px] lg:text-[9px] text-slate-500 uppercase font-black tracking-widest">Multas</span>
+                <span className={`text-lg lg:text-2xl font-black ${saldos.MULTAS > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
                   ${saldos.MULTAS.toLocaleString('es-AR')}
                 </span>
               </div>
@@ -361,16 +358,16 @@ function PropertyDetail({ properties, onPrint }) {
             onClick={() => setShowForm(!showForm)}
             className="w-full py-4 bg-orange-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            {showForm ? '× Cancelar Carga' : '+ Cargar Movimiento'}
+            {showForm ? '× Cancelar' : '+ Cargar Movimiento'}
           </button>
         </div>
 
-        {/* CONTENIDO PRINCIPAL: TABLAS */}
-        <div className="lg:col-span-3 flex flex-col gap-8 order-1 lg:order-2">
+        {/* CONTENIDO PRINCIPAL */}
+        <div className="lg:col-span-3 flex flex-col gap-6 lg:gap-8 order-1 lg:order-2">
           
           {showForm && (
-            <div className="kpi-card p-10 border-orange-500/30 animate-in slide-in-from-top duration-300">
-              <form onSubmit={handleAddMovimiento} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="kpi-card p-6 lg:p-10 border-orange-500/30 animate-in slide-in-from-top duration-300">
+              <form onSubmit={handleAddMovimiento} className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-[9px] font-black text-slate-500 uppercase">Cuenta</label>
                   <select 
@@ -401,27 +398,24 @@ function PropertyDetail({ properties, onPrint }) {
                     value={formData.monto}
                     onChange={e => setFormData({...formData, monto: e.target.value})}
                     className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
-                    placeholder="Ej: 15000"
                   />
                 </div>
                 <div className="md:col-span-2 flex flex-col gap-2">
-                  <label className="text-[9px] font-black text-slate-500 uppercase">Descripción / Concepto</label>
+                  <label className="text-[9px] font-black text-slate-500 uppercase">Descripción</label>
                   <input 
                     type="text"
                     required
                     value={formData.descripcion}
                     onChange={e => setFormData({...formData, descripcion: e.target.value})}
                     className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
-                    placeholder="Ej: Cuota 1 Plan de Pago"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-[9px] font-black text-slate-500 uppercase">Adjuntar Comprobante (Foto/PDF)</label>
+                  <label className="text-[9px] font-black text-slate-500 uppercase">Archivo</label>
                   <input 
                     type="file"
-                    accept="image/*,application/pdf"
                     onChange={e => setFile(e.target.files[0])}
-                    className="bg-slate-800 border border-white/10 rounded-xl p-2.5 text-white text-[10px] outline-none focus:border-orange-500/50 file:bg-orange-500/10 file:border-0 file:text-orange-500 file:text-[9px] file:font-black file:uppercase file:px-4 file:py-1 file:rounded-lg file:mr-4"
+                    className="bg-slate-800 border border-white/10 rounded-xl p-2.5 text-white text-[10px] outline-none"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -431,31 +425,29 @@ function PropertyDetail({ properties, onPrint }) {
                     required
                     value={formData.fecha_documento}
                     onChange={e => setFormData({...formData, fecha_documento: e.target.value})}
-                    className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-orange-500/50"
+                    className="bg-slate-800 border border-white/10 rounded-xl p-3 text-white text-xs outline-none"
                   />
                 </div>
                 <div className="md:col-span-3">
                   <button type="submit" className="w-full py-4 bg-white text-slate-900 rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-orange-500 hover:text-white transition-all">
-                    Confirmar Registro en Supabase
+                    Registrar en Supabase
                   </button>
                 </div>
               </form>
             </div>
           )}
 
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-            {/* TABLA IMPUESTOS */}
-            <div className="kpi-card p-8 border-blue-500/10">
-              <span className="text-[10px] font-black text-blue-400 tracking-[0.2em] uppercase block mb-6">Cuenta Corriente Impuestos</span>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-[10px]">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+            <div className="kpi-card p-6 lg:p-8 border-blue-500/10">
+              <span className="text-[10px] font-black text-blue-400 tracking-[0.2em] uppercase block mb-6">Impuestos</span>
+              <div className="overflow-x-auto min-h-[100px]">
+                <table className="w-full text-left text-[10px] min-w-[350px]">
                   <thead>
                     <tr className="border-b border-white/5 text-slate-600 font-black uppercase tracking-widest">
                       <th className="pb-4">Fecha</th>
                       <th className="pb-4">Concepto</th>
                       <th className="pb-4 text-right">Monto</th>
-                      <th className="pb-4 w-8"></th>
-                      <th className="pb-4 w-8"></th>
+                      <th className="pb-4 w-16"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -466,40 +458,33 @@ function PropertyDetail({ properties, onPrint }) {
                         <td className={`py-4 text-right font-bold ${m.tipo_movimiento === 'DEUDA' ? 'text-orange-400' : 'text-emerald-400'}`}>
                           {m.tipo_movimiento === 'DEUDA' ? '-' : '+'} ${parseFloat(m.monto).toLocaleString('es-AR')}
                         </td>
-                        <td className="py-4 text-right">
+                        <td className="py-4 text-right flex gap-2 justify-end">
                           {m.archivo_url && (
-                            <a href={m.archivo_url} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-white transition-colors">
+                            <a href={m.archivo_url} target="_blank" rel="noopener noreferrer" className="text-orange-500">
                               <span className="material-symbols-outlined !text-[16px]">attachment</span>
                             </a>
                           )}
-                        </td>
-                        <td className="py-4 text-right">
-                          <button onClick={() => handleDeleteMovimiento(m.id)} className="text-slate-700 hover:text-red-500 transition-colors">
+                          <button onClick={() => handleDeleteMovimiento(m.id)} className="text-slate-700">
                             <span className="material-symbols-outlined !text-[16px]">delete</span>
                           </button>
                         </td>
                       </tr>
                     ))}
-                    {movImpuestos.length === 0 && (
-                      <tr><td colSpan="4" className="py-10 text-center text-slate-600 italic">Sin movimientos</td></tr>
-                    )}
                   </tbody>
                 </table>
               </div>
             </div>
 
-            {/* TABLA MULTAS */}
-            <div className="kpi-card p-8 border-purple-500/10">
-              <span className="text-[10px] font-black text-purple-400 tracking-[0.2em] uppercase block mb-6">Cuenta Corriente Multas</span>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-[10px]">
+            <div className="kpi-card p-6 lg:p-8 border-purple-500/10">
+              <span className="text-[10px] font-black text-purple-400 tracking-[0.2em] uppercase block mb-6">Multas</span>
+              <div className="overflow-x-auto min-h-[100px]">
+                <table className="w-full text-left text-[10px] min-w-[350px]">
                   <thead>
                     <tr className="border-b border-white/5 text-slate-600 font-black uppercase tracking-widest">
                       <th className="pb-4">Fecha</th>
                       <th className="pb-4">Concepto</th>
                       <th className="pb-4 text-right">Monto</th>
-                      <th className="pb-4 w-8"></th>
-                      <th className="pb-4 w-8"></th>
+                      <th className="pb-4 w-16"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -510,30 +495,25 @@ function PropertyDetail({ properties, onPrint }) {
                         <td className={`py-4 text-right font-bold ${m.tipo_movimiento === 'DEUDA' ? 'text-orange-400' : 'text-emerald-400'}`}>
                           {m.tipo_movimiento === 'DEUDA' ? '-' : '+'} ${parseFloat(m.monto).toLocaleString('es-AR')}
                         </td>
-                        <td className="py-4 text-right">
+                        <td className="py-4 text-right flex gap-2 justify-end">
                           {m.archivo_url && (
-                            <a href={m.archivo_url} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-white transition-colors">
+                            <a href={m.archivo_url} target="_blank" rel="noopener noreferrer" className="text-orange-500">
                               <span className="material-symbols-outlined !text-[16px]">attachment</span>
                             </a>
                           )}
-                        </td>
-                        <td className="py-4 text-right">
-                          <button onClick={() => handleDeleteMovimiento(m.id)} className="text-slate-700 hover:text-red-500 transition-colors">
+                          <button onClick={() => handleDeleteMovimiento(m.id)} className="text-slate-700">
                             <span className="material-symbols-outlined !text-[16px]">delete</span>
                           </button>
                         </td>
                       </tr>
                     ))}
-                    {movMultas.length === 0 && (
-                      <tr><td colSpan="4" className="py-10 text-center text-slate-600 italic">Sin movimientos</td></tr>
-                    )}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          <div className="kpi-card p-10">
+          <div className="kpi-card p-6 lg:p-10">
             <span className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase block mb-8">Información Histórica</span>
             <div className="prose prose-invert prose-sm max-w-none text-slate-400 leading-relaxed">
               <div dangerouslySetInnerHTML={{ __html: (property.resumen || "").replace(/\n/g, '<br/>') }} />
@@ -546,13 +526,10 @@ function PropertyDetail({ properties, onPrint }) {
   );
 }
 
-
-
 function PrintFicha({ property, coords }) {
   if (!property) return null;
   const mapLat = coords?.[0] || -27.45;
   const mapLng = coords?.[1] || -58.98;
-  // Bbox más ajustado para mayor zoom y legibilidad
   const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${mapLng-0.003},${mapLat-0.002},${mapLng+0.003},${mapLat+0.002}&layer=mapnik&marker=${mapLat},${mapLng}`;
   const heroImg = getImageUrl(property.foto_url || property.foto_portada);
 
@@ -650,10 +627,10 @@ export default function App() {
   const [movimientos, setMovimientos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [printData, setPrintData] = useState({ property: null, coords: null });
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handlePrint = (property, coords) => {
     setPrintData({ property, coords });
-    // Mayor delay para asegurar que React renderizó el componente y las imágenes empezaron a cargar
     setTimeout(() => {
       window.print();
     }, 500);
@@ -694,10 +671,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <>
-        <div className="no-print flex min-h-screen bg-[#020617] text-slate-200 selection:bg-orange-500/30">
-          <Sidebar />
-          <div className="flex-1 ml-64 flex flex-col h-full overflow-y-auto scroll-smooth">
-            <Topbar />
+        <div className="no-print flex min-h-screen bg-[#020617] text-slate-200 selection:bg-orange-500/30 overflow-x-hidden">
+          <Sidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+          <div className="flex-1 lg:ml-64 flex flex-col h-screen overflow-y-auto scroll-smooth w-full">
+            <Topbar onMenuClick={() => setMenuOpen(true)} />
             <Routes>
               <Route path="/" element={<Dashboard properties={properties} globalDebt={globalTotalDeuda} />} />
               <Route path="/property/:id" element={<PropertyDetail properties={properties} onPrint={handlePrint} />} />
