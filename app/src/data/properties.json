@@ -611,6 +611,57 @@
     "resumen": "Esta propiedad es un terreno rural ubicado en Machagai, Provincia del Chaco, identificado catastralmente como Circunscripción XVII, Chacra 30, Parcela 11.\n\n**Historia de Titularidad y Transacciones: \"**\"\n*   **Remate Judicial: \"** La propiedad fue objeto de un juicio ejecutivo caratulado NUEVO BANCO DEL CHACO S.A. C/ RADIS DOMINGO MIGUEL S/ EJECUTIVO, Expediente N° 2151/00, tramitado en el Juzgado Civil y Comercial N° 16 de Resistencia.\"\n*   **Adjudicación: \"** Fue adjudicada en subasta pública a [[Hugo Daniel Rennis]] (DNI N° 25.504.258, CUIT N° 20-25504258-1) el 19 de diciembre de 2009. El precio de remate por esta parcela fue de $145.000. La base de subasta fue de $3.266,66.\"\n*   **Toma de Posesión y Levantamiento de Embargo: \"** Se ordenó el libramiento de hijuelas y minutas, y el levantamiento del embargo trabado sobre el inmueble mediante Auto de fecha 28 de septiembre de 2010. En noviembre de 2011, se diligenció el mandamiento de toma de posesión.\"\n\n**Características de la Propiedad: \"**\"\n*   **Superficie: \"** 4 Hectáreas.\"\n*   **Valuación Fiscal: \"** No se encontró un certificado de valuación fiscal municipal reciente específico para esta parcela en la documentación provista, pero la base de subasta fue establecida.\"\n*   **Estado Legal: \"** Actualmente se encuentra limpia, con el embargo previamente existente levantado.\"\n\n\n#propiedad #machagai"
   },
   {
+    "id": "Machagai - Ruta 16 - Chacra 30 - Parcela 7",
+    "tipo": "inmueble",
+    "domicilio_real": "Ruta 16, Parcela 7",
+    "direccion": "[No posee dirección específica de calle]",
+    "localidad": "Machagai",
+    "matricula_folio_real": "508",
+    "nomenclatura_castastral": "Circunscripción XVII, Chacra 30, Parcela 7",
+    "partida_inmobiliaria": "[No especificada]",
+    "titulares": [
+      "Raquel Rennis"
+    ],
+    "estado_legal": "Limpio (Embargo levantado)",
+    "superficie": "50.000,00 M2",
+    "medidas": "5 Hectáreas",
+    "coordenadas": "-26.93578, -60.06527",
+    "foto_portada": "/photos/machagai-ruta-16-chacra-30-parcela-7_portada.png",
+    "ultima_actualizacion": "2026-05-02",
+    "superficie_limpia": "50000 m²",
+    "estado_limpio": "Limpio",
+    "titulares_limpios": [
+      "Raquel Rennis"
+    ],
+    "adjuntos": [
+      {
+        "nombre": "Croquis del Remate",
+        "url": "/attachments/Machagai-Ruta-16-Chacra-30-Parcela-7-Croquis-del-Remate"
+      },
+      {
+        "nombre": "Acta de Adjudicación Judicial (Pág 1)",
+        "url": "/attachments/Machagai-Ruta-16-Chacra-30-Parcela-7-Acta-de-Adjudicaci-n-Judicial-P-g-1-"
+      },
+      {
+        "nombre": "Certificado Valuación P.7",
+        "url": "/attachments/Machagai-Ruta-16-Chacra-30-Parcela-7-Certificado-Valuaci-n-P.7"
+      },
+      {
+        "nombre": "Certificado Valuación P.9",
+        "url": "/attachments/Machagai-Ruta-16-Chacra-30-Parcela-7-Certificado-Valuaci-n-P.9"
+      },
+      {
+        "nombre": "Recibo de Pago de Inmueble (Parc. 6 / 9)",
+        "url": "/attachments/Machagai-Ruta-16-Chacra-30-Parcela-7-Recibo-de-Pago-de-Inmueble-Parc.-6-9-"
+      },
+      {
+        "nombre": "Oficios de Inscripción (Juzgado 16)",
+        "url": "/attachments/Machagai-Ruta-16-Chacra-30-Parcela-7-Oficios-de-Inscripci-n-Juzgado-16-"
+      }
+    ],
+    "resumen": "Esta propiedad es un terreno ubicado en Machagai, Provincia del Chaco, identificado catastralmente como Circunscripción XVII, Chacra 30, Parcela 7.\n\n**Historia de Titularidad y Transacciones:**\n*   **Antecedente Dominial:** Previamente, la propiedad correspondía a [[Radis Domingo Miguel]], quien la obtuvo por Donación mediante Escritura N° 104 de fecha 19 de septiembre de 1996, inscripta en Tomo 2, Folio 111, Año 1969, N° 21617.\n*   **Remate Judicial:** La propiedad fue objeto de un juicio ejecutivo caratulado \"NUEVO BANCO DEL CHACO S.A. C/ RADIS DOMINGO MIGUEL S/ EJECUTIVO\", Expediente N° 2151/00, tramitado en el Juzgado Civil y Comercial N° 16 de Resistencia.\n*   **Adjudicación:** Fue adjudicada en subasta pública a [[Hugo Daniel Rennis]] (DNI N° 25.504.258, CUIT N° 20-25504258-1) el 19 de diciembre de 2009. El precio de remate por esta parcela fue de $45.000. La base de subasta fue de $3.850.\n*   **Toma de Posesión y Levantamiento de Embargo:** Se ordenó el libramiento de hijuelas y minutas, y el levantamiento del embargo trabado sobre el inmueble mediante Auto de fecha 28 de septiembre de 2010. En noviembre de 2011, se diligenció el mandamiento de toma de posesión, constatándose que el predio se encontraba totalmente deshabitado y desocupado.\n\n**Características de la Propiedad:**\n*   **Superficie:** 50.000,00 metros cuadrados, equivalente a 5 hectáreas.\n*   **Valuación Fiscal (2024):** Según Certificado de Valuación Fiscal de la Municipalidad de Machagai, de fecha 25 de octubre de 2024, la valuación fiscal asciende a $9.590.625,00.\n*   **Estado Legal:** Actualmente se encuentra limpia, con el embargo previamente existente levantado.\n\n#propiedad #machagai"
+  },
+  {
     "id": "Machagai - Ruta 16 - Chacra 30 - Parcela 8",
     "tipo": "inmueble",
     "domicilio_real": "Ruta 16, Parcela 8",
