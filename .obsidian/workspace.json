@@ -185,6 +185,7 @@
   },
   "active": "6497539cc452c446",
   "lastOpenFiles": [
+    "app/scripts/cleanup_p8.cjs",
     "wiki/propiedades/Machagai - Ruta 16 - Chacra 30 - Parcela 7.md",
     "app/scripts/cleanup_p7.cjs",
     "app/scripts/cleanup_duplicates.cjs",
@@ -230,7 +231,6 @@
     "app/node_modules/leaflet/CHANGELOG.md",
     "app/node_modules/@react-leaflet/core/README.md",
     "app/node_modules/@react-leaflet/core/LICENSE.md",
-    "app/node_modules/react-leaflet/README.md",
-    "app/node_modules/react-leaflet/LICENSE.md"
+    "app/node_modules/react-leaflet/README.md"
   ]
 }

@@ -6,7 +6,7 @@ localidad: "Machagai"
 matricula_folio_real: "508"
 nomenclatura_castastral: "Circunscripción XVII, Chacra 30, Parcela 7"
 partida_inmobiliaria: "[No especificada]"
-titulares: ["Raquel Rennis"]
+titulares: ["[[Hugo Daniel Rennis]]"]
 estado_legal: "Limpio (Embargo levantado)"
 superficie: "50.000,00 M2"
 medidas: "5 Hectáreas"
